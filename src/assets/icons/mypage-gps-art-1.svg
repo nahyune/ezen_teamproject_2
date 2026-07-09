@@ -1,0 +1,7 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 90 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="gps-art">
+<path id="Vector" d="M10 70C15 45 35 55 42 35C48 20 65 15 72 25C80 36 68 48 55 50C45 52 40 62 45 70" stroke="var(--stroke-0, #D4FF3F)" stroke-width="2.5" stroke-linecap="round"/>
+<path id="Vector_2" d="M10 73C11.6569 73 13 71.6569 13 70C13 68.3431 11.6569 67 10 67C8.34315 67 7 68.3431 7 70C7 71.6569 8.34315 73 10 73Z" fill="var(--fill-0, white)"/>
+<path id="Vector_3" d="M45 73C46.6569 73 48 71.6569 48 70C48 68.3431 46.6569 67 45 67C43.3431 67 42 68.3431 42 70C42 71.6569 43.3431 73 45 73Z" fill="var(--fill-0, white)"/>
+</g>
+</svg>

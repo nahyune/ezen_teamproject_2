@@ -1,0 +1,133 @@
+.settings {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── header ──────────────────────────────────────────────── */
+.settings-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px var(--gutter);
+}
+.settings-header__back {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+}
+.settings-header__back img {
+  width: 100%;
+  height: 100%;
+}
+.settings-header__title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.48px;
+  color: var(--text-primary);
+}
+
+/* ── content ─────────────────────────────────────────────── */
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding: 8px var(--gutter) 40px;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.settings-group__title {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.42px;
+  color: var(--primary-lime);
+}
+
+.settings-card {
+  background: #161616;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.settings-card__divider {
+  height: 1px;
+  background: #262626;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px 16px;
+}
+.settings-row__label {
+  font-size: 16px;
+  letter-spacing: -0.48px;
+  color: var(--text-primary);
+}
+.settings-row__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.settings-row__value {
+  font-size: 14px;
+  letter-spacing: -0.42px;
+  color: #8a8a8a;
+}
+.settings-row__chevron {
+  width: 14px;
+  height: 14px;
+}
+.settings-row__toggle {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 13px;
+  background: #3b3b3b;
+  transition: background-color 0.2s ease;
+}
+.settings-row__toggle--on {
+  background: var(--primary-lime);
+}
+.settings-row__toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #999999;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.settings-row__toggle--on .settings-row__toggle-thumb {
+  background: #ffffff;
+  transform: translateX(18px);
+  box-shadow: 0 2px 4px rgba(143, 172, 43, 0.5);
+}
+
+/* ── account actions ────────────────────────────────────── */
+.settings-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-top: 8px;
+}
+.settings-actions__logout {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-orange);
+}
+.settings-actions__delete {
+  font-size: 14px;
+  color: #8a8a8a;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
