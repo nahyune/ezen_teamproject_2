@@ -1,0 +1,217 @@
+/* ── 러닝 가이드 화면 (기록 탭 하위 페이지, 하단 네비 없음) ──── */
+.guide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 헤더 (뒤로가기 + 가운데 타이틀) ─────────────────────── */
+.guide__header {
+  margin-top: 12px;
+  padding: 10px var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.guide__back {
+  width: 26px;
+  height: 26px;
+}
+.guide__back img {
+  width: 100%;
+  height: 100%;
+}
+.guide__title {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.48px;
+}
+/* keeps the title optically centered against the back button */
+.guide__header-spacer {
+  width: 26px;
+  height: 26px;
+}
+
+/* ── 본문 ────────────────────────────────────────────────── */
+.guide__body {
+  padding: 24px var(--gutter) 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.guide-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.guide-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.guide-section__title {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.6px;
+}
+.guide-section__more {
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: -0.36px;
+  color: #d6ff1e;
+}
+
+/* ── 가이드 런 카드 ──────────────────────────────────────── */
+.guide-run__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.guide-run {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #1b1b22; /* bg/surface token in Figma */
+}
+.guide-run__play {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: #26262e; /* bg/surface-2 token in Figma */
+  display: grid;
+  place-items: center;
+}
+.guide-run__play img {
+  width: 18px;
+  height: 18px;
+}
+.guide-run__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.guide-run__name {
+  font-size: 16px;
+  line-height: 1.3;
+  letter-spacing: -0.48px;
+}
+.guide-run__desc {
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.36px;
+  color: #9a9aa3; /* text/secondary token in Figma */
+}
+.guide-run__level {
+  flex: 0 0 auto;
+  padding: 3px 8px;
+  border: 1px solid var(--primary-lime);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.36px;
+  color: var(--primary-lime);
+}
+
+/* ── 진행 중인 프로그램 카드 ─────────────────────────────── */
+.guide-program {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #26262a;
+}
+.guide-program__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.guide-program__name {
+  font-size: 16px;
+  line-height: 1.3;
+  letter-spacing: -0.48px;
+}
+.guide-program__week {
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: -0.42px;
+  color: #d6ff1e;
+}
+.guide-program__next {
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.36px;
+  color: #9a9aa1;
+}
+.guide-program__track {
+  height: 6px;
+  border-radius: 3px;
+  background: #1a1a1c;
+  overflow: hidden;
+}
+.guide-program__fill {
+  width: 21%; /* 세션 5/24 진행률 */
+  height: 100%;
+  border-radius: 3px;
+  background: #d6ff1e;
+}
+.guide-program__cta {
+  width: 107px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--primary-lime);
+  color: var(--text-on-lime);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.48px;
+}
+.guide-program__meta {
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -0.36px;
+  color: #9a9aa1;
+}
+
+/* ── 러닝 팁 리스트 ──────────────────────────────────────── */
+.guide-tip__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.guide-tip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #26262a;
+  text-align: left;
+}
+.guide-tip__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.42px;
+}
+.guide-tip__arrow {
+  flex: 0 0 auto;
+  width: 6.5px;
+  height: 12px;
+}
