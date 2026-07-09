@@ -2,6 +2,7 @@ import logoW from "../assets/icons/logo-w.svg";
 import logoRun from "../assets/icons/logo-run.svg";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
 import iconBell from "../assets/icons/header-bell.svg";
+import iconSettings from "../assets/icons/header-settings.svg";
 import "./TopBars.css";
 
 export function StatusBar() {
@@ -29,7 +30,9 @@ export function StatusBar() {
   );
 }
 
-export function AppHeader() {
+type AppHeaderProps = { variant?: "default" | "settings"; onSettingsClick?: () => void };
+
+export function AppHeader({ variant = "default", onSettingsClick }: AppHeaderProps) {
   return (
     <header className="appheader">
       <div className="appheader__logo" aria-label="W:RUN">
@@ -41,14 +44,20 @@ export function AppHeader() {
         </span>
         <img className="appheader__logo-run" src={logoRun} alt="" />
       </div>
-      <div className="appheader__actions">
-        <button type="button" aria-label="챗봇">
-          <img className="appheader__icon" src={iconChatbot} alt="" />
+      {variant === "settings" ? (
+        <button type="button" aria-label="설정" onClick={onSettingsClick}>
+          <img className="appheader__icon" src={iconSettings} alt="" />
         </button>
-        <button type="button" aria-label="알림">
-          <img className="appheader__icon" src={iconBell} alt="" />
-        </button>
-      </div>
+      ) : (
+        <div className="appheader__actions">
+          <button type="button" aria-label="챗봇">
+            <img className="appheader__icon" src={iconChatbot} alt="" />
+          </button>
+          <button type="button" aria-label="알림">
+            <img className="appheader__icon" src={iconBell} alt="" />
+          </button>
+        </div>
+      )}
     </header>
   );
 }
