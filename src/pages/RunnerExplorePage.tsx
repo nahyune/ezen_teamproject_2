@@ -1,6 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
 import { StatusBar } from "../components/TopBars";
-import BottomNav from "../components/BottomNav";
 import runner1 from "../assets/img/runner1.png";
 import runner2 from "../assets/img/runner2.png";
 import runner3 from "../assets/img/runner3.png";
@@ -193,8 +192,6 @@ export default function RunnerExplorePage({ onBack }: Props) {
           </ul>
         </PageSection>
       </main>
-
-      <BottomNav />
     </div>
   );
 }
