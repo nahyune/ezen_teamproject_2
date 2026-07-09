@@ -6,10 +6,13 @@
 
 .schedule__card {
   position: relative;
+  display: block;
+  width: 100%;
   height: 250px;
   border-radius: 20px;
   overflow: hidden;
   background: #111;
+  text-align: left;
 }
 
 .schedule__bg {
@@ -18,7 +21,8 @@
   height: 100%;
   /* Match the Figma design exactly: the photo fills the 394×250 frame
      (Figma uses `size-full` with no object-cover, i.e. object-fit: fill). */
-  object-fit: fill;
+  object-fit: cover;
+  object-position: bottom center;
 }
 
 .schedule__scrim {

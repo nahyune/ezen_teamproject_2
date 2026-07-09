@@ -38,7 +38,7 @@
 
 .runner-page__content {
   flex: 1;
-  padding: 14px var(--gutter) 148px;
+  padding: 14px var(--gutter) 48px;
 }
 
 .runner-page__search {
