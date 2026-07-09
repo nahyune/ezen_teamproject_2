@@ -1,0 +1,41 @@
+/* ==========================================================
+   W:RUN 디자인 토큰 — 타이포그래피
+   ----------------------------------------------------------
+   ⚠️ 규칙: 폰트 크기·굵기·행간·자간 "값"은 이 파일에서만 정의.
+   컴포넌트 CSS에 font-size: 17px 같은 직접 값 금지.
+   새 크기가 필요하면 → 여기 변수로 이름 붙여 추가 후 사용.
+
+   ※ 컬러·레이아웃 토큰은 index.css의 :root에 이미 정의되어
+   있습니다 (--primary-lime, --primary-orange, --bg-app,
+   --text-primary, --gutter, --font-sans, --font-display ...).
+   중복 정의 금지 — 컬러가 필요하면 index.css 것을 쓰세요.
+   ========================================================== */
+
+/* 폰트 로딩은 index.html에서 처리 중 (Pretendard CDN + Anton 구글폰트) */
+
+:root {
+  /* ---------- Weight (Pretendard) ---------- */
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* ---------- Size (피그마 텍스트 스타일 기준) ---------- */
+  --fs-title-1: 30px;    /* Title-1    · SemiBold */
+  --fs-title-2: 24px;    /* Title-2    · SemiBold */
+  --fs-subtitle-1: 20px; /* SubTitle-1 · Medium   */
+  --fs-subtitle-2: 14px; /* SubTitle-2 · Medium   */
+  --fs-body-1: 16px;     /* Body-1     · Regular  */
+  --fs-body-2: 14px;     /* Body-2     · Regular  */
+  --fs-body-3: 12px;     /* Body-3     · Light    */
+  --fs-body-4: 16px;     /* Body-4     · (피그마 표기 16·36/130 — 행간 아래 별도) */
+  --fs-button: 16px;     /* Button     · SemiBold */
+
+  /* ---------- 공통 규칙 ---------- */
+  --lh-base: 1.2;        /* 행간 120% 통일 */
+  --lh-body-4: 36px;     /* Body-4 전용 행간 (피그마 정의) */
+  --ls-base: -0.02em;    /* 자간 -2% 통일 */
+
+  /* ---------- Layout (index.css --gutter 보완) ---------- */
+  --section-gap: 48px;   /* 섹션 간 간격 */
+}
