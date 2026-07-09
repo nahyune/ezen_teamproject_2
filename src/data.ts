@@ -18,17 +18,17 @@ import challenge3 from "./assets/img/challenge3.png";
 import mag1 from "./assets/img/mag1.png";
 import mag2 from "./assets/img/mag2.png";
 import mag3 from "./assets/img/mag3.png";
-import mypageAvatar from "./assets/img/mypage-avatar.png";
-import record0708 from "./assets/img/mypage-record-0708.jpg";
-import record0707 from "./assets/img/mypage-record-0707.png";
-import record0630 from "./assets/img/mypage-record-0630.jpg";
-import record0628 from "./assets/img/mypage-record-0628.jpg";
-import record0627 from "./assets/img/mypage-record-0627.jpg";
-import record0626 from "./assets/img/mypage-record-0626.jpg";
-import record0615 from "./assets/img/mypage-record-0615.jpg";
-import record0612 from "./assets/img/mypage-record-0612.png";
-import record0611 from "./assets/img/mypage-record-0611.png";
-import record0605 from "./assets/img/mypage-record-0605.png";
+import mypageAvatar from "./assets/img/mypage-avatar.webp";
+import record0708 from "./assets/img/mypage-record-0708.webp";
+import record0707 from "./assets/img/mypage-record-0707.webp";
+import record0630 from "./assets/img/mypage-record-0630.webp";
+import record0628 from "./assets/img/mypage-record-0628.webp";
+import record0627 from "./assets/img/mypage-record-0627.webp";
+import record0626 from "./assets/img/mypage-record-0626.webp";
+import record0615 from "./assets/img/mypage-record-0615.webp";
+import record0612 from "./assets/img/mypage-record-0612.webp";
+import record0611 from "./assets/img/mypage-record-0611.webp";
+import record0605 from "./assets/img/mypage-record-0605.webp";
 
 export const heroData = {
   title: "어제 저녁 러닝",
