@@ -9,7 +9,7 @@ import runner3 from "./assets/img/runner3.png";
 import runner4 from "./assets/img/runner4.png";
 import runner5 from "./assets/img/runner5.png";
 import runner6 from "./assets/img/runner6.png";
-import schedule from "./assets/img/schedule.png";
+import schedule from "./assets/img/schedule-hero.png";
 import race1 from "./assets/img/race1.png";
 import race2 from "./assets/img/race2.png";
 import challenge1 from "./assets/img/challenge1.png";
