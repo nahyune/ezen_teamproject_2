@@ -1,11 +1,9 @@
 import { StatusBar } from "../components/TopBars";
 import { ChevronLeft } from "../components/Icons";
-import BottomNav from "../components/BottomNav";
 import challengeHero from "../assets/img/challenge1.webp";
 
 type Props = {
   onBack: () => void;
-  onNavigate?: (key: string) => void;
 };
 
 const infoCards = [
@@ -69,7 +67,7 @@ function ShareIcon() {
   );
 }
 
-export default function ChallengeDetailPage({ onBack, onNavigate }: Props) {
+export default function ChallengeDetailPage({ onBack }: Props) {
   return (
     <div className="phone min-h-screen bg-[#040405] text-[#f6f6ed]">
       <StatusBar />
@@ -91,7 +89,7 @@ export default function ChallengeDetailPage({ onBack, onNavigate }: Props) {
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 px-[var(--gutter)] pb-[130px]">
+      <main className="flex flex-col gap-12 px-[var(--gutter)] pb-10">
         <section className="relative h-[420px] overflow-hidden rounded-[20px]">
           <img className="h-full w-full object-cover" src={challengeHero} alt="경복궁 댕댕런 GPS 아트런 경로 지도" />
           <div className="absolute inset-x-0 bottom-0 flex flex-col gap-[15px] pt-[65px] pr-[40px] pb-[26px] pl-[15px] bg-[linear-gradient(to_top,rgba(0,0,0,0.62)_30%,rgba(0,0,0,0.33)_70%,rgba(0,0,0,0)_100%)]">
@@ -221,8 +219,6 @@ export default function ChallengeDetailPage({ onBack, onNavigate }: Props) {
           </button>
         </section>
       </main>
-
-      <BottomNav active="home" onNavigate={onNavigate} />
     </div>
   );
 }

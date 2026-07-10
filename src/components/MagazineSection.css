@@ -29,12 +29,12 @@
 }
 
 .article-card__body {
-  @apply absolute bottom-4 left-4 flex flex-col gap-2.5 text-[var(--text-primary)];
+  @apply absolute bottom-4 left-4 flex flex-col gap-2.5 text-left text-[var(--text-primary)];
 }
 .article-card__title {
   @apply flex flex-col text-xl leading-[1.3] font-medium tracking-[-0.6px];
 }
 .article-card__preview {
-  @apply flex flex-col text-sm font-medium tracking-[-0.42px] text-[#bcc3c5];
+  @apply flex flex-col text-sm font-normal tracking-[-0.42px] text-[#bcc3c5];
 }
 }
