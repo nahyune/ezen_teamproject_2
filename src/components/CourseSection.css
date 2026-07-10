@@ -11,7 +11,7 @@
 }
 
 .course-card {
-  @apply relative block h-40 w-[180px] shrink-0 appearance-none overflow-hidden rounded-[20px] bg-[var(--bg-elevated)] p-0 text-left;
+  @apply relative block h-40 w-[182px] shrink-0 appearance-none overflow-hidden rounded-[20px] bg-[var(--bg-elevated)] p-0 text-left;
 }
 
 .course-card--static {
@@ -22,19 +22,19 @@
   @apply absolute top-0 right-0 left-0 h-[103px] overflow-hidden bg-[#2c2c30];
 }
 .course-card__img img {
-  @apply block h-full w-full object-cover object-[center_62%];
+  @apply absolute left-0 top-[-18.36%] block h-[118.52%] w-full max-w-none object-cover;
 }
 
 .course-card__body {
-  @apply absolute right-0 bottom-0 left-0 h-[57px] bg-[var(--bg-elevated)] px-3.5 pt-2.5;
+  @apply absolute left-3.5 top-[113px] flex w-[106px] flex-col items-start gap-[5px] bg-[var(--bg-elevated)];
 }
 .course-card__title {
-  @apply text-sm font-bold text-[var(--text-strong)];
+  @apply w-full text-[14px] font-bold leading-[17px] text-[var(--text-strong)];
 }
 .course-card__rating {
-  @apply text-xs font-normal text-[var(--primary-lime)];
+  @apply text-[12px] font-normal leading-[14px] text-[var(--primary-lime)];
 }
 .course-card__detail {
-  @apply mt-1.5 text-[11px] text-[var(--text-muted)];
+  @apply whitespace-nowrap text-[11px] leading-[13px] text-[var(--text-muted)];
 }
 }

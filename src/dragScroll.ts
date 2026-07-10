@@ -5,20 +5,24 @@ export function attachDragScroll(el: HTMLElement): () => void {
   let isDown = false;
   let startX = 0;
   let startLeft = 0;
-  let moved = false;
+  let didDrag = false;
+  let suppressClick = false;
+  let suppressTimer: number | undefined;
 
   const onDown = (e: MouseEvent) => {
     isDown = true;
-    moved = false;
+    didDrag = false;
     startX = e.pageX;
     startLeft = el.scrollLeft;
-    el.classList.add("dragging");
   };
 
   const onMove = (e: MouseEvent) => {
     if (!isDown) return;
     const dx = e.pageX - startX;
-    if (Math.abs(dx) > 4) moved = true;
+    if (Math.abs(dx) > 8) {
+      didDrag = true;
+      el.classList.add("dragging");
+    }
     el.scrollLeft = startLeft - dx;
   };
 
@@ -26,13 +30,21 @@ export function attachDragScroll(el: HTMLElement): () => void {
     if (!isDown) return;
     isDown = false;
     el.classList.remove("dragging");
+    if (didDrag) {
+      suppressClick = true;
+      window.clearTimeout(suppressTimer);
+      suppressTimer = window.setTimeout(() => {
+        suppressClick = false;
+      }, 120);
+    }
   };
 
   const onClickCapture = (e: MouseEvent) => {
-    if (moved) {
+    if (suppressClick) {
       e.preventDefault();
       e.stopPropagation();
-      moved = false;
+      suppressClick = false;
+      window.clearTimeout(suppressTimer);
     }
   };
 
@@ -46,6 +58,7 @@ export function attachDragScroll(el: HTMLElement): () => void {
     window.removeEventListener("mousemove", onMove);
     window.removeEventListener("mouseup", onUp);
     el.removeEventListener("click", onClickCapture, true);
+    window.clearTimeout(suppressTimer);
   };
 }
 

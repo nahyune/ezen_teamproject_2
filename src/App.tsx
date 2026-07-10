@@ -38,8 +38,8 @@ export default function App() {
   const [courseExploreKind, setCourseExploreKind] = useState<CourseExploreKind>("nearby");
   const [courseDetailKind, setCourseDetailKind] = useState<CourseDetailKind>("yeouido");
 
-  // Make every horizontal carousel draggable with the mouse (finger-swipe feel).
-  useEffect(() => initDragScroll(), []);
+  // Make the horizontal rows on the current screen draggable with the mouse.
+  useEffect(() => initDragScroll(), [page]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
