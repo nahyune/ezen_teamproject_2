@@ -14,7 +14,7 @@ export function StatusBar() {
           <rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor" />
           <rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor" />
           <rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor" />
-          <rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor" opacity="0.4" />
+          <rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor" />
         </svg>
         <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
           <path

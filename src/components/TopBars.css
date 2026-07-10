@@ -11,18 +11,34 @@
 }
 
 .statusbar__right {
-  @apply flex items-center gap-1.5;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .statusbar__battery {
-  @apply relative h-3 w-6 rounded-[3px] border border-white/50 p-[1.5px];
+  width: 25px;
+  height: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 3.5px;
+  padding: 1.5px;
+  position: relative;
 }
 .statusbar__battery::after {
   content: "";
-  @apply absolute top-[3.5px] right-[-3px] h-1 w-0.5 rounded-r-sm bg-white/50;
+  position: absolute;
+  right: -3px;
+  top: 3.5px;
+  width: 1.5px;
+  height: 4px;
+  border-radius: 0 1px 1px 0;
+  background: rgba(255, 255, 255, 0.4);
 }
 .statusbar__battery-fill {
-  @apply h-full w-full rounded-[1px] bg-[var(--text-primary)];
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5px;
+  background: #f8d12f; /* iOS Low Power Mode Yellow */
 }
 
 /* ── App header ─────────────────────────────────────────── */

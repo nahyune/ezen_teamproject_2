@@ -1,0 +1,97 @@
+.onboarding-slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  scroll-snap-align: start;
+}
+
+.onboarding-slide__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* Bottom gradient so the headline/description stay legible over the photo */
+.onboarding-slide__scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 46%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 15%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+/* Top gradient so the status bar/logo stay legible over bright skies etc. */
+.onboarding-slide__top-scrim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 22%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+.onboarding-slide__statusbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.onboarding-slide__logo {
+  position: absolute;
+  top: 58px;
+  left: var(--gutter);
+  z-index: 2;
+}
+
+.onboarding-slide__copy {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 40px;
+  z-index: 2;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.onboarding-slide__eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: 2.1px;
+  color: var(--primary-lime);
+  margin: 0;
+}
+
+.onboarding-slide__title {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 300;
+  line-height: 1;
+  color: #ffffff;
+  margin: 0;
+}
+
+.onboarding-slide__desc {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.3;
+  letter-spacing: -0.48px;
+  color: #ffffff;
+  opacity: 0.85;
+  margin: 0;
+}
