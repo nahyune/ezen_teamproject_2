@@ -41,6 +41,9 @@ import record0615 from "./assets/img/mypage-record-0615.webp";
 import record0612 from "./assets/img/mypage-record-0612.webp";
 import record0611 from "./assets/img/mypage-record-0611.webp";
 import record0605 from "./assets/img/mypage-record-0605.webp";
+import feedImage1 from "./assets/img/feed-image-01.webp";
+import feedImage2 from "./assets/img/feed-image-02.webp";
+import storyDogMap from "./assets/img/img-dog-map.webp";
 
 export const heroData = {
   title: "어제 저녁 러닝",
@@ -565,3 +568,72 @@ export const defaultSettingsToggles: Record<string, boolean> = {
   socialNotif: true,
   marketingNotif: false,
 };
+
+// ── Feed page (피그마 "피드 페이지/0709 수정" 프레임) ─────────────
+
+export type FeedStory = {
+  name: string;
+  /** 저화질 프로필은 미사용 — image 없으면 회색 원 플레이스홀더 */
+  image?: string;
+  /** me = 내 스토리(+배지) · new = 새 소식(오렌지 링 = 접속 표시) · seen = 확인함 */
+  state: "me" | "new" | "seen";
+};
+
+export const feedStories: FeedStory[] = [
+  { name: "내 스토리", image: storyDogMap, state: "me" },
+  { name: "안정은", state: "new" },
+  { name: "러너_준", state: "new" },
+  { name: "도쿄원정대", state: "new" },
+  { name: "김페이스", state: "seen" },
+];
+
+export type FeedPost = {
+  id: number;
+  author: string;
+  /** 저화질 프로필 미사용 — 없으면 회색 원 */
+  avatar?: string;
+  meta: string;
+  /** 사용자가 편집해 올리는 게시물 이미지 (336px 영역) */
+  image?: string;
+  cheers: number;
+  comments: number;
+  reposts: number;
+  likedBy: string;
+  commentPreview: string;
+};
+
+export const feedPosts: FeedPost[] = [
+  {
+    id: 1,
+    author: "안정은",
+    meta: "오늘 08:05 · 한강 러너스 크루 · 서울",
+    image: feedImage1,
+    cheers: 12,
+    comments: 62,
+    reposts: 50,
+    likedBy: "JW님 외 여러 명이 좋아합니다",
+    commentPreview: "메이브 · 오늘도 나오셨네요! 👏",
+  },
+  {
+    id: 2,
+    author: "도쿄원정대",
+    meta: "어제 · GPS 아트 · 도쿄",
+    image: feedImage2,
+    cheers: 12,
+    comments: 62,
+    reposts: 50,
+    likedBy: "JW님 외 여러 명이 좋아합니다",
+    commentPreview: "이하늘 · 저도 도쿄에서 달려보고 싶어요",
+  },
+];
+
+export type CrewSuggestion = {
+  name: string;
+  meta: string;
+  image?: string;
+};
+
+export const suggestedCrews: CrewSuggestion[] = [
+  { name: "성수 새벽런", meta: "응원 2.1k · 서울" },
+  { name: "한강 브릿지런", meta: "응원 1.4k · 서울" },
+];

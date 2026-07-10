@@ -24,6 +24,7 @@
   --text-primary: #ffffff;
   --text-strong: #f5f4f2;
   --text-muted: rgba(255, 255, 255, 0.7);
+  --text-soft: #9a9aa1; /* 메타 정보·비활성 라벨 (피드 페이지 기준) */
   --text-on-lime: #000000;
 
   /* ── Type ─────────────────────────────────────────────── */

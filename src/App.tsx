@@ -11,6 +11,7 @@ import RaceSection from "./components/RaceSection";
 import ChallengeSection from "./components/ChallengeSection";
 import MagazineSection from "./components/MagazineSection";
 import MyPage from "./pages/MyPage";
+import FeedPage from "./pages/FeedPage";
 import SettingsPage from "./pages/SettingsPage";
 import BottomNav from "./components/BottomNav";
 import RunnerExplorePage from "./pages/RunnerExplorePage";
@@ -22,6 +23,7 @@ import "./App.css";
 
 type Page =
   | "home"
+  | "feed"
   | "my"
   | "settings"
   | "runners"
@@ -98,12 +100,14 @@ export default function App() {
   return (
     <div className="phone">
       <AppHeader
-        variant={page === "my" ? "settings" : "default"}
+        variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
         onSettingsClick={() => setPage("settings")}
       />
 
       {page === "my" ? (
         <MyPage />
+      ) : page === "feed" ? (
+        <FeedPage />
       ) : (
         <main className="home">
           <HeroSection />
@@ -133,9 +137,9 @@ export default function App() {
       )}
 
       <BottomNav
-        active={page === "my" ? "my" : "home"}
+        active={page === "my" || page === "feed" ? page : "home"}
         onNavigate={(key) => {
-          if (key === "home" || key === "my") setPage(key);
+          if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
           // 기록 탭은 별도 페이지(record.html)로 이동한다.
           if (key === "record") window.location.href = `${import.meta.env.BASE_URL}record.html`;
         }}
