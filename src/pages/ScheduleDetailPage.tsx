@@ -1,13 +1,13 @@
 import { StatusBar } from "../components/TopBars";
 import { ChevronRight } from "../components/Icons";
-import scheduleImage from "../assets/img/schedule-hero.png";
-import runner1 from "../assets/img/runner1.png";
-import runner2 from "../assets/img/runner2.png";
-import runner3 from "../assets/img/runner3.png";
-import runner4 from "../assets/img/runner4.png";
-import runner5 from "../assets/img/runner5.png";
-import runner6 from "../assets/img/runner6.png";
-import course1 from "../assets/img/course1.png";
+import scheduleImage from "../assets/img/schedule-hero.webp";
+import runner1 from "../assets/img/runner1.webp";
+import runner2 from "../assets/img/runner2.webp";
+import runner3 from "../assets/img/runner3.webp";
+import runner4 from "../assets/img/runner4.webp";
+import runner5 from "../assets/img/runner5.webp";
+import runner6 from "../assets/img/runner6.webp";
+import course1 from "../assets/img/course1.webp";
 
 type Props = {
   onBack: () => void;

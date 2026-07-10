@@ -8,7 +8,11 @@ export default function ChallengeSection() {
       <h2 className="challenge__title">챌린지</h2>
       <ul className="challenge__list">
         {challenges.map((c) => (
-          <li key={c.name} className="challenge-item">
+          <li key={c.name}>
+            <button
+              className="challenge-item"
+              type="button"
+            >
             <div className="challenge-item__img">
               <img
                 src={c.image}
@@ -25,6 +29,7 @@ export default function ChallengeSection() {
               <p className="challenge-item__name">{c.name}</p>
               <p className="challenge-item__meta">👥 {c.participants}</p>
             </div>
+            </button>
           </li>
         ))}
       </ul>

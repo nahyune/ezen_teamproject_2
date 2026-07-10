@@ -1,5 +1,5 @@
 import { StatusBar } from "../components/TopBars";
-import raceHero from "../assets/img/race1.png";
+import raceHero from "../assets/img/race1.webp";
 
 type Props = {
   onBack: () => void;

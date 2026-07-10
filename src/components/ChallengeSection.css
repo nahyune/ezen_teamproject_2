@@ -18,6 +18,7 @@
 }
 
 .challenge-item {
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -25,6 +26,7 @@
   border-radius: 20px;
   background: var(--bg-elevated);
   overflow: hidden;
+  text-align: left;
 }
 
 .challenge-item__img {
