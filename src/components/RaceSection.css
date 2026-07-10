@@ -58,6 +58,7 @@
   border-radius: 20px;
   overflow: hidden;
   background: #111;
+  text-align: left;
 }
 .race-card__bg {
   position: absolute;

@@ -8,7 +8,6 @@ import runner5 from "../assets/img/runner5.png";
 import runner6 from "../assets/img/runner6.png";
 import course1 from "../assets/img/course1.png";
 import race1 from "../assets/img/race1.png";
-import "./RunnerExplorePage.css";
 
 type Props = {
   onBack: () => void;
@@ -25,6 +24,18 @@ type ProfileItem = {
 type QuickLink = Pick<ProfileItem, "image" | "position"> & {
   label: string;
 };
+
+const pageSectionClass = "flex flex-col";
+const sectionHeadClass = "mb-[21px] flex items-center justify-between";
+const sectionTitleClass = "text-[24px] font-semibold leading-none tracking-[0]";
+const sectionActionClass = "text-[12px] font-normal leading-none tracking-[0] text-[var(--primary-lime)]";
+const profileRowClass =
+  "grid min-h-[58px] grid-cols-[58px_minmax(0,1fr)_auto_18px] items-center gap-x-[10px] max-[360px]:grid-cols-[52px_minmax(0,1fr)_auto_16px] max-[360px]:gap-x-2";
+const profileAvatarClass =
+  "h-[58px] w-[58px] rounded-full bg-[#222] object-cover max-[360px]:h-[52px] max-[360px]:w-[52px]";
+const profileTextClass = "flex min-w-0 flex-col gap-[5px]";
+const profileNameClass = "truncate text-[16px] font-medium leading-[1.05] tracking-[0] text-white";
+const profileMetaClass = "truncate text-[13px] font-normal leading-[1.1] tracking-[0] text-[rgba(255,255,255,0.58)]";
 
 const quickLinks: QuickLink[] = [
   { image: runner1, label: "내 크루", position: "45% 42%" },
@@ -106,10 +117,14 @@ function PageSection({
   children: ReactNode;
 }) {
   return (
-    <section className="runner-page__section">
-      <div className="runner-page__section-head">
-        <h2>{title}</h2>
-        {action && <button type="button">{action}</button>}
+    <section className={pageSectionClass}>
+      <div className={sectionHeadClass}>
+        <h2 className={sectionTitleClass}>{title}</h2>
+        {action && (
+          <button className={sectionActionClass} type="button">
+            {action}
+          </button>
+        )}
       </div>
       {children}
     </section>
@@ -118,24 +133,34 @@ function PageSection({
 
 function ProfileRow({ item }: { item: ProfileItem }) {
   return (
-    <li className="runner-profile">
-      <Avatar className="runner-profile__avatar" item={item} />
-      <div className="runner-profile__text">
-        <strong>{item.name}</strong>
-        <span>{item.meta}</span>
+    <li className={profileRowClass}>
+      <Avatar className={profileAvatarClass} item={item} />
+      <div className={profileTextClass}>
+        <strong className={profileNameClass}>{item.name}</strong>
+        <span className={profileMetaClass}>{item.meta}</span>
       </div>
       {item.action === "follow" && (
-        <button className="runner-profile__follow" type="button">
+        <button
+          className="h-[34px] w-[69px] rounded-[10px] bg-[var(--primary-lime)] text-[13px] font-medium tracking-[0] text-black max-[360px]:w-16 max-[360px]:text-[12px]"
+          type="button"
+        >
           팔로우
         </button>
       )}
       {item.action === "cheer" && (
-        <button className="runner-profile__cheer" type="button">
+        <button
+          className="h-[33px] w-[94px] rounded-full border border-[var(--primary-lime)] text-[13px] font-medium leading-[1.3] tracking-[0] text-[var(--primary-lime)] max-[360px]:w-[88px] max-[360px]:text-[12px]"
+          type="button"
+        >
           응원하기
         </button>
       )}
       {item.action && (
-        <button className="runner-profile__dismiss" type="button" aria-label={`${item.name} 숨기기`}>
+        <button
+          className="grid h-[34px] w-[18px] place-items-center text-[rgba(255,255,255,0.62)]"
+          type="button"
+          aria-label={`${item.name} 숨기기`}
+        >
           <CloseIcon />
         </button>
       )}
@@ -145,39 +170,48 @@ function ProfileRow({ item }: { item: ProfileItem }) {
 
 export default function RunnerExplorePage({ onBack }: Props) {
   return (
-    <div className="phone runner-page">
+    <div className="phone min-h-screen bg-black text-[var(--text-primary)] [&_.statusbar]:h-11 [&_.statusbar]:px-[26px]">
       <StatusBar />
-      <header className="runner-page__top">
-        <button className="runner-page__back" type="button" onClick={onBack} aria-label="뒤로가기">
+      <header className="relative flex h-[57px] items-center justify-center px-[var(--gutter)]">
+        <button
+          className="absolute left-[18px] top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center text-white"
+          type="button"
+          onClick={onBack}
+          aria-label="뒤로가기"
+        >
           <BackIcon />
         </button>
-        <h1>인기 러너</h1>
+        <h1 className="text-[25px] font-semibold leading-none tracking-[0]">인기 러너</h1>
       </header>
 
-      <main className="runner-page__content">
-        <input className="runner-page__search" aria-label="러너·크루 검색" placeholder="러너·크루 검색" />
+      <main className="flex-1 px-[var(--gutter)] pb-12 pt-[14px] [&>section+section]:mt-[45px]">
+        <input
+          className="block h-[47px] w-full rounded-[11px] border-0 bg-[#1d1d20] px-4 text-[15px] font-medium tracking-[0] text-white outline-0 placeholder:text-white/48"
+          aria-label="러너·크루 검색"
+          placeholder="러너·크루 검색"
+        />
 
-        <div className="runner-page__quick">
+        <div className="flex gap-[27px] pb-[46px] pt-12">
           {quickLinks.map((item) => (
-            <button className="runner-page__quick-item" type="button" key={item.label}>
-              <Avatar className="runner-page__quick-avatar" item={item} />
-              <span>{item.label}</span>
+            <button className="flex w-[73px] flex-col items-center gap-[9px]" type="button" key={item.label}>
+              <Avatar className="h-[72px] w-[72px] rounded-full object-cover" item={item} />
+              <span className="whitespace-nowrap text-[14px] font-medium leading-none tracking-[0]">{item.label}</span>
             </button>
           ))}
         </div>
 
         <PageSection title="최근 응원한 러너" action="전체 보기">
-          <div className="runner-profile runner-profile--recent">
-            <Avatar className="runner-profile__avatar" item={recentRunner} />
-            <div className="runner-profile__text">
-              <strong>{recentRunner.name}</strong>
-              <span>{recentRunner.meta}</span>
+          <div className="grid min-h-[58px] grid-cols-[58px_minmax(0,1fr)] items-center gap-x-[10px]">
+            <Avatar className={profileAvatarClass} item={recentRunner} />
+            <div className={profileTextClass}>
+              <strong className={profileNameClass}>{recentRunner.name}</strong>
+              <span className={profileMetaClass}>{recentRunner.meta}</span>
             </div>
           </div>
         </PageSection>
 
         <PageSection title="인기 러너" action="모두 보기">
-          <ul className="runner-page__list">
+          <ul className="flex flex-col gap-6">
             {popularRunners.map((item) => (
               <ProfileRow key={item.name} item={item} />
             ))}
@@ -185,7 +219,7 @@ export default function RunnerExplorePage({ onBack }: Props) {
         </PageSection>
 
         <PageSection title="팔로우할 만한 크루" action="모두 보기">
-          <ul className="runner-page__list">
+          <ul className="flex flex-col gap-6">
             {crews.map((item) => (
               <ProfileRow key={item.name} item={item} />
             ))}

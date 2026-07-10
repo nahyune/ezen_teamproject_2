@@ -1,0 +1,345 @@
+/* ── 기록하기 화면 ───────────────────────────────────────────
+   이 화면은 팀 경계를 위해 헤더/하단 네비까지 자체 마크업·스타일로
+   가지고 있으며, 공용 컴포넌트(TopBars/BottomNav)는 수정하지 않는다. */
+
+/* 독립 실행(record.html 미리보기)용 폰 프레임 — App의 .phone 대응 */
+.record-frame {
+  width: 100%;
+  max-width: var(--frame-width);
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.record {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Map backdrop: fades in from black at the top, dark vignette at the edges */
+.record__map {
+  position: absolute;
+  inset: 210px 0 0;
+  z-index: 0;
+  background: url("../assets/img/record-map.png") center / cover no-repeat;
+  pointer-events: none;
+}
+.record__map::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 50% at center,
+    rgba(0, 0, 0, 0.62) 0%,
+    rgba(0, 0, 0, 0.85) 60%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+}
+.record__map::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(to bottom, #000 19%, rgba(0, 0, 0, 0));
+}
+
+/* ── 헤더 (로고 + 알림) ──────────────────────────────────── */
+.record__header {
+  position: relative;
+  z-index: 1;
+  height: 52px;
+  margin: 12px 0;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.record__logo {
+  display: flex;
+  align-items: center;
+  gap: 4.6px;
+  height: 21.6px;
+}
+.record__logo-w {
+  width: 17.1px;
+  height: 21.44px;
+}
+.record__logo-run {
+  width: 34.23px;
+  height: 21.64px;
+}
+/* The lime ":" rendered as three stacked dots, per the Figma logo */
+.record__logo-dots {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 21px;
+  padding: 0.3px 0;
+}
+.record__logo-dots i {
+  display: block;
+  width: 4.42px;
+  height: 3.64px;
+  background: var(--primary-lime);
+}
+
+.record__bell {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── 추천 코스 캐러셀 ────────────────────────────────────── */
+.record-course {
+  position: relative;
+  z-index: 1;
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.record-course__head {
+  padding: 0 var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.record-course__title {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.48px;
+}
+.record-course__sub {
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: -0.42px;
+}
+
+.record-course__row {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  /* side padding centers a card and lets neighbours peek at the edges */
+  padding: 0 calc((var(--frame-width) - 330px) / 2);
+  scroll-snap-type: x mandatory;
+}
+/* snapping fights the 1:1 drag tracking, so pause it while dragging */
+.record-course__row.dragging {
+  scroll-snap-type: none;
+}
+
+.record-card {
+  flex: 0 0 330px;
+  height: 140px;
+  padding: 22px 18px 23px 17px;
+  border-radius: var(--radius-card);
+  background: var(--bg-elevated);
+  scroll-snap-align: center;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  /* non-centered cards sit blurred and slightly shrunken */
+  filter: blur(2px);
+  transform: scale(0.93);
+  transition:
+    filter 0.25s ease,
+    transform 0.25s ease;
+}
+.record-card--active {
+  filter: none;
+  transform: none;
+}
+
+.record-card__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.record-card__title {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.6px;
+}
+.record-card__desc {
+  margin-top: 10px;
+  font-size: 14px;
+  letter-spacing: -0.42px;
+  color: var(--text-muted);
+  white-space: pre-line;
+}
+.record-card__time {
+  margin-top: 8px;
+  font-size: 14px;
+  letter-spacing: -0.42px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.record-card__more {
+  position: absolute;
+  top: 24px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  letter-spacing: -0.42px;
+  color: var(--text-muted);
+  visibility: hidden;
+}
+.record-card--active .record-card__more {
+  visibility: visible;
+}
+
+.record-card__thumb {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 63px;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+/* ── 하단 컨트롤 (말풍선 · 챗봇 · 시작 · 보조 버튼) ─────────── */
+.record__controls {
+  position: absolute;
+  left: 50%;
+  bottom: 150px;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.record__bubble {
+  position: relative;
+  width: 267px;
+  padding: 13px 10px;
+  margin-bottom: 25px; /* leaves room for the 15px tail + 10px gap */
+  border-radius: 15px;
+  background: rgba(28, 28, 31, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.42px;
+  text-align: center;
+}
+.record__bubble::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top: 15px solid rgba(28, 28, 31, 0.7);
+  border-bottom: none;
+}
+
+.record__fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 26px;
+  background: #1b1b22; /* bg/surface token in Figma */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+}
+.record__fab img {
+  width: 24px;
+  height: 24px;
+}
+.record__fab--chat {
+  margin-bottom: 30px;
+}
+
+.record__sparkle {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  /* sits between the chatbot button and the start button, right side */
+  top: 155px;
+  left: 240px;
+}
+
+.record__actions {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.record__start {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--primary-lime);
+  color: var(--text-on-lime);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.48px;
+}
+
+/* ── 하단 네비게이션 (이 화면 전용 사본, 기록 탭 활성) ────────── */
+.record-nav-dock {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: var(--frame-width);
+  max-width: 100%;
+  padding: 0 16px 18px;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.record-nav {
+  pointer-events: auto;
+  width: 398px;
+  max-width: 100%;
+  padding: 16px;
+  border-radius: 100px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.record-nav__list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 53px;
+}
+
+.record-nav__tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 51px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.24px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.record-nav__tab--active {
+  color: var(--primary-lime);
+  font-weight: 600;
+}
+
+.record-nav__icon {
+  width: 30px;
+  height: 28px;
+}
