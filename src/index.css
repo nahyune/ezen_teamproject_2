@@ -1,3 +1,19 @@
+@import "tailwindcss";
+
+/* Tailwind theme tokens for components converted to utility classes
+   (BottomNav, MyPage, SettingsPage). Values mirror the --primary-lime /
+   --bg-elevated / etc. custom properties below, kept separate so CSS-file
+   components elsewhere are unaffected. */
+@theme {
+  --color-primary-lime: #d4ff3f;
+  --color-primary-orange: #ff4e16;
+  --color-elevated: #1c1c1f;
+  --color-pill: #1f211f;
+  --color-pill-border: #404538;
+  --font-display: "Anton", var(--font-sans);
+  --radius-card: 20px;
+}
+
 :root {
   /* ── Color tokens (from Figma) ────────────────────────── */
   --primary-lime: #d4ff3f; /* primary-2 */
@@ -24,46 +40,48 @@
   --radius-card: 20px;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-html,
-body {
-  height: 100%;
-}
+  html,
+  body {
+    height: 100%;
+  }
 
-body {
-  background: #2b2b2e;
-  color: var(--text-primary);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+  body {
+    background: #2b2b2e;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
 
-#root {
-  min-height: 100%;
-  display: flex;
-  justify-content: center;
-}
+  #root {
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+  }
 
-button {
-  font: inherit;
-  color: inherit;
-  border: none;
-  background: none;
-  cursor: pointer; /* clickable elements → pointing-finger hand */
-}
+  button {
+    font: inherit;
+    color: inherit;
+    border: none;
+    background: none;
+    cursor: pointer; /* clickable elements → pointing-finger hand */
+  }
 
-img {
-  display: block;
-  max-width: 100%;
-}
+  img {
+    display: block;
+    max-width: 100%;
+  }
 
-ul {
-  list-style: none;
+  ul {
+    list-style: none;
+  }
 }
 
 /* Hide scrollbars on horizontal carousels while keeping scroll */

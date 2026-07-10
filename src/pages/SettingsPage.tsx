@@ -2,7 +2,6 @@ import { Fragment, useState } from "react";
 import { settingsGroups, defaultSettingsToggles } from "../data";
 import chevronLeft from "../assets/icons/settings-chevron-left.svg";
 import chevronRight from "../assets/icons/settings-chevron-right.svg";
-import "./SettingsPage.css";
 
 type Props = {
   onBack?: () => void;
@@ -12,34 +11,38 @@ export default function SettingsPage({ onBack }: Props) {
   const [toggles, setToggles] = useState(defaultSettingsToggles);
 
   return (
-    <div className="settings">
-      <header className="settings-header">
+    <div className="flex flex-col">
+      <header className="relative flex items-center gap-3 px-[18px] py-4">
         <button
           type="button"
-          className="settings-header__back"
+          className="flex-none w-[26px] h-[26px]"
           onClick={onBack}
           aria-label="뒤로가기"
         >
-          <img src={chevronLeft} alt="" />
+          <img className="w-full h-full" src={chevronLeft} alt="" />
         </button>
-        <h1 className="settings-header__title">설정</h1>
+        <h1 className="absolute left-1/2 -translate-x-1/2 text-2xl font-semibold tracking-[-0.48px] text-white">
+          설정
+        </h1>
       </header>
 
-      <div className="settings-content">
+      <div className="flex flex-col gap-12 pt-2 px-[18px] pb-10">
         {settingsGroups.map((group) => (
-          <section key={group.title} className="settings-group">
-            <p className="settings-group__title">{group.title}</p>
-            <div className="settings-card">
+          <section key={group.title} className="flex flex-col gap-2.5">
+            <p className="text-sm font-medium tracking-[-0.42px] text-primary-lime">
+              {group.title}
+            </p>
+            <div className="bg-[#161616] rounded-2xl overflow-hidden">
               {group.rows.map((row, i) => (
                 <Fragment key={row.label}>
-                  {i > 0 && <div className="settings-card__divider" />}
-                  <div className="settings-row">
-                    <span className="settings-row__label">{row.label}</span>
+                  {i > 0 && <div className="h-px bg-[#262626]" />}
+                  <div className="flex items-center justify-between px-4 py-[17px]">
+                    <span className="text-base tracking-[-0.48px] text-white">{row.label}</span>
                     {row.kind === "toggle" ? (
                       <button
                         type="button"
-                        className={`settings-row__toggle${
-                          toggles[row.key] ? " settings-row__toggle--on" : ""
+                        className={`relative w-11 h-[26px] rounded-full transition-colors duration-200 ease-in-out ${
+                          toggles[row.key] ? "bg-primary-lime" : "bg-[#3b3b3b]"
                         }`}
                         aria-pressed={toggles[row.key]}
                         aria-label={row.label}
@@ -47,13 +50,23 @@ export default function SettingsPage({ onBack }: Props) {
                           setToggles((prev) => ({ ...prev, [row.key]: !prev[row.key] }))
                         }
                       >
-                        <span className="settings-row__toggle-thumb" />
+                        <span
+                          className={`absolute top-[3px] left-[3px] w-5 h-5 rounded-full transition-[transform,background-color,box-shadow] duration-200 ease-in-out ${
+                            toggles[row.key]
+                              ? "bg-white translate-x-[18px] shadow-[0_2px_4px_rgba(143,172,43,0.5)]"
+                              : "bg-[#999999]"
+                          }`}
+                        />
                       </button>
                     ) : (
-                      <span className="settings-row__right">
-                        {row.value && <span className="settings-row__value">{row.value}</span>}
+                      <span className="flex items-center gap-2">
+                        {row.value && (
+                          <span className="text-sm tracking-[-0.42px] text-[#8a8a8a]">
+                            {row.value}
+                          </span>
+                        )}
                         {row.kind === "nav" && (
-                          <img className="settings-row__chevron" src={chevronRight} alt="" />
+                          <img className="w-3.5 h-3.5" src={chevronRight} alt="" />
                         )}
                       </span>
                     )}
@@ -64,11 +77,11 @@ export default function SettingsPage({ onBack }: Props) {
           </section>
         ))}
 
-        <div className="settings-actions">
-          <button type="button" className="settings-actions__logout">
+        <div className="flex flex-col items-center gap-5 pt-2">
+          <button type="button" className="text-base font-medium text-primary-orange">
             로그아웃
           </button>
-          <button type="button" className="settings-actions__delete">
+          <button type="button" className="text-sm text-[#8a8a8a] underline underline-offset-2">
             회원탈퇴
           </button>
         </div>
