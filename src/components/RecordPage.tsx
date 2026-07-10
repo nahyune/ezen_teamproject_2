@@ -51,7 +51,13 @@ const navTabs = [
 const fabClass =
   "grid size-13 place-items-center rounded-full bg-surface shadow-[0_4px_12px_rgba(0,0,0,0.35)]";
 
-export default function RecordPage({ onGuideOpen }: { onGuideOpen?: () => void }) {
+export default function RecordPage({
+  onGuideOpen,
+  onStart,
+}: {
+  onGuideOpen?: () => void;
+  onStart?: () => void;
+}) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
 
@@ -181,7 +187,7 @@ export default function RecordPage({ onGuideOpen }: { onGuideOpen?: () => void }
 
       <div className="absolute bottom-37.5 left-1/2 z-2 flex -translate-x-1/2 flex-col items-center">
         {/* 말풍선: 아래 25px 여백은 15px 꼬리 + 10px 간격 몫 */}
-        <p className="relative mb-6.25 w-66.75 rounded-[15px] bg-elevated/70 px-2.5 py-3.25 text-center text-[14px] font-medium tracking-[-0.42px] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-b-0 after:border-transparent after:border-t-[15px] after:border-t-elevated/70">
+        <p className="relative mb-6.25 w-66.75 rounded-[15px] bg-elevated/70 px-2.5 py-3.25 text-center text-[14px] font-medium tracking-[-0.42px] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-b-0 after:border-transparent after:border-t-15 after:border-t-elevated/70">
           러닝하기 딱 좋은 날이에요!
           <br />
           다른 코스를 원하시면 저에게 알려주세요.
@@ -211,6 +217,7 @@ export default function RecordPage({ onGuideOpen }: { onGuideOpen?: () => void }
           <button
             type="button"
             className="size-30 rounded-full bg-primary-lime text-[24px] font-semibold tracking-[-0.48px] text-black"
+            onClick={onStart}
           >
             시작
           </button>

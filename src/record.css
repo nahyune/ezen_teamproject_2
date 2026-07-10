@@ -16,6 +16,22 @@
   /* ── Type ─────────────────────────────────────────────── */
   --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont,
     "Apple SD Gothic Neo", system-ui, sans-serif;
+  --font-display: "Anton", var(--font-sans);
+
+  /* ── Motion ───────────────────────────────────────────── */
+  /* 카운트다운 숫자: 작게 시작해 부드럽게 커지며 나타난다 */
+  --animate-count-pop: count-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes count-pop {
+    from {
+      scale: 0.3;
+      opacity: 0;
+    }
+    to {
+      scale: 1;
+      opacity: 1;
+    }
+  }
 }
 
 @layer base {
