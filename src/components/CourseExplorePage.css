@@ -1,0 +1,119 @@
+@reference "../index.css";
+
+@layer components {
+.course-explore {
+  @apply mx-auto min-h-screen w-full max-w-[var(--frame-width)] bg-black pb-10;
+}
+
+.course-explore__topbar {
+  @apply sticky top-0 z-[95] flex h-16 items-center justify-between bg-black px-[18px] py-4;
+}
+
+.course-explore__page-title {
+  @apply absolute top-4 left-1/2 -translate-x-1/2 text-2xl leading-[1.3] font-semibold tracking-[-0.48px] text-white;
+}
+
+.course-explore__icon-btn {
+  @apply grid h-[26px] w-[26px] place-items-center text-[var(--text-primary)];
+}
+
+.course-explore__content {
+  @apply flex flex-col;
+}
+
+.nearby-course {
+  @apply flex flex-col gap-2.5 px-[var(--gutter)] pt-[22px] pb-[18px];
+}
+
+.course-explore__section-title {
+  @apply text-2xl leading-none font-semibold tracking-[-0.48px] text-[var(--text-strong)];
+}
+
+.nearby-course__card {
+  @apply w-full overflow-hidden rounded-[20px] bg-[var(--bg-elevated)] text-left;
+}
+
+.nearby-course__image {
+  @apply relative h-[170px] overflow-hidden bg-linear-to-b from-[#29332b] to-[var(--bg-elevated)];
+}
+
+.nearby-course__image img {
+  @apply absolute max-w-none object-cover;
+  top: -54.48%;
+  left: 0.08%;
+  width: 100%;
+  height: 154.51%;
+}
+
+.nearby-course__info {
+  @apply flex flex-col gap-1.5 px-[18px] pt-[15px] pb-3.5;
+}
+
+.nearby-course__title-row {
+  @apply flex min-w-0 items-center gap-2;
+}
+
+.nearby-course__title {
+  @apply text-xl leading-[1.3] font-medium tracking-[-0.6px] text-[var(--text-strong)];
+}
+
+.nearby-course__level {
+  @apply shrink-0 rounded-[10px] bg-[var(--primary-lime)] px-2 pt-0.5 pb-[3px] text-xs leading-[1.3] font-light tracking-[-0.36px] text-[#0f0f0f];
+}
+
+.nearby-course__meta {
+  @apply text-sm leading-[1.3] font-normal tracking-[-0.42px] text-[rgba(245,244,242,0.7)];
+}
+
+.course-filters {
+  @apply flex gap-2 overflow-x-auto px-[var(--gutter)] pt-[19px] pb-5;
+}
+
+.course-filter {
+  @apply shrink-0 rounded-[50px] border border-[var(--border-pill)] bg-[var(--bg-pill)] px-3.5 py-2 text-sm leading-[1.3] font-normal tracking-[-0.42px] text-[#f6f6ed];
+}
+
+.course-filter--active {
+  @apply border-[var(--primary-lime)] bg-[var(--primary-lime)] leading-none font-medium text-black;
+}
+
+.course-list {
+  @apply flex flex-col gap-3 px-[var(--gutter)];
+}
+
+.course-list__card {
+  @apply flex min-h-[102px] w-full items-center gap-3.5 overflow-hidden rounded-2xl bg-[var(--bg-elevated)] py-3 pr-3.5 pl-3 text-left;
+}
+
+.course-list__thumb {
+  @apply h-[78px] w-[78px] shrink-0 overflow-hidden rounded-xl bg-[#2c2c30];
+}
+
+.course-list__thumb img {
+  @apply h-full w-full object-cover;
+}
+
+.course-list__info {
+  @apply flex h-[62px] min-w-0 flex-col justify-start gap-[7px];
+}
+
+.course-list__title-row {
+  @apply flex min-w-0 items-center gap-[7px];
+}
+
+.course-list__title {
+  @apply min-w-0 max-w-[168px] overflow-hidden text-ellipsis whitespace-nowrap text-base leading-[1.3] font-semibold tracking-[-0.48px] text-[var(--text-strong)];
+}
+
+.course-list__level {
+  @apply shrink-0 rounded-[9px] bg-[#959595] px-2 pt-0.5 pb-[3px] text-xs leading-[1.3] font-light tracking-[-0.36px] text-[#0f0f0f];
+}
+
+.course-list__meta {
+  @apply text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.7)];
+}
+
+.course-list__nearby {
+  @apply text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.55)];
+}
+}

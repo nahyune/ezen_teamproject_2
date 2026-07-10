@@ -1,103 +1,59 @@
+@reference "../index.css";
+
+@layer components {
 /* ── Status bar ─────────────────────────────────────────── */
 .statusbar {
-  height: 52px;
-  padding: 0 26px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--text-primary);
+  @apply flex h-[52px] items-center justify-between px-[26px] text-[var(--text-primary)];
 }
 
 .statusbar__time {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
+  @apply text-base font-semibold tracking-[0.2px];
 }
 
 .statusbar__right {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  @apply flex items-center gap-1.5;
 }
 
 .statusbar__battery {
-  width: 24px;
-  height: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 3px;
-  padding: 1.5px;
-  position: relative;
+  @apply relative h-3 w-6 rounded-[3px] border border-white/50 p-[1.5px];
 }
 .statusbar__battery::after {
   content: "";
-  position: absolute;
-  right: -3px;
-  top: 3.5px;
-  width: 2px;
-  height: 4px;
-  border-radius: 0 2px 2px 0;
-  background: rgba(255, 255, 255, 0.5);
+  @apply absolute top-[3.5px] right-[-3px] h-1 w-0.5 rounded-r-sm bg-white/50;
 }
 .statusbar__battery-fill {
-  width: 100%;
-  height: 100%;
-  border-radius: 1px;
-  background: var(--text-primary);
+  @apply h-full w-full rounded-[1px] bg-[var(--text-primary)];
 }
 
 /* ── App header ─────────────────────────────────────────── */
 .appheader {
-  position: sticky;
-  top: 12px;
-  z-index: 90;
-  height: 52px;
-  padding: 0 var(--gutter);
-  margin-top: 12px;
-  margin-bottom: 12px;
-  background: var(--bg-app);
+  @apply sticky top-3 z-[90] mt-3 mb-3 flex h-[52px] items-center justify-between bg-[var(--bg-app)] px-[var(--gutter)];
   box-shadow:
     0 -12px 0 var(--bg-app),
     0 12px 0 var(--bg-app);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .appheader__logo {
-  display: flex;
-  align-items: center;
-  gap: 4.6px;
-  height: 21.6px;
+  @apply flex h-[21.6px] items-center gap-[4.6px];
 }
 .appheader__logo-w {
-  width: 17.1px;
-  height: 21.44px;
+  @apply h-[21.44px] w-[17.1px];
 }
 .appheader__logo-run {
-  width: 34.23px;
-  height: 21.64px;
+  @apply h-[21.64px] w-[34.23px];
 }
 /* The lime ":" rendered as three stacked dots, per the Figma logo */
 .appheader__logo-dots {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 21px;
-  padding: 0.3px 0;
+  @apply flex h-[21px] flex-col justify-between py-[0.3px];
 }
 .appheader__logo-dots i {
-  display: block;
-  width: 4.42px;
-  height: 3.64px;
-  background: var(--primary-lime);
+  @apply block h-[3.64px] w-[4.42px] bg-[var(--primary-lime)];
 }
 
 .appheader__actions {
-  display: flex;
-  align-items: center;
-  gap: 18px;
+  @apply flex items-center gap-[18px];
 }
 .appheader__icon {
-  width: 24px;
-  height: 24px;
+  @apply h-6 w-6;
+}
 }

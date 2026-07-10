@@ -12,7 +12,11 @@ export default function SectionHeader({ title, action = "전체보기", onAction
     <div className="section-header">
       <h2 className="section-header__title">{title}</h2>
       {action && (
-        <button className="section-header__action" type="button" onClick={onAction}>
+        <button
+          className={`section-header__action${onAction ? "" : " section-header__action--static"}`}
+          type="button"
+          onClick={onAction}
+        >
           <span>{action}</span>
           <ChevronRight size={14} />
         </button>

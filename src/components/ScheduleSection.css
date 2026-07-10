@@ -1,54 +1,29 @@
+@reference "../index.css";
+
+@layer components {
 .schedule {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  @apply flex flex-col gap-[15px];
 }
 
 .schedule__card {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 250px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #111;
-  text-align: left;
+  @apply relative block h-[250px] w-full overflow-hidden rounded-[20px] bg-[#111] text-left;
 }
 
 .schedule__bg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  /* Match the Figma design exactly: the photo fills the 394×250 frame
-     (Figma uses `size-full` with no object-cover, i.e. object-fit: fill). */
-  object-fit: cover;
-  object-position: bottom center;
+  @apply block h-full w-full object-cover object-bottom;
 }
 
 .schedule__scrim {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 88px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+  @apply absolute right-0 bottom-0 left-0 h-[88px] bg-linear-to-t from-black/60 to-black/0;
 }
 
 .schedule__body {
-  position: absolute;
-  left: 16px;
-  bottom: 16px;
-  color: var(--text-primary);
+  @apply absolute bottom-4 left-4 text-[var(--text-primary)];
 }
 .schedule__title {
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: -0.6px;
+  @apply text-xl font-medium tracking-[-0.6px];
 }
 .schedule__meta {
-  margin-top: 3px;
-  display: flex;
-  gap: 5px;
-  font-size: 16px;
-  letter-spacing: -0.48px;
+  @apply mt-[3px] flex gap-[5px] text-base tracking-[-0.48px];
+}
 }

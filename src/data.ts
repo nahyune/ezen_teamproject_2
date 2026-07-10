@@ -1,8 +1,20 @@
 // All home-screen content, extracted from the Figma "메인 홈" frame.
-import hero from "./assets/img/hero.png";
+import hero from "./assets/img/hero.webp";
 import course1 from "./assets/img/course1.webp";
-import course2 from "./assets/img/course2.png";
-import course3 from "./assets/img/course3.png";
+import course2 from "./assets/img/course2.webp";
+import course3 from "./assets/img/course3.webp";
+import courseThumbSeoul from "./assets/img/course-thumb-seoul.webp";
+import courseThumbNamsan from "./assets/img/course-thumb-namsan.webp";
+import courseDetailMap from "./assets/img/course-detail-map.webp";
+import popularCourseMain from "./assets/img/popular-course-main.webp";
+import popularCourseSeokchon from "./assets/img/popular-course-seokchon.webp";
+import popularCourseHangang from "./assets/img/popular-course-hangang.webp";
+import popularCourseDetailMap from "./assets/img/popular-course-detail-map.webp";
+import challengeCourseMain from "./assets/img/challenge-course-main.webp";
+import challengeCourseGwanghwamun from "./assets/img/challenge-course-gwanghwamun.webp";
+import challengeCourseYeontral from "./assets/img/challenge-course-yeontral.webp";
+import challengeCourseGyeongbok from "./assets/img/challenge-course-gyeongbok.webp";
+import challengeCourseDetailMap from "./assets/img/challenge-course-detail-map.webp";
 import runner1 from "./assets/img/runner1.webp";
 import runner2 from "./assets/img/runner2.webp";
 import runner3 from "./assets/img/runner3.webp";
@@ -15,9 +27,9 @@ import race2 from "./assets/img/race2.webp";
 import challenge1 from "./assets/img/challenge1.webp";
 import challenge2 from "./assets/img/challenge2.webp";
 import challenge3 from "./assets/img/challenge3.webp";
-import mag1 from "./assets/img/mag1.png";
-import mag2 from "./assets/img/mag2.png";
-import mag3 from "./assets/img/mag3.png";
+import mag1 from "./assets/img/mag1.webp";
+import mag2 from "./assets/img/mag2.webp";
+import mag3 from "./assets/img/mag3.webp";
 import mypageAvatar from "./assets/img/mypage-avatar.webp";
 import record0708 from "./assets/img/mypage-record-0708.webp";
 import record0707 from "./assets/img/mypage-record-0707.webp";
@@ -53,6 +65,282 @@ export const courses: Course[] = [
   { image: course2, name: "인기 코스", rating: "4.8", detail: "6.5km · 보통" },
   { image: course3, name: "도전 코스", rating: "4.7", detail: "10km · 어려움" },
 ];
+
+export type CourseRecommendation = {
+  image: string;
+  name: string;
+  level: string;
+  distance: string;
+  duration: string;
+  rating: string;
+  nearby: string;
+};
+
+export type CourseDetailKind = "yeouido" | "nodulseom" | "gwanghwamun";
+
+type CourseHero = {
+  image: string;
+  title: string;
+  distance: string;
+  level: CourseRecommendation["level"];
+  meta: string;
+  imageBox: { width: string; height: string; left: string; top: string };
+  detail?: CourseDetailKind;
+};
+
+export type CourseExploreKind = "nearby" | "popular" | "challenge";
+
+export type CourseExploreItem = CourseRecommendation & {
+  detail?: CourseDetailKind;
+};
+
+export type CourseExploreData = {
+  sectionTitle: string;
+  filters: string[];
+  hero: CourseHero;
+  courses: CourseExploreItem[];
+};
+
+export type CourseDetailData = {
+  image: string;
+  title: string;
+  level: string;
+  rating: string;
+  location: string;
+  stats: { label: string; value: string }[];
+  variants: { title: string; level: string; active?: boolean }[];
+  amenities: { value: string; label: string }[];
+  social: string;
+  reviews: string[];
+};
+
+export const courseRecommendations: CourseRecommendation[] = [
+  {
+    image: course1,
+    name: "여의도 한 바퀴",
+    level: "초급자",
+    distance: "4.6km",
+    duration: "약 30분",
+    rating: "5.0",
+    nearby: "내 위치에서 2.1km",
+  },
+  {
+    image: courseThumbSeoul,
+    name: "서울숲 → 뚝섬 왕복",
+    level: "중급자",
+    distance: "6.5km",
+    duration: "약 45분",
+    rating: "4.8",
+    nearby: "내 위치에서 4.8km",
+  },
+  {
+    image: courseThumbNamsan,
+    name: "남산 순환 코스",
+    level: "상급자",
+    distance: "10km",
+    duration: "약 70분",
+    rating: "4.7",
+    nearby: "내 위치에서 6.2km",
+  },
+];
+
+export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = {
+  nearby: {
+    sectionTitle: "지금 내 근처",
+    filters: ["전체", "초급자", "중급자", "상급자"],
+    hero: {
+      image: course1,
+      title: "여의도 한 바퀴",
+      distance: "4.6km",
+      level: "초급자",
+      meta: "평지 코스 · 내 위치에서 2.1km",
+      imageBox: { width: "100%", height: "154.51%", left: "0.08%", top: "-54.48%" },
+      detail: "yeouido",
+    },
+    courses: courseRecommendations.map((course) => ({
+      ...course,
+      detail: course.name === "여의도 한 바퀴" ? "yeouido" : undefined,
+    })),
+  },
+  popular: {
+    sectionTitle: "인기 코스",
+    filters: ["전체", "초급자", "중급자", "상급자"],
+    hero: {
+      image: popularCourseMain,
+      title: "노들섬 코스",
+      distance: "4.6km",
+      level: "초급자",
+      meta: "평지 코스 · 내 위치에서 2.9km",
+      imageBox: { width: "100%", height: "131.92%", left: "-0.01%", top: "-22.79%" },
+      detail: "nodulseom",
+    },
+    courses: [
+      {
+        image: popularCourseMain,
+        name: "노들섬 코스",
+        level: "초급자",
+        distance: "1.5km",
+        duration: "약 30분",
+        rating: "5.0",
+        nearby: "내 위치에서 2.1km",
+        detail: "nodulseom",
+      },
+      {
+        image: popularCourseSeokchon,
+        name: "석촌 호수 코스",
+        level: "중급자",
+        distance: "2.5km",
+        duration: "약 15분",
+        rating: "4.8",
+        nearby: "내 위치에서 4.8km",
+      },
+      {
+        image: popularCourseHangang,
+        name: "한강대교 코스",
+        level: "상급자",
+        distance: "8.4km",
+        duration: "약 50분",
+        rating: "4.7",
+        nearby: "내 위치에서 6.2km",
+      },
+    ],
+  },
+  challenge: {
+    sectionTitle: "도전 코스",
+    filters: ["전체", "가본 곳", "안 가본 곳"],
+    hero: {
+      image: challengeCourseMain,
+      title: "광화문 댕댕런",
+      distance: "7.6km",
+      level: "가본 곳",
+      meta: "평지 코스 · 내 위치에서 3.4km",
+      imageBox: { width: "100%", height: "126.11%", left: "-0.03%", top: "-26.03%" },
+      detail: "gwanghwamun",
+    },
+    courses: [
+      {
+        image: challengeCourseGwanghwamun,
+        name: "광화문 댕댕런",
+        level: "가본 곳",
+        distance: "7.6km",
+        duration: "약 45분",
+        rating: "5.0",
+        nearby: "내 위치에서 2.1km",
+        detail: "gwanghwamun",
+      },
+      {
+        image: challengeCourseYeontral,
+        name: "연트럴파크 폭포 코스",
+        level: "안 가본 곳",
+        distance: "4.0km",
+        duration: "약 24분",
+        rating: "4.8",
+        nearby: "내 위치에서 4.8km",
+      },
+      {
+        image: challengeCourseGyeongbok,
+        name: "경복궁 돌담길코스",
+        level: "안 가본 곳",
+        distance: "2.5km",
+        duration: "약 15분",
+        rating: "4.7",
+        nearby: "내 위치에서 6.2km",
+      },
+    ],
+  },
+};
+
+export const courseDetailPages: Record<CourseDetailKind, CourseDetailData> = {
+  yeouido: {
+    image: courseDetailMap,
+    title: "여의도 한 바퀴",
+    level: "초급자",
+    rating: "5.0",
+    location: "영등포구 여의도동 · 내 위치에서 2.1km",
+    stats: [
+      { label: "거리", value: "4.6km" },
+      { label: "예상 시간", value: "30-40분" },
+      { label: "고도", value: "+12m" },
+      { label: "노면", value: "우레탄" },
+    ],
+    variants: [
+      { title: "1바퀴 4.6km", level: "초급자", active: true },
+      { title: "2바퀴 9.2km", level: "중급자" },
+      { title: "반포까지 12km", level: "상급자" },
+    ],
+    amenities: [
+      { value: "2", label: "화장실" },
+      { value: "4", label: "급수대" },
+      { value: "3", label: "보관함" },
+      { value: "여의도역", label: "지하철" },
+      { value: "5", label: "쉼터" },
+    ],
+    social: "이번 주 328명이 뛴 코스",
+    reviews: [
+      '"밤 9시 이후엔 자전거 많아요"  ★ 5.0',
+      '"3km 지점 급수대 이용 가능해요"  ★ 4.5',
+    ],
+  },
+  nodulseom: {
+    image: popularCourseDetailMap,
+    title: "노들섬 코스",
+    level: "가볍게",
+    rating: "5.0",
+    location: "영등포구 여의도동 · 내 위치에서 2.1km",
+    stats: [
+      { label: "거리", value: "4.6km" },
+      { label: "예상 시간", value: "30–40분" },
+      { label: "고도", value: "±12m" },
+      { label: "노면", value: "우레탄" },
+    ],
+    variants: [
+      { title: "1바퀴 4.6km", level: "가볍게", active: true },
+      { title: "2바퀴 9.2km", level: "제대로" },
+      { title: "반포까지 12km", level: "도전" },
+    ],
+    amenities: [
+      { value: "12", label: "화장실" },
+      { value: "4", label: "급수대" },
+      { value: "3", label: "보관함" },
+      { value: "노들역", label: "지하철" },
+      { value: "3", label: "쉼터" },
+    ],
+    social: "이번 주 500명이 뛴 코스",
+    reviews: [
+      '"힘들 줄만 알았는데 끝나고 나니 또 뛰고 싶어졌습니다."  ★ 5.0',
+      '"오늘은 기록보다 풍경을 즐기면서 천천히 뛰었습니다."  ★ 4.5',
+    ],
+  },
+  gwanghwamun: {
+    image: challengeCourseDetailMap,
+    title: "광화문 댕댕런",
+    level: "가본 곳",
+    rating: "5.0",
+    location: "영등포구 여의도동 · 내 위치에서 2.1km",
+    stats: [
+      { label: "거리", value: "7.6km" },
+      { label: "예상 시간", value: "47-57분" },
+      { label: "고도", value: "±12m" },
+      { label: "노면", value: "우레탄" },
+    ],
+    variants: [
+      { title: "1바퀴 7.6km", level: "가볍게", active: true },
+      { title: "2바퀴 15.2km", level: "제대로" },
+    ],
+    amenities: [
+      { value: "36", label: "화장실" },
+      { value: "6", label: "급수대" },
+      { value: "3", label: "자판기" },
+      { value: "광화문역", label: "지하철" },
+      { value: "3", label: "쉼터" },
+    ],
+    social: "이번 주 275명이 뛴 코스",
+    reviews: [
+      '"혼자 뛰는 줄 알았는데 크루와 함께하니 훨씬 즐거웠어요."  ★ 5.0',
+      '"목표 페이스를 달성했습니다! 꾸준히 연습한 보람이 있었어요."  ★ 4.5',
+    ],
+  },
+};
 
 // `crop` mirrors each photo's position/zoom inside the 68px avatar frame in Figma.
 export type Runner = {

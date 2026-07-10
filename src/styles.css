@@ -1,23 +1,22 @@
+@import "tailwindcss";
+
+@layer base {
 :root {
+  @apply bg-black text-white;
   font-family: Inter, Pretendard, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #ffffff;
-  background: #000;
 }
 
 * {
-  box-sizing: border-box;
+  @apply box-border;
 }
 
 body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  background: #000;
+  @apply m-0 min-h-screen min-w-80 bg-black;
+}
 }
 
+@layer components {
 .app {
-  width: min(430px, 100%);
-  min-height: 100vh;
-  margin: 0 auto;
-  background: #000;
+  @apply mx-auto min-h-screen w-[min(430px,100%)] bg-black;
+}
 }

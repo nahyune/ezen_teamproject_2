@@ -1,115 +1,62 @@
+@reference "../index.css";
+
+@layer components {
 .race {
-  display: flex;
-  flex-direction: column;
-  gap: 35px;
+  @apply flex flex-col gap-[35px];
 }
 
 .race__head {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  @apply flex flex-col gap-[15px];
 }
 .race__title {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.48px;
-  color: var(--text-strong);
+  @apply text-2xl font-semibold tracking-[-0.48px] text-[var(--text-strong)];
 }
 
 .race__filters {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  margin: 0 calc(-1 * var(--gutter));
-  padding: 0 var(--gutter);
+  @apply flex gap-2.5 overflow-x-auto px-[var(--gutter)] mx-[calc(-1*var(--gutter))];
 }
 
 .pill {
-  flex: 0 0 auto;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.42px;
-  color: var(--text-strong);
-  background: var(--bg-pill);
-  border: 1px solid var(--border-pill);
-  white-space: nowrap;
+  @apply shrink-0 rounded-full border border-[var(--border-pill)] bg-[var(--bg-pill)] px-3.5 py-2 text-sm font-medium tracking-[-0.42px] whitespace-nowrap text-[var(--text-strong)];
 }
 .pill--active {
-  background: var(--primary-lime);
-  color: var(--text-on-lime);
-  border-color: var(--primary-lime);
+  @apply border-[var(--primary-lime)] bg-[var(--primary-lime)] text-[var(--text-on-lime)];
 }
 
 .race__row {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  margin: 0 calc(-1 * var(--gutter));
-  padding: 0 var(--gutter);
+  @apply flex gap-3 overflow-x-auto px-[var(--gutter)] mx-[calc(-1*var(--gutter))];
 }
 
 .race-card {
-  position: relative;
-  flex: 0 0 auto;
-  width: 250px;
-  height: 320px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #111;
-  text-align: left;
+  @apply relative h-[320px] w-[250px] shrink-0 overflow-hidden rounded-[20px] bg-[#111] text-left;
 }
 .race-card__bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  max-width: none; /* allow inline widths > card width (D-31 uses 306px) */
-  object-fit: cover;
+  @apply absolute top-0 left-0 h-full w-full max-w-none object-cover;
+  /* allow inline widths > card width (D-31 uses 306px) */
   /* per-card size/offset can be supplied inline (see D-31 card in data.ts) */
 }
 .race-card__bg--bright {
-  filter: brightness(1.22);
+  @apply brightness-[1.22];
 }
 .race-card__scrim {
-  position: absolute;
-  inset: 0;
+  @apply absolute inset-0 bg-black/10;
   /* Figma uses a flat 10% black tint over the photo — no gradient. */
-  background: rgba(0, 0, 0, 0.1);
 }
 
 .race-card__body {
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  color: var(--text-primary);
+  @apply absolute right-4 bottom-4 left-4 flex flex-col gap-3.5 text-[var(--text-primary)];
 }
 .race-card__dday {
+  @apply text-[64px] leading-[0.95] text-[var(--primary-lime)];
   font-family: var(--font-display);
-  font-size: 64px;
-  line-height: 0.95;
-  color: var(--primary-lime);
 }
 .race-card__name {
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: -0.6px;
+  @apply text-xl font-medium tracking-[-0.6px];
 }
 .race-card__meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 14px;
-  letter-spacing: -0.42px;
+  @apply flex items-center justify-between text-sm tracking-[-0.42px];
 }
 .race-card__arrow {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
+  @apply h-6 w-6 shrink-0;
+}
 }
