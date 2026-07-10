@@ -1,21 +1,19 @@
+@reference "../index.css";
+
+@layer components {
 .section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @apply flex items-center justify-between;
 }
 
 .section-header__title {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.48px;
-  color: var(--text-strong);
+  @apply text-2xl font-semibold tracking-[-0.48px] text-[var(--text-strong)];
 }
 
 .section-header__action {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 14px;
-  letter-spacing: -0.42px;
-  color: var(--text-muted);
+  @apply flex items-center gap-0.5 text-sm tracking-[-0.42px] text-[var(--text-muted)];
+}
+
+.section-header__action--static {
+  @apply cursor-default;
+}
 }

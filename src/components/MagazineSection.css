@@ -1,40 +1,25 @@
+@reference "../index.css";
+
+@layer components {
 .magazine {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  @apply flex flex-col gap-[15px];
 }
 
 .magazine__row {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  margin: 0 calc(-1 * var(--gutter));
-  padding: 0 var(--gutter);
+  @apply flex gap-3 overflow-x-auto px-[var(--gutter)] mx-[calc(-1*var(--gutter))];
 }
 
 .article-card {
-  position: relative;
-  flex: 0 0 auto;
-  width: 207px;
-  height: 263px;
-  border-radius: 20px;
-  overflow: hidden;
+  @apply relative h-[263px] w-[207px] shrink-0 overflow-hidden rounded-[20px] bg-[var(--bg-elevated)];
   /* dark placeholder so no light hairline shows at the rounded edges */
-  background: #1c1c1f;
 }
 .article-card__bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  max-width: none; /* allow inline widths > card width (mag1 uses 101.21%) */
-  object-fit: cover;
+  @apply absolute top-0 left-0 h-full w-full max-w-none object-cover;
+  /* allow inline widths > card width (mag1 uses 101.21%) */
   /* per-card size/offset can be supplied inline (mag1 hides a white edge) */
 }
 .article-card__scrim {
-  position: absolute;
-  inset: 0;
+  @apply absolute inset-0;
   background: linear-gradient(
     rgba(255, 255, 255, 0) 32%,
     rgba(0, 0, 0, 0.41) 51%,
@@ -44,27 +29,12 @@
 }
 
 .article-card__body {
-  position: absolute;
-  left: 16px;
-  bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  color: var(--text-primary);
+  @apply absolute bottom-4 left-4 flex flex-col gap-2.5 text-[var(--text-primary)];
 }
 .article-card__title {
-  display: flex;
-  flex-direction: column;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: -0.6px;
+  @apply flex flex-col text-xl leading-[1.3] font-medium tracking-[-0.6px];
 }
 .article-card__preview {
-  display: flex;
-  flex-direction: column;
-  color: #bcc3c5;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.42px;
+  @apply flex flex-col text-sm font-medium tracking-[-0.42px] text-[#bcc3c5];
+}
 }

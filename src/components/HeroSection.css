@@ -1,100 +1,60 @@
+@reference "../index.css";
+
+@layer components {
 .hero {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  @apply flex flex-col gap-3;
 }
 
 .hero__card {
-  position: relative;
-  height: 426px;
-  border-radius: 16px;
-  overflow: hidden;
-  background: #111;
+  @apply relative h-[426px] overflow-hidden rounded-2xl bg-[#111];
 }
 
 .hero__bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  @apply absolute inset-0 h-full w-full object-cover;
 }
 
 /* Even dark tint over the whole photo (matches Figma "Instagram 2" overlay) */
 .hero__tint {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.16);
+  @apply absolute inset-0 bg-black/16;
 }
 
 /* Bottom gradient so text stays legible */
 .hero__scrim {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 200px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  @apply absolute right-0 bottom-0 left-0 h-[200px] bg-linear-to-t from-black/70 to-black/0;
 }
 
 .hero__route {
-  position: absolute;
-  left: 16px;
-  top: 125px;
-  width: 88px;
-  height: 72px;
+  @apply absolute top-[125px] left-4 h-[72px] w-[88px];
 }
 
 .hero__head {
-  position: absolute;
-  left: 24px;
-  top: 22px;
-  color: var(--text-primary);
+  @apply absolute top-[22px] left-6 text-[var(--text-primary)];
 }
 .hero__title {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.48px;
+  @apply text-2xl font-semibold tracking-[-0.48px];
 }
 .hero__meta {
-  margin-top: 4px;
-  font-size: 14px;
-  letter-spacing: -0.42px;
+  @apply mt-1 text-sm tracking-[-0.42px];
 }
 
 .hero__stats {
-  position: absolute;
-  left: 32px;
-  top: 213px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  @apply absolute top-[213px] left-8 flex flex-col gap-2.5;
 }
 .hero__stat {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col;
 }
 .hero__stat-label {
-  font-size: 14px;
-  letter-spacing: -0.42px;
-  color: var(--text-primary);
+  @apply text-sm tracking-[-0.42px] text-[var(--text-primary)];
 }
 .hero__stat-value {
+  @apply text-[26px] tracking-[-0.52px] text-[var(--text-strong)];
   font-family: var(--font-display);
-  font-size: 26px;
-  letter-spacing: -0.52px;
-  color: var(--text-strong);
 }
 
 .hero__cta {
-  height: 48px;
-  border-radius: 30px;
-  background: var(--primary-lime);
-  color: var(--text-on-lime);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.48px;
+  @apply h-12 rounded-[30px] bg-[var(--primary-lime)] text-base font-semibold tracking-[-0.48px] text-[var(--text-on-lime)];
 }
 .hero__cta:active {
-  transform: scale(0.99);
+  @apply scale-[0.99];
+}
 }

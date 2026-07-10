@@ -1,18 +1,12 @@
+@reference "./index.css";
+
+@layer components {
 .phone {
-  width: 100%;
-  max-width: var(--frame-width);
-  min-height: 100vh;
-  background: var(--bg-app);
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  @apply relative flex min-h-screen w-[var(--frame-width)] max-w-full shrink-0 flex-col bg-[var(--bg-app)];
 }
 
 .home {
-  flex: 1;
+  @apply flex flex-1 flex-col gap-12 px-[var(--gutter)] pt-3 pb-[130px];
   /* extra bottom padding leaves room for the floating nav dock */
-  padding: 12px var(--gutter) 130px;
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
+}
 }

@@ -1,56 +1,32 @@
+@reference "../index.css";
+
+@layer components {
 .runners {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  @apply flex flex-col gap-[15px];
 }
 
 .runners__row {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  margin: 0 calc(-1 * var(--gutter));
-  padding: 0 var(--gutter);
+  @apply flex gap-3.5 overflow-x-auto px-[var(--gutter)] mx-[calc(-1*var(--gutter))];
 }
 
 .runner {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: 76px;
+  @apply flex w-[76px] shrink-0 flex-col items-center gap-2;
 }
 
 .runner__ring {
-  width: 78px;
-  height: 78px;
-  border-radius: 50%;
+  @apply flex h-[78px] w-[78px] items-center justify-center rounded-full border-[2.5px] border-[var(--primary-orange)];
   /* Figma "Ellipse 3832": 2.5px orange stroke */
-  border: 2.5px solid var(--primary-orange);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .runner__avatar {
-  position: relative;
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1px solid rgba(242, 242, 242, 0.95);
-  background: #fff;
+  @apply relative h-[68px] w-[68px] overflow-hidden rounded-full border border-[rgba(242,242,242,0.95)] bg-white;
 }
 /* Each image is absolutely positioned/zoomed per its Figma crop (set inline). */
 .runner__avatar img {
-  position: absolute;
-  max-width: none;
+  @apply absolute max-w-none;
 }
 
 .runner__name {
-  font-size: 14px;
-  letter-spacing: -0.42px;
-  color: var(--text-primary);
-  text-align: center;
-  white-space: nowrap;
+  @apply text-center text-sm tracking-[-0.42px] whitespace-nowrap text-[var(--text-primary)];
+}
 }

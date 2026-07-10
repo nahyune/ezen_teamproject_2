@@ -1,60 +1,31 @@
+@reference "../index.css";
+
+@layer components {
 /* Floating dock pinned to the bottom of the viewport */
 .nav-dock {
-  position: fixed;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: var(--frame-width);
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 0 16px 18px;
-  z-index: 100;
-  pointer-events: none;
+  @apply pointer-events-none fixed bottom-0 left-1/2 z-[100] flex w-[var(--frame-width)] max-w-full -translate-x-1/2 flex-col items-center gap-2 px-4 pb-[18px];
 }
 
 /* The glassmorphism nav pill */
 .bottomnav {
-  pointer-events: auto;
-  width: 398px;
-  max-width: 100%;
-  padding: 16px;
-  border-radius: 100px;
-  background: rgba(0, 0, 0, 0.08);
+  @apply pointer-events-auto w-[398px] max-w-full rounded-[100px] border border-white/8 bg-black/8 p-4;
   backdrop-filter: blur(8px) saturate(140%);
   -webkit-backdrop-filter: blur(8px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .bottomnav__list {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 53px;
+  @apply flex h-[53px] items-center justify-between;
 }
 
 .bottomnav__tab {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  width: 51px;
-  color: var(--text-primary);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: -0.24px;
-  text-align: center;
-  white-space: nowrap;
+  @apply flex w-[51px] flex-col items-center gap-[5px] text-center text-xs font-medium tracking-[-0.24px] whitespace-nowrap text-[var(--text-primary)];
 }
 
 .bottomnav__tab--active {
-  color: #d6ff1e;
-  font-weight: 600;
+  @apply font-semibold text-[#d6ff1e];
 }
 
 .bottomnav__icon {
-  width: 30px;
-  height: 28px;
+  @apply h-7 w-[30px];
+}
 }
