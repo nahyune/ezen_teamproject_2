@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
-@layer base {
+/* Tailwind theme tokens for components converted to utility classes. */
+@theme {
+  --color-primary-lime: #d4ff3f;
+  --color-primary-orange: #ff4e16;
+  --color-elevated: #1c1c1f;
+  --color-pill: #1f211f;
+  --color-pill-border: #404538;
+  --font-display: "Anton", var(--font-sans);
+  --radius-card: 20px;
+}
+
 :root {
   /* ── Color tokens (from Figma) ────────────────────────── */
   --primary-lime: #d4ff3f; /* primary-2 */
@@ -27,63 +37,68 @@
   --radius-card: 20px;
 }
 
-* {
-  @apply box-border m-0 p-0;
-}
+@layer base {
+  * {
+    @apply box-border m-0 p-0;
+  }
 
-html,
-body {
-  @apply h-full;
-}
+  html,
+  body {
+    @apply h-full;
+  }
 
-body {
-  @apply bg-[#2b2b2e] text-[var(--text-primary)] antialiased;
-  font-family: var(--font-sans);
-  text-rendering: optimizeLegibility;
-}
+  body {
+    @apply bg-[#2b2b2e] text-[var(--text-primary)] antialiased;
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
 
-#root {
-  @apply flex min-h-full justify-center;
-}
+  #root {
+    @apply flex min-h-full justify-center;
+  }
 
-button {
-  @apply cursor-pointer border-0 bg-transparent text-inherit;
-  font: inherit;
-}
+  button {
+    @apply cursor-pointer border-0 bg-transparent text-inherit;
+    font: inherit;
+  }
 
-img {
-  @apply block max-w-full;
-}
+  img {
+    @apply block max-w-full;
+  }
 
-ul {
-  @apply list-none;
-}
+  ul {
+    @apply list-none;
+  }
 }
 
 @layer utilities {
-/* Hide scrollbars on horizontal carousels while keeping scroll */
-.no-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  /* standard draggable-carousel affordance: open hand, closed hand while dragging */
-  cursor: grab;
-  /* don't select text/images while swiping */
-  user-select: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar img,
-.no-scrollbar a {
-  -webkit-user-drag: none;
-  user-select: none;
-}
-/* during an active drag: closed-hand cursor + 1:1 tracking (no smooth-scroll) */
-.no-scrollbar.dragging {
-  scroll-behavior: auto;
-}
-.no-scrollbar.dragging,
-.no-scrollbar.dragging * {
-  cursor: grabbing;
-}
+  /* Hide scrollbars on horizontal carousels while keeping scroll */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* standard draggable-carousel affordance: open hand, closed hand while dragging */
+    cursor: grab;
+    /* don't select text/images while swiping */
+    user-select: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar img,
+  .no-scrollbar a {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  /* during an active drag: closed-hand cursor + 1:1 tracking (no smooth-scroll) */
+  .no-scrollbar.dragging {
+    scroll-behavior: auto;
+  }
+
+  .no-scrollbar.dragging,
+  .no-scrollbar.dragging * {
+    cursor: grabbing;
+  }
 }

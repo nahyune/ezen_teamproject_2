@@ -28,7 +28,7 @@
 }
 
 .race-card {
-  @apply relative h-[320px] w-[250px] shrink-0 overflow-hidden rounded-[20px] bg-[#111];
+  @apply relative h-[320px] w-[250px] shrink-0 overflow-hidden rounded-[20px] bg-[#111] text-left;
 }
 .race-card__bg {
   @apply absolute top-0 left-0 h-full w-full max-w-none object-cover;

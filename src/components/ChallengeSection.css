@@ -14,7 +14,7 @@
 }
 
 .challenge-item {
-  @apply flex h-20 items-center gap-[15px] overflow-hidden rounded-[20px] bg-[var(--bg-elevated)];
+  @apply flex h-20 w-full items-center gap-[15px] overflow-hidden rounded-[20px] bg-[var(--bg-elevated)] text-left;
 }
 
 .challenge-item__img {

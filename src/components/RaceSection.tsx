@@ -2,18 +2,18 @@ import { raceFilters, races } from "../data";
 import chevronRight from "../assets/icons/chevron-right.svg";
 import "./RaceSection.css";
 
-export default function RaceSection() {
+type Props = {
+  onOpenRace?: () => void;
+};
+
+export default function RaceSection({ onOpenRace }: Props) {
   return (
     <section className="race">
       <div className="race__head">
         <h2 className="race__title">대회 소식</h2>
         <div className="race__filters no-scrollbar">
           {raceFilters.map((f, i) => (
-            <button
-              key={f}
-              type="button"
-              className={`pill${i === 0 ? " pill--active" : ""}`}
-            >
+            <button key={f} type="button" className={`pill${i === 0 ? " pill--active" : ""}`}>
               {f}
             </button>
           ))}
@@ -22,7 +22,7 @@ export default function RaceSection() {
 
       <div className="race__row no-scrollbar">
         {races.map((r) => (
-          <article key={r.title} className="race-card">
+          <button key={r.title} className="race-card" type="button" onClick={onOpenRace}>
             <img
               className={`race-card__bg${r.bright ? " race-card__bg--bright" : ""}`}
               src={r.image}
@@ -38,7 +38,7 @@ export default function RaceSection() {
                 <img className="race-card__arrow" src={chevronRight} alt="" />
               </div>
             </div>
-          </article>
+          </button>
         ))}
       </div>
     </section>

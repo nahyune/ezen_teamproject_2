@@ -2,10 +2,14 @@ import SectionHeader from "./SectionHeader";
 import { runners } from "../data";
 import "./RunnerSection.css";
 
-export default function RunnerSection() {
+type Props = {
+  onViewAll?: () => void;
+};
+
+export default function RunnerSection({ onViewAll }: Props) {
   return (
     <section className="runners">
-      <SectionHeader title="인기 러너" />
+      <SectionHeader title="인기 러너" onAction={onViewAll} />
       <div className="runners__row no-scrollbar">
         {runners.map((r) => (
           <div key={r.name} className="runner">

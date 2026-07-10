@@ -6,13 +6,11 @@
 }
 
 .schedule__card {
-  @apply relative h-[250px] overflow-hidden rounded-[20px] bg-[#111];
+  @apply relative block h-[250px] w-full overflow-hidden rounded-[20px] bg-[#111] text-left;
 }
 
 .schedule__bg {
-  @apply block h-full w-full object-fill;
-  /* Match the Figma design exactly: the photo fills the 394×250 frame
-     (Figma uses `size-full` with no object-cover, i.e. object-fit: fill). */
+  @apply block h-full w-full object-cover object-bottom;
 }
 
 .schedule__scrim {
