@@ -18,6 +18,7 @@ import RunnerExplorePage from "./pages/RunnerExplorePage";
 import ScheduleDetailPage from "./pages/ScheduleDetailPage";
 import ScheduleListPage from "./pages/ScheduleListPage";
 import RaceDetailPage from "./pages/RaceDetailPage";
+import ChallengeDetailPage from "./pages/ChallengeDetailPage";
 import type { CourseDetailKind, CourseExploreKind } from "./data";
 import "./App.css";
 
@@ -31,7 +32,8 @@ type Page =
   | "scheduleList"
   | "race"
   | "courses"
-  | "courseDetail";
+  | "courseDetail"
+  | "challengeDetail";
 
 export default function App() {
   const [page, setPage] = useState<Page>("home");
@@ -72,6 +74,18 @@ export default function App() {
 
   if (page === "race") {
     return <RaceDetailPage onBack={() => setPage("home")} />;
+  }
+
+  if (page === "challengeDetail") {
+    return (
+      <ChallengeDetailPage
+        onBack={() => setPage("home")}
+        onNavigate={(key) => {
+          if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
+          if (key === "record") window.location.href = `${import.meta.env.BASE_URL}record.html`;
+        }}
+      />
+    );
   }
 
   if (page === "courses") {
@@ -131,7 +145,7 @@ export default function App() {
             onOpen={() => setPage("schedule")}
           />
           <RaceSection onOpenRace={() => setPage("race")} />
-          <ChallengeSection />
+          <ChallengeSection onOpenChallenge={() => setPage("challengeDetail")} />
           <MagazineSection />
         </main>
       )}

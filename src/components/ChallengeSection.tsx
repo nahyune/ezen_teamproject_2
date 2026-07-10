@@ -2,7 +2,11 @@ import { challenges } from "../data";
 import { ChevronDown } from "./Icons";
 import "./ChallengeSection.css";
 
-export default function ChallengeSection() {
+type Props = {
+  onOpenChallenge?: () => void;
+};
+
+export default function ChallengeSection({ onOpenChallenge }: Props) {
   return (
     <section className="challenge">
       <h2 className="challenge__title">챌린지</h2>
@@ -12,6 +16,7 @@ export default function ChallengeSection() {
             <button
               className="challenge-item"
               type="button"
+              onClick={c.name === "경복궁 댕댕런" ? onOpenChallenge : undefined}
             >
             <div className="challenge-item__img">
               <img
