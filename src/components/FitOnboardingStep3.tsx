@@ -89,35 +89,46 @@ export default function FitOnboardingStep3({ onBack, onFinish }: { onBack?: () =
       nextLabel="위런 시작하기"
       showSkip={false}
     >
-      <div className="fit-onboarding__feature-grid">
-        {features.map((f, i) => (
-          <button
-            key={f.title}
-            type="button"
-            className={`fit-onboarding__feature${selected.has(i) ? " fit-onboarding__feature--active" : ""}`}
-            onClick={() => toggle(i)}
-          >
-            <span className="fit-onboarding__feature-top">
-              <span className="fit-onboarding__feature-icon">{f.icon}</span>
-              {selected.has(i) && (
-                <span className="fit-onboarding__feature-check" aria-hidden>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 13l5 5L19 7" stroke="var(--text-on-lime)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+      <div className="mt-7 [@media(max-height:700px)]:mt-[14px] grid grid-cols-2 gap-[14px] [@media(max-height:700px)]:gap-2">
+        {features.map((f, i) => {
+          const active = selected.has(i);
+          return (
+            <button
+              key={f.title}
+              type="button"
+              className={`flex flex-col items-start gap-3 min-h-[138px] p-4 rounded-card border-[1.5px] text-left ${
+                active ? "bg-pill border-primary-lime shadow-[0_0_20px_rgba(212,255,63,0.2)]" : "bg-elevated border-transparent"
+              }`}
+              onClick={() => toggle(i)}
+            >
+              <span className="w-full flex items-center justify-between">
+                <span
+                  className={`w-[34px] h-[34px] rounded-[10px] flex items-center justify-center ${
+                    active ? "bg-primary-lime/12 text-primary-lime" : "bg-white/6 text-[var(--text-muted)]"
+                  }`}
+                >
+                  {f.icon}
                 </span>
-              )}
-            </span>
-            <span className="fit-onboarding__feature-title">{f.title}</span>
-            <span className="fit-onboarding__feature-subtitle">
-              {f.subtitleLines.map((line, li) => (
-                <span key={line}>
-                  {li > 0 && <br />}
-                  {line}
-                </span>
-              ))}
-            </span>
-          </button>
-        ))}
+                {active && (
+                  <span className="shrink-0 w-5 h-5 rounded-full bg-primary-lime flex items-center justify-center" aria-hidden>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                      <path d="M5 13l5 5L19 7" stroke="var(--text-on-lime)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                )}
+              </span>
+              <span className="text-base font-semibold text-white">{f.title}</span>
+              <span className="text-xs leading-[1.4] text-[var(--text-muted)]">
+                {f.subtitleLines.map((line, li) => (
+                  <span key={line}>
+                    {li > 0 && <br />}
+                    {line}
+                  </span>
+                ))}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </FitOnboardingShell>
   );

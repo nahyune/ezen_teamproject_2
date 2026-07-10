@@ -4,45 +4,49 @@ import bgImage from "../assets/img/on4_img.png";
 import runner1 from "../assets/img/runner1.png";
 import runner2 from "../assets/img/runner2.png";
 import runner3 from "../assets/img/runner3.png";
-import "./Login.css";
 
 export default function Login({ onLogin }: { onLogin?: () => void }) {
   return (
-    <div className="login">
-      <img className="login__bg" src={bgImage} alt="함께 달리는 러너들" />
-      <div className="login__scrim" />
+    <div className="relative self-start w-full max-w-[var(--frame-width)] h-dvh mx-auto overflow-hidden bg-black">
+      <img className="absolute inset-0 w-full h-full object-cover" src={bgImage} alt="함께 달리는 러너들" />
+      {/* Bottom gradient so the headline/CTA stay legible over the photo */}
+      <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black/92 from-25% to-transparent pointer-events-none" />
 
-      <div className="login__statusbar">
+      <div className="absolute inset-x-0 top-0 z-[2]">
         <StatusBar />
       </div>
 
-      <BrandLogo className="login__logo" />
+      <BrandLogo className="absolute top-[58px] left-[var(--gutter)] z-[2]" />
 
-      <div className="login__content">
-        <h1 className="login__title">
-          <span className="login__title-line login__title-line--white">WE RUN,</span>
-          <span className="login__title-line login__title-line--lime">YOU IN?</span>
+      <div className="absolute left-[var(--gutter)] right-[var(--gutter)] bottom-[34px] z-[2] flex flex-col gap-5">
+        <h1 className="flex flex-col font-display text-[82px] font-normal leading-[1.05]">
+          <span className="text-white">WE RUN,</span>
+          <span className="text-primary-lime">YOU IN?</span>
         </h1>
 
-        <div className="login__social">
-          <div className="login__avatars">
-            <img className="login__avatar" src={runner1} alt="" />
-            <img className="login__avatar" src={runner2} alt="" />
-            <img className="login__avatar" src={runner3} alt="" />
+        <div className="flex items-center gap-2.5">
+          <div className="flex">
+            <img className="w-7 h-7 rounded-full object-cover border-2 border-[var(--bg-app)] first:ml-0 -ml-2.5" src={runner1} alt="" />
+            <img className="w-7 h-7 rounded-full object-cover border-2 border-[var(--bg-app)] first:ml-0 -ml-2.5" src={runner2} alt="" />
+            <img className="w-7 h-7 rounded-full object-cover border-2 border-[var(--bg-app)] first:ml-0 -ml-2.5" src={runner3} alt="" />
           </div>
-          <span className="login__social-text">12,847명의 러너가 이미 달리는 중</span>
+          <span className="text-[13px] text-[var(--text-muted)]">12,847명의 러너가 이미 달리는 중</span>
         </div>
 
-        <button className="login__cta" type="button" onClick={onLogin}>
+        <button
+          className="w-full h-[58px] rounded-[29px] bg-primary-lime text-black text-[17px] font-bold tracking-[-0.34px] active:scale-[0.99]"
+          type="button"
+          onClick={onLogin}
+        >
           로그인
         </button>
 
-        <p className="login__signup">
-          아직 크루가 아니라면? <button className="login__signup-link" type="button">회원가입</button>
+        <p className="text-center text-sm font-light text-[var(--text-muted)]">
+          아직 크루가 아니라면? <button className="text-primary-lime font-semibold" type="button">회원가입</button>
         </p>
       </div>
 
-      <div className="login__home-indicator" />
+      <div className="absolute left-1/2 bottom-[10px] -translate-x-1/2 z-[2] w-[134px] h-[5px] rounded-[3px] bg-white" />
     </div>
   );
 }

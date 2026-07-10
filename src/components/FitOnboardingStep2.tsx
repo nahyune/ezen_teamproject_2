@@ -43,26 +43,40 @@ export default function FitOnboardingStep2({ onBack, onNext, onSkip }: { onBack?
       onNext={onNext}
       onSkip={onSkip}
     >
-      <div className="fit-onboarding__grid">
-        {styles.map((s, i) => (
-          <button
-            key={s.label}
-            type="button"
-            className={`fit-onboarding__tile${selected.has(i) ? " fit-onboarding__tile--active" : ""}`}
-            onClick={() => toggle(i)}
-          >
-            <img className="fit-onboarding__tile-img" src={s.image} alt="" />
-            <div className="fit-onboarding__tile-scrim" />
-            <span className="fit-onboarding__tile-label">{s.label}</span>
-            {selected.has(i) && (
-              <span className="fit-onboarding__tile-check" aria-hidden>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 13l5 5L19 7" stroke="var(--text-on-lime)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+      <div className="mt-7 [@media(max-height:700px)]:mt-[14px] grid grid-cols-2 gap-[14px] [@media(max-height:700px)]:gap-2">
+        {styles.map((s, i) => {
+          const active = selected.has(i);
+          return (
+            <button
+              key={s.label}
+              type="button"
+              className={`relative aspect-[16/10] rounded-2xl overflow-hidden bg-elevated border-[1.5px] ${
+                active ? "border-primary-lime shadow-[0_0_20px_rgba(212,255,63,0.25)]" : "border-transparent"
+              }`}
+              onClick={() => toggle(i)}
+            >
+              <img className="absolute inset-0 w-full h-full object-cover" src={s.image} alt="" />
+              <div className="absolute inset-x-0 bottom-0 h-[65%] bg-gradient-to-t from-black/75 from-10% to-transparent pointer-events-none" />
+              <span
+                className={`absolute left-3 bottom-[10px] text-sm font-semibold tracking-[-0.3px] ${
+                  active ? "text-primary-lime" : "text-white"
+                }`}
+              >
+                {s.label}
               </span>
-            )}
-          </button>
-        ))}
+              {active && (
+                <span
+                  className="absolute top-[10px] right-[10px] w-[22px] h-[22px] rounded-full bg-primary-lime flex items-center justify-center"
+                  aria-hidden
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 13l5 5L19 7" stroke="var(--text-on-lime)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </FitOnboardingShell>
   );

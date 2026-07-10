@@ -4,13 +4,15 @@ import Login from "./Login";
 import FitOnboarding from "./FitOnboarding";
 import FitOnboardingStep2 from "./FitOnboardingStep2";
 import FitOnboardingStep3 from "./FitOnboardingStep3";
+import App from "../App";
 
-type Screen = "onboarding" | "login" | "fit1" | "fit2" | "fit3";
+type Screen = "onboarding" | "login" | "fit1" | "fit2" | "fit3" | "main";
 
 export default function OnboardingApp() {
   const [screen, setScreen] = useState<Screen>("onboarding");
 
-  if (screen === "fit3") return <FitOnboardingStep3 onBack={() => setScreen("fit2")} />;
+  if (screen === "main") return <App />;
+  if (screen === "fit3") return <FitOnboardingStep3 onBack={() => setScreen("fit2")} onFinish={() => setScreen("main")} />;
   if (screen === "fit2")
     return <FitOnboardingStep2 onBack={() => setScreen("fit1")} onNext={() => setScreen("fit3")} onSkip={() => setScreen("fit3")} />;
   if (screen === "fit1")

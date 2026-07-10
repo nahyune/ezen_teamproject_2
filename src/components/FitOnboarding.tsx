@@ -73,28 +73,39 @@ export default function FitOnboarding({ onBack, onNext, onSkip }: { onBack?: () 
       onNext={onNext}
       onSkip={onSkip}
     >
-      <div className="fit-onboarding__options">
-        {levels.map((level, i) => (
-          <button
-            key={level.title}
-            type="button"
-            className={`fit-onboarding__option${i === selected ? " fit-onboarding__option--active" : ""}`}
-            onClick={() => setSelected(i)}
-          >
-            <span className="fit-onboarding__option-icon">{level.icon}</span>
-            <span className="fit-onboarding__option-body">
-              <span className="fit-onboarding__option-title">{level.title}</span>
-              <span className="fit-onboarding__option-subtitle">{level.subtitle}</span>
-            </span>
-            {i === selected && (
-              <span className="fit-onboarding__option-check" aria-hidden>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 13l5 5L19 7" stroke="var(--text-on-lime)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+      <div className="mt-7 [@media(max-height:700px)]:mt-[14px] flex flex-col gap-3 [@media(max-height:700px)]:gap-2">
+        {levels.map((level, i) => {
+          const active = i === selected;
+          return (
+            <button
+              key={level.title}
+              type="button"
+              className={`relative flex items-center gap-3.5 py-4.5 px-4 rounded-card border-[1.5px] text-left ${
+                active ? "bg-pill border-primary-lime" : "bg-elevated border-transparent"
+              }`}
+              onClick={() => setSelected(i)}
+            >
+              <span
+                className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
+                  active ? "bg-primary-lime/12 text-primary-lime" : "bg-white/6 text-[var(--text-muted)]"
+                }`}
+              >
+                {level.icon}
               </span>
-            )}
-          </button>
-        ))}
+              <span className="flex flex-col gap-1">
+                <span className="text-base font-semibold text-white">{level.title}</span>
+                <span className="text-[13px] text-[var(--text-muted)]">{level.subtitle}</span>
+              </span>
+              {active && (
+                <span className="ml-auto shrink-0 w-[22px] h-[22px] rounded-full bg-primary-lime flex items-center justify-center" aria-hidden>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 13l5 5L19 7" stroke="var(--text-on-lime)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </FitOnboardingShell>
   );
