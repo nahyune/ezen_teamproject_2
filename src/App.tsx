@@ -21,6 +21,7 @@ import RaceDetailPage from "./pages/RaceDetailPage";
 import ChallengeDetailPage from "./pages/ChallengeDetailPage";
 import MagazineDetailPage from "./pages/MagazineDetailPage";
 import RecordFlow from "./components/RecordFlow";
+import ChatbotPage from "./components/ChatbotPage";
 import type { CourseDetailKind, CourseExploreKind } from "./data";
 import "./App.css";
 
@@ -37,7 +38,8 @@ type Page =
   | "courseDetail"
   | "challengeDetail"
   | "magazineDetail"
-  | "record";
+  | "record"
+  | "chatbot";
 
 export default function App() {
   const [page, setPage] = useState<Page>("home");
@@ -110,6 +112,10 @@ export default function App() {
     );
   }
 
+  if (page === "chatbot") {
+    return <ChatbotPage onBack={() => setPage("home")} />;
+  }
+
   if (page === "courses") {
     return (
       <div className="phone">
@@ -139,6 +145,7 @@ export default function App() {
       <AppHeader
         variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
         onSettingsClick={() => setPage("settings")}
+        onChatbotClick={() => setPage("chatbot")}
       />
 
       {page === "my" ? (
