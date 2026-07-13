@@ -1,7 +1,7 @@
 // All home-screen content, extracted from the Figma "메인 홈" frame.
 import hero from "./assets/img/hero.webp";
 import course1 from "./assets/img/course1.webp";
-import course2 from "./assets/img/course2.webp";
+import course2 from "./assets/img/100img.png";
 import course3 from "./assets/img/course3.webp";
 import courseThumbSeoul from "./assets/img/course-thumb-seoul.webp";
 import courseThumbNamsan from "./assets/img/course-thumb-namsan.webp";
