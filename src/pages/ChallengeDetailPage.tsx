@@ -72,7 +72,7 @@ export default function ChallengeDetailPage({ onBack }: Props) {
     <div className="phone min-h-screen bg-[#040405] text-[#f6f6ed]">
       <StatusBarArea />
 
-      <header className="flex items-center justify-between px-[var(--gutter)] pt-[14px] pb-[20px]">
+      <header className="subheader justify-between">
         <button
           className="grid h-6 w-6 shrink-0 place-items-center text-[#f6f6ed]"
           type="button"

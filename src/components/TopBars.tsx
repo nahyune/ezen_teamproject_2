@@ -15,7 +15,7 @@ import "./TopBars.css";
  */
 export function StatusBarArea() {
   return (
-    <>
+    <div className="sticky top-0 z-[95] bg-inherit">
       <div
         className="md:hidden"
         style={{ height: "env(safe-area-inset-top, 0px)" }}
@@ -24,7 +24,7 @@ export function StatusBarArea() {
       <div className="hidden md:block">
         <StatusBar />
       </div>
-    </>
+    </div>
   );
 }
 

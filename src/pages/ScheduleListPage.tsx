@@ -146,7 +146,7 @@ export default function ScheduleListPage({ onBack, onOpenSchedule }: Props) {
   return (
     <div className="phone min-h-screen bg-[#0a0a0a] text-white [&_.statusbar]:h-[52px] [&_.statusbar]:bg-black [&_.statusbar]:px-[26px]">
       <StatusBarArea />
-      <header className="relative flex h-[58px] items-center px-[var(--gutter)]">
+      <header className="subheader relative">
         <button className="grid h-[26px] w-[26px] place-items-center text-white" type="button" onClick={onBack} aria-label="뒤로가기">
           <BackIcon />
         </button>

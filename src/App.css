@@ -9,4 +9,32 @@
   @apply flex flex-1 flex-col gap-12 px-[var(--gutter)] pt-3 pb-[130px];
   /* extra bottom padding leaves room for the floating nav dock */
 }
+
+/* 서브/연계 페이지 공통 헤더 "영역" — 메인 헤더(.appheader) 기준으로 통일.
+   높이·좌우여백·sticky 고정 + 위아래 12px 여백(살짝 떠 있는 느낌)까지 강제.
+   내부 콘텐츠(뒤로/타이틀/액션)와 배경색은 각 페이지가 정한다.
+   배경은 부모(.phone 등)에서 물려받아 페이지 배경과 이음새 없이 맞춰진다(bg-inherit). */
+.subheader {
+  @apply sticky z-[90] mt-3 mb-3 flex h-[52px] shrink-0 items-center bg-inherit px-[var(--gutter)];
+  /* 고정된 상태바 바로 아래(상태바 높이 + 12px 여백)에 붙는다. */
+  top: calc(var(--statusbar-h) + 12px);
+}
+/* 12px 여백(mt/mb + top-3 float)으로 생기는 틈을, 스크롤 시 헤더 배경색으로 덮어
+   뒤 콘텐츠가 비치지 않게 한다. 색은 background-color: inherit 로 페이지 배경을 그대로 따라감. */
+.subheader::before,
+.subheader::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background-color: inherit;
+  pointer-events: none;
+}
+.subheader::before {
+  bottom: 100%;
+}
+.subheader::after {
+  top: 100%;
+}
 }

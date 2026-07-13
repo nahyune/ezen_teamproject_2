@@ -75,7 +75,7 @@ export default function ScheduleDetailPage({ onBack }: Props) {
   return (
     <div className="phone min-h-screen bg-[#0a0a0a] text-white [&_.statusbar]:h-[52px] [&_.statusbar]:bg-[#0a0a0a] [&_.statusbar]:px-[26px]">
       <StatusBarArea />
-      <header className="flex h-[58px] items-center justify-between px-[var(--gutter)]">
+      <header className="subheader justify-between">
         <button className="grid h-[26px] w-[26px] place-items-center text-white" type="button" onClick={onBack} aria-label="뒤로가기">
           <BackIcon />
         </button>

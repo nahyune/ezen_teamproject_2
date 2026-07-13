@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { StatusBarArea } from "../components/TopBars";
 import { settingsGroups, defaultSettingsToggles } from "../data";
 import chevronLeft from "../assets/icons/settings-chevron-left.svg";
 import chevronRight from "../assets/icons/settings-chevron-right.svg";
@@ -11,8 +12,9 @@ export default function SettingsPage({ onBack }: Props) {
   const [toggles, setToggles] = useState(defaultSettingsToggles);
 
   return (
-    <div className="flex flex-col">
-      <header className="relative flex items-center gap-3 px-[18px] py-4">
+    <div className="flex flex-col bg-[var(--bg-app)]">
+      <StatusBarArea />
+      <header className="subheader relative gap-3">
         <button
           type="button"
           className="flex-none w-[26px] h-[26px]"

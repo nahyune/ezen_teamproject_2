@@ -63,6 +63,16 @@
   --frame-width: 430px;
   --gutter: 18px;
   --radius-card: 20px;
+
+  /* 상태바 영역 높이 — 고정 헤더가 이만큼 아래에 붙는다.
+     모바일: 실기기 노치/상태바 영역(env). 테블릿+: 목업 가짜 상태바 52px(아래 미디어쿼리). */
+  --statusbar-h: env(safe-area-inset-top, 0px);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --statusbar-h: 52px;
+  }
 }
 
 @layer base {

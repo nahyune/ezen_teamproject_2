@@ -43,7 +43,9 @@
 
 /* ── App header ─────────────────────────────────────────── */
 .appheader {
-  @apply sticky top-3 z-[90] mt-3 mb-3 flex h-[52px] items-center justify-between bg-[var(--bg-app)] px-[var(--gutter)];
+  @apply sticky z-[90] mt-3 mb-3 flex h-[52px] items-center justify-between bg-[var(--bg-app)] px-[var(--gutter)];
+  /* 고정된 상태바 바로 아래(상태바 높이 + 12px 여백)에 붙는다. */
+  top: calc(var(--statusbar-h) + 12px);
   box-shadow:
     0 -12px 0 var(--bg-app),
     0 12px 0 var(--bg-app);

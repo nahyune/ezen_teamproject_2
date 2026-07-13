@@ -95,7 +95,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
     <div className="phone min-h-screen bg-black text-[#f6f6ed]">
       <StatusBarArea />
 
-      <header className="flex items-center justify-between px-[18px] py-[10px]">
+      <header className="subheader justify-between">
         <button className="grid h-6 w-6 shrink-0 place-items-center text-white" type="button" onClick={onBack} aria-label="뒤로가기">
           <ChevronLeft size={24} />
         </button>

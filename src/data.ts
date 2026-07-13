@@ -581,10 +581,10 @@ export type FeedStory = {
 
 export const feedStories: FeedStory[] = [
   { name: "내 스토리", image: storyDogMap, state: "me" },
-  { name: "안정은", state: "new" },
-  { name: "러너_준", state: "new" },
-  { name: "도쿄원정대", state: "new" },
-  { name: "김페이스", state: "seen" },
+  { name: "안정은", image: runner1, state: "new" },
+  { name: "러너_준", image: runner2, state: "new" },
+  { name: "도쿄원정대", image: runner4, state: "new" },
+  { name: "김페이스", image: runner3, state: "seen" },
 ];
 
 export type FeedPost = {
@@ -606,6 +606,7 @@ export const feedPosts: FeedPost[] = [
   {
     id: 1,
     author: "안정은",
+    avatar: runner1, // 스토리 레일과 동일 인물·동일 사진 (임시 — 고해상도 확보 시 교체)
     meta: "오늘 08:05 · 한강 러너스 크루 · 서울",
     image: feedImage1,
     cheers: 12,
@@ -617,6 +618,7 @@ export const feedPosts: FeedPost[] = [
   {
     id: 2,
     author: "도쿄원정대",
+    avatar: runner4, // 스토리 레일과 동일 인물·동일 사진 (임시 — 고해상도 확보 시 교체)
     meta: "어제 · GPS 아트 · 도쿄",
     image: feedImage2,
     cheers: 12,
@@ -634,6 +636,7 @@ export type CrewSuggestion = {
 };
 
 export const suggestedCrews: CrewSuggestion[] = [
-  { name: "성수 새벽런", meta: "응원 2.1k · 서울" },
-  { name: "한강 브릿지런", meta: "응원 1.4k · 서울" },
+  // 크루 이미지는 임시 (고해상도 확보 시 교체)
+  { name: "성수 새벽런", meta: "응원 2.1k · 서울", image: runner5 },
+  { name: "한강 브릿지런", meta: "응원 1.4k · 서울", image: runner6 },
 ];

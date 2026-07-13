@@ -5,6 +5,7 @@ import {
   type CourseExploreKind,
 } from "../data";
 import { ChevronLeft, SearchIcon } from "./Icons";
+import { StatusBarArea } from "./TopBars";
 import "./CourseExplorePage.css";
 
 type Props = {
@@ -48,7 +49,8 @@ export default function CourseExplorePage({ onBack, onOpenDetail, kind }: Props)
 
   return (
     <section className="course-explore">
-      <header className="course-explore__topbar">
+      <StatusBarArea />
+      <header className="subheader justify-between">
         <button className="course-explore__icon-btn" type="button" aria-label="뒤로가기" onClick={onBack}>
           <ChevronLeft size={26} />
         </button>
