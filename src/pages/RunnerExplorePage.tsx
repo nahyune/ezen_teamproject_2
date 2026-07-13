@@ -170,9 +170,9 @@ function ProfileRow({ item }: { item: ProfileItem }) {
 
 export default function RunnerExplorePage({ onBack }: Props) {
   return (
-    <div className="phone min-h-screen bg-black text-[var(--text-primary)] [&_.statusbar]:h-11 [&_.statusbar]:px-[26px]">
+    <div className="phone min-h-screen bg-black text-[var(--text-primary)]">
       <StatusBarArea />
-      <header className="subheader relative justify-center">
+      <header className="subheader justify-center">
         <button
           className="absolute left-[18px] top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center text-white"
           type="button"
