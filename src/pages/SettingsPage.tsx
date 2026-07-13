@@ -14,7 +14,7 @@ export default function SettingsPage({ onBack }: Props) {
   return (
     <div className="flex flex-col bg-[var(--bg-app)]">
       <StatusBarArea />
-      <header className="subheader relative gap-3">
+      <header className="subheader gap-3">
         <button
           type="button"
           className="flex-none w-[26px] h-[26px]"

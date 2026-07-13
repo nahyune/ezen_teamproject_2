@@ -144,9 +144,9 @@ export default function ScheduleListPage({ onBack, onOpenSchedule }: Props) {
   const joined = [{ ...joinedItems[0], onClick: onOpenSchedule }, ...joinedItems.slice(1)];
 
   return (
-    <div className="phone min-h-screen bg-[#0a0a0a] text-white [&_.statusbar]:h-[52px] [&_.statusbar]:bg-black [&_.statusbar]:px-[26px]">
+    <div className="phone min-h-screen bg-[#0a0a0a] text-white">
       <StatusBarArea />
-      <header className="subheader relative">
+      <header className="subheader">
         <button className="grid h-[26px] w-[26px] place-items-center text-white" type="button" onClick={onBack} aria-label="뒤로가기">
           <BackIcon />
         </button>
