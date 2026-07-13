@@ -16,9 +16,11 @@ type Screen = "record" | "guide" | "countdown" | "running" | "finished";
 export default function RecordFlow({
   autoStart = false,
   onTabNavigate,
+  onBack,
 }: {
   autoStart?: boolean;
   onTabNavigate?: (key: string) => void;
+  onBack?: () => void;
 }) {
   const [screen, setScreen] = useState<Screen>(() => (autoStart ? "countdown" : "record"));
 
@@ -26,10 +28,10 @@ export default function RecordFlow({
     return <RunningGuidePage onBack={() => setScreen("record")} />;
   }
   if (screen === "countdown") {
-    return <CountdownPage onDone={() => setScreen("running")} />;
+    return <CountdownPage onDone={() => setScreen("running")} onBack={onBack} />;
   }
   if (screen === "running") {
-    return <RunningPage onEnd={() => setScreen("finished")} />;
+    return <RunningPage onEnd={() => setScreen("finished")} onBack={onBack} />;
   }
   if (screen === "finished") {
     return <RunCompletePage onBack={() => setScreen("record")} />;
@@ -39,6 +41,7 @@ export default function RecordFlow({
       onGuideOpen={() => setScreen("guide")}
       onStart={() => setScreen("countdown")}
       onTabNavigate={onTabNavigate}
+      onBack={onBack}
     />
   );
 }

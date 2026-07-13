@@ -4,6 +4,7 @@ import RunningMapPage from "./RunningMapPage";
 import MusicConnectPage from "./MusicConnectPage";
 import MusicPlayerBar from "./MusicPlayerBar";
 import PausedRunPage from "./PausedRunPage";
+import { ChevronLeft } from "./Icons";
 
 const START_SECONDS = 16 * 60 + 47; // 디자인 시안의 16:47부터 시작
 
@@ -27,7 +28,7 @@ function Stat({ value, label }: { value: string; label: string }) {
 // 카운트다운이 끝나면 뜨는 측정 화면. 시간 스탯만 1초에 1씩
 // 올라가고, 일시정지 버튼으로 멈췄다 재개할 수 있다.
 // 세로 간격은 시안 좌표에서 상태바(47px)를 뺀 값 기준.
-export default function RunningPage({ onEnd }: { onEnd?: () => void }) {
+export default function RunningPage({ onEnd, onBack }: { onEnd?: () => void; onBack?: () => void }) {
   const [seconds, setSeconds] = useState(START_SECONDS);
   const [paused, setPaused] = useState(false);
   const [view, setView] = useState<"stats" | "map">("stats");
@@ -60,6 +61,7 @@ export default function RunningPage({ onEnd }: { onEnd?: () => void }) {
         seconds={seconds}
         onResume={() => setPaused(false)}
         onEnd={onEnd}
+        onBack={onBack}
         onMusicConnect={() => setMusicOpen(true)}
         musicConnected={musicConnected}
       />
@@ -79,7 +81,15 @@ export default function RunningPage({ onEnd }: { onEnd?: () => void }) {
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-[#1b1b1b] pb-17.25">
+    <div className="relative flex flex-1 flex-col items-center bg-[#1b1b1b] pb-17.25">
+      <button
+        type="button"
+        aria-label="뒤로가기"
+        onClick={onBack}
+        className="absolute top-[18px] left-[18px] z-10 grid h-6 w-6 shrink-0 place-items-center text-white"
+      >
+        <ChevronLeft size={24} />
+      </button>
       {/* 진행 중인 코스 칩 */}
       <button
         type="button"

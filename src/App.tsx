@@ -99,6 +99,7 @@ export default function App() {
       <div className="relative flex min-h-screen w-full max-w-107.5 flex-col bg-black mx-auto">
         <RecordFlow
           autoStart={recordAutoStart}
+          onBack={() => setPage("home")}
           onTabNavigate={(key) => {
             if (key === "record") return;
             setRecordAutoStart(false);

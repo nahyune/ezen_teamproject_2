@@ -10,6 +10,7 @@ import iconSparkle from "../assets/icons/sparkle.svg";
 import BottomNav from "./BottomNav";
 import recordCourseImg from "../assets/img/record-course.png";
 import recordMapImg from "../assets/img/record-map.png";
+import { ChevronLeft } from "./Icons";
 
 const recommendedCourses = [
   {
@@ -43,10 +44,12 @@ export default function RecordPage({
   onGuideOpen,
   onStart,
   onTabNavigate,
+  onBack,
 }: {
   onGuideOpen?: () => void;
   onStart?: () => void;
   onTabNavigate?: (key: string) => void;
+  onBack?: () => void;
 }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
@@ -98,18 +101,28 @@ export default function RecordPage({
       />
 
       <header className="relative z-1 my-3 flex h-13 items-center justify-between px-4.5">
-        <div className="flex h-[21.6px] items-center gap-[4.6px]" aria-label="W:RUN">
-          <img className="h-[21.44px] w-[17.1px]" src={logoW} alt="" />
-          {/* The lime ":" rendered as three stacked dots, per the Figma logo */}
-          <span
-            className="flex h-5.25 flex-col justify-between py-[0.3px]"
-            aria-hidden
+        <div className="flex items-center">
+          <button
+            type="button"
+            aria-label="홈으로 가기"
+            onClick={onBack}
+            className="mr-3 flex items-center text-white"
           >
-            <i className="block h-[3.64px] w-[4.42px] bg-primary-lime" />
-            <i className="block h-[3.64px] w-[4.42px] bg-primary-lime" />
-            <i className="block h-[3.64px] w-[4.42px] bg-primary-lime" />
-          </span>
-          <img className="h-[21.64px] w-[34.23px]" src={logoRun} alt="" />
+            <ChevronLeft size={26} />
+          </button>
+          <div className="flex h-[21.6px] items-center gap-[4.6px]" aria-label="W:RUN">
+            <img className="h-[21.44px] w-[17.1px]" src={logoW} alt="" />
+            {/* The lime ":" rendered as three stacked dots, per the Figma logo */}
+            <span
+              className="flex h-5.25 flex-col justify-between py-[0.3px]"
+              aria-hidden
+            >
+              <i className="block h-[3.64px] w-[4.42px] bg-primary-lime" />
+              <i className="block h-[3.64px] w-[4.42px] bg-primary-lime" />
+              <i className="block h-[3.64px] w-[4.42px] bg-primary-lime" />
+            </span>
+            <img className="h-[21.64px] w-[34.23px]" src={logoRun} alt="" />
+          </div>
         </div>
         <button type="button" aria-label="알림">
           <img className="size-6" src={iconBell} alt="" />

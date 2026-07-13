@@ -3,6 +3,7 @@ import iconChatbot from "../assets/icons/header-chatbot.svg";
 import iconSparkle from "../assets/icons/sparkle.svg";
 import runMapImg from "../assets/img/run-map.png";
 import MusicPlayerBar from "./MusicPlayerBar";
+import { ChevronLeft } from "./Icons";
 
 const HOLD_MS = 800; // "길게 눌러 종료" 판정 시간
 
@@ -26,6 +27,7 @@ type Props = {
   seconds: number;
   onResume: () => void;
   onEnd?: () => void;
+  onBack?: () => void;
   onMusicConnect?: () => void;
   musicConnected?: boolean;
 };
@@ -37,6 +39,7 @@ export default function PausedRunPage({
   seconds,
   onResume,
   onEnd,
+  onBack,
   onMusicConnect,
   musicConnected,
 }: Props) {
@@ -57,6 +60,14 @@ export default function PausedRunPage({
 
   return (
     <div className="relative flex-1 bg-[#1b1b1b]">
+      <button
+        type="button"
+        aria-label="뒤로가기"
+        onClick={onBack}
+        className="absolute top-[18px] left-[18px] z-10 grid h-6 w-6 shrink-0 place-items-center text-white"
+      >
+        <ChevronLeft size={24} />
+      </button>
       {/* 상단 지도 스트립 (달리던 코스 + 현재 위치) */}
       <div className="relative h-69.25 w-full overflow-hidden">
         <img
@@ -65,6 +76,8 @@ export default function PausedRunPage({
           alt=""
           aria-hidden
         />
+        {/* Top gradient so the back button stays legible over the map */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/55 to-transparent" />
         <img
           className="absolute top-31.5 left-47.25 size-6"
           src={iconSparkle}
