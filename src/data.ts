@@ -44,7 +44,6 @@ import record0605 from "./assets/img/mypage-record-0605.webp";
 import feedImage1 from "./assets/img/feed-image-01.webp";
 import feedImage2 from "./assets/img/feed-image-02.webp";
 import storyDogMap from "./assets/img/img-dog-map.webp";
-import runner2Png from "./assets/img/runner2.png";
 
 export const heroData = {
   title: "어제 저녁 러닝",
