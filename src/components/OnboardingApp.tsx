@@ -14,9 +14,9 @@ export default function OnboardingApp() {
   if (screen === "main") return <App />;
   if (screen === "fit3") return <FitOnboardingStep3 onBack={() => setScreen("fit2")} onFinish={() => setScreen("main")} />;
   if (screen === "fit2")
-    return <FitOnboardingStep2 onBack={() => setScreen("fit1")} onNext={() => setScreen("fit3")} onSkip={() => setScreen("fit3")} />;
+    return <FitOnboardingStep2 onBack={() => setScreen("fit1")} onNext={() => setScreen("fit3")} onSkip={() => setScreen("main")} />;
   if (screen === "fit1")
-    return <FitOnboarding onBack={() => setScreen("login")} onNext={() => setScreen("fit2")} onSkip={() => setScreen("fit2")} />;
+    return <FitOnboarding onBack={() => setScreen("login")} onNext={() => setScreen("fit2")} onSkip={() => setScreen("main")} />;
   if (screen === "login") return <Login onLogin={() => setScreen("fit1")} />;
   return <OnboardingFlow onComplete={() => setScreen("login")} />;
 }
