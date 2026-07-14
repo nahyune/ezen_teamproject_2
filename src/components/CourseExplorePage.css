@@ -2,7 +2,9 @@
 
 @layer components {
 .course-explore {
-  @apply mx-auto min-h-screen w-full max-w-[var(--frame-width)] bg-black pb-10;
+  /* 최소높이 기준: 브라우저 창(min-h-screen) → 폰 프레임(min-h-full).
+     카드가 적으면 프레임 높이까지만, 많아지면 내용만큼 자연스럽게 늘어난다. */
+  @apply mx-auto min-h-full w-full max-w-[var(--frame-width)] bg-black pb-10;
 }
 
 .course-explore__topbar {

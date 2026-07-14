@@ -7,7 +7,6 @@ import iconChatbot from "../assets/icons/header-chatbot.svg";
 import iconBulb from "../assets/icons/bulb.svg";
 import iconMusic from "../assets/icons/music.svg";
 import iconSparkle from "../assets/icons/sparkle.svg";
-import BottomNav from "./BottomNav";
 import recordCourseImg from "../assets/img/record-course.png";
 import recordMapImg from "../assets/img/record-map.png";
 import { ChevronLeft } from "./Icons";
@@ -43,13 +42,11 @@ const fabClass =
 export default function RecordPage({
   onGuideOpen,
   onStart,
-  onTabNavigate,
   onBack,
   onChatbot,
 }: {
   onGuideOpen?: () => void;
   onStart?: () => void;
-  onTabNavigate?: (key: string) => void;
   onBack?: () => void;
   onChatbot?: () => void;
 }) {
@@ -231,9 +228,6 @@ export default function RecordPage({
           </button>
         </div>
       </div>
-
-      {/* ── 하단 네비게이션 (홈/피드/마이와 공통 컴포넌트 사용) ────── */}
-      <BottomNav active="record" onNavigate={onTabNavigate} />
     </div>
   );
 }

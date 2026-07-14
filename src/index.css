@@ -86,9 +86,17 @@
   }
 
   body {
-    @apply bg-[#2b2b2e] text-[var(--text-primary)] antialiased;
+    /* 모바일: 노치/상태바 뒤(안전영역)로 비치는 색이 body 배경이므로
+       앱 배경색과 맞춰 위쪽이 "빈 띠"처럼 보이지 않게 한다. */
+    @apply bg-[var(--bg-app)] text-[var(--text-primary)] antialiased;
     font-family: var(--font-sans);
     text-rendering: optimizeLegibility;
+  }
+  /* 데스크톱(폰 목업 모드): 프레임 뒤 백드롭은 기존 회색 유지 */
+  @media (min-width: 768px) {
+    body {
+      @apply bg-[#2b2b2e];
+    }
   }
 
   #root {

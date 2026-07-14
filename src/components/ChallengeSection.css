@@ -29,7 +29,7 @@
   @apply flex flex-col gap-1.5;
 }
 .challenge-item__name {
-  @apply text-xl font-medium tracking-[-0.6px] text-[var(--text-primary)];
+  @apply text-[18px] font-medium tracking-[-0.54px] text-[var(--text-primary)];
 }
 .challenge-item__meta {
   @apply text-sm tracking-[-0.42px] text-[var(--text-muted)];

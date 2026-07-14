@@ -94,7 +94,7 @@ function ArrowUpRightIcon() {
 
 export default function MagazineDetailPage({ onBack }: Props) {
   return (
-    <div className="phone min-h-screen bg-black text-[#f6f6ed]">
+    <div className="phone bg-black text-[#f6f6ed]">
       <StatusBarArea />
 
       <header className="subheader justify-between">

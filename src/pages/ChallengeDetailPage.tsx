@@ -69,7 +69,7 @@ function ShareIcon() {
 
 export default function ChallengeDetailPage({ onBack }: Props) {
   return (
-    <div className="phone min-h-screen bg-[#040405] text-[#f6f6ed]">
+    <div className="phone bg-[#040405] text-[#f6f6ed]">
       <StatusBarArea />
 
       <header className="subheader justify-between">

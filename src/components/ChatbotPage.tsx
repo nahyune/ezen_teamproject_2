@@ -91,7 +91,7 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
   const isEmpty = messages.length === 0;
 
   return (
-    <div className="phone flex min-h-screen flex-col bg-[var(--bg-app)] text-white">
+    <div className="phone flex flex-col bg-[var(--bg-app)] text-white">
       <StatusBarArea />
 
       {/* 헤더: ‹ 뒤로 · 러니(아바타+이름) · ⋯ */}
