@@ -23,7 +23,9 @@ export default function FitOnboardingShell({
   children: ReactNode;
 }) {
   return (
-    <div className="self-start w-full max-w-[var(--frame-width)] min-h-dvh mx-auto bg-[var(--bg-app)] flex flex-col">
+    // min-h-full = 폰 프레임 높이 기준 (min-h-dvh 는 브라우저 창 기준이라 프레임을 넘쳐 스크롤을 만들었음).
+    // 콘텐츠가 프레임보다 길어지는 예외 상황에만 그만큼 스크롤이 생긴다.
+    <div className="self-start w-full max-w-[var(--frame-width)] min-h-full mx-auto bg-[var(--bg-app)] flex flex-col">
       <StatusBarArea />
 
       <div className="flex-1 flex flex-col px-[var(--gutter)]">

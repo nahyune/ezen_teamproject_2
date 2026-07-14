@@ -2,7 +2,9 @@
 
 @layer components {
 .phone {
-  @apply relative flex min-h-screen w-[var(--frame-width)] max-w-full shrink-0 flex-col bg-[var(--bg-app)];
+  /* 키 기준은 브라우저 창(min-h-screen)이 아니라 폰 프레임(.phone-scroll)의
+     높이(min-h-full). 콘텐츠가 프레임보다 길면 그만큼만 스크롤이 생긴다. */
+  @apply relative flex min-h-full w-[var(--frame-width)] max-w-full shrink-0 flex-col bg-[var(--bg-app)];
 }
 
 .home {
@@ -37,4 +39,54 @@
 .subheader::after {
   top: 100%;
 }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   폰 목업 프레임 (PhoneFrame 컴포넌트 전용) — A: 미니멀 베젤
+   면접관이 웹(넓은 화면)에서 URL을 열어도 앱이 세로로 늘어지지 않고
+   가운데 폰 프레임 안에 담겨 보이게 한다.
+
+   구조 = "프레임(바깥)" + "스크롤(안쪽)" 을 서로 다른 요소로 분리:
+   - .phone-frame : 고정 크기·베젤·라운드. transform 으로 내부 fixed
+     (하단 탭바·챗봇 입력바)를 이 프레임 안에 가둔다. (스크롤 X)
+   - .phone-scroll: 실제 스크롤 영역. (transform·overflow 를 한 요소에
+     같이 주면 fixed 가 콘텐츠 따라 밀려 올라가므로 반드시 분리)
+   ────────────────────────────────────────────────────────────── */
+.phone-frame {
+  display: flex;
+  flex-direction: column;
+  width: var(--frame-width);
+  max-width: 100%;
+  /* 높이를 확정값으로 — 안의 화면들이 h-full/min-h-full(%)로 키를 잴 수 있게.
+     (min-height 였을 땐 % 기준이 없어 화면들이 브라우저 창 높이에 의존했음) */
+  height: 100svh;
+  background: var(--bg-app);
+}
+.phone-scroll {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.phone-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .phone-frame {
+    min-height: 0;
+    height: 932px;
+    max-height: 92vh;
+    margin: auto; /* #root 플렉스 안에서 상하좌우 중앙 */
+    border: 10px solid #1a1a1c; /* 폰 베젤 */
+    border-radius: 52px; /* 바깥 라운드 */
+    overflow: hidden; /* 라운드 밖 클립 */
+    transform: translateZ(0); /* 내부 fixed 를 프레임 기준으로 가둠 */
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  }
+  .phone-scroll {
+    border-radius: 42px; /* 안쪽 화면 라운드 (베젤 두께만큼 작게) */
+  }
 }

@@ -62,7 +62,7 @@ function RouteMiniMap() {
 
 export default function RaceDetailPage({ onBack }: Props) {
   return (
-    <div className="phone min-h-screen bg-black text-[#f6f6ed]">
+    <div className="phone bg-black text-[#f6f6ed]">
       <StatusBarArea />
       <header className="subheader justify-between">
         <button className="grid h-6 w-6 place-items-center text-[#f6f6ed]" type="button" onClick={onBack} aria-label="뒤로가기">

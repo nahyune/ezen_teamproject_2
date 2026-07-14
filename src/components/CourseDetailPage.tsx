@@ -1,5 +1,6 @@
 import { courseDetailPages, type CourseDetailKind } from "../data";
 import { ChevronLeft } from "./Icons";
+import { StatusBarArea } from "./TopBars";
 import "./CourseDetailPage.css";
 
 type Props = {
@@ -12,6 +13,10 @@ export default function CourseDetailPage({ onBack, kind }: Props) {
 
   return (
     <section className="course-detail">
+      {/* 상태바 — 히어로 위 최상단 오버레이 (헤더는 CSS에서 상태바 높이만큼 내림) */}
+      <div className="fixed left-1/2 top-0 z-[97] w-[var(--frame-width)] max-w-full -translate-x-1/2 text-white">
+        <StatusBarArea />
+      </div>
       <div className="course-detail__hero">
         <img src={detail.image} alt="" />
       </div>

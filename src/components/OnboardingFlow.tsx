@@ -198,7 +198,8 @@ export default function OnboardingFlow({ onComplete }: { onComplete?: () => void
   }, []);
 
   return (
-    <div className="self-start w-full max-w-[var(--frame-width)] h-dvh mx-auto bg-[var(--bg-app)] flex flex-col">
+    // h-full = 폰 프레임 높이에 딱 맞춤 (min-h-dvh 제거 — 브라우저 창 기준이라 프레임을 넘쳐 스크롤을 만들었음)
+    <div className="self-start w-full max-w-[var(--frame-width)] h-full mx-auto bg-[var(--bg-app)] flex flex-col">
       <div
         className="flex w-full flex-1 min-h-0 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
         ref={viewportRef}

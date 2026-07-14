@@ -7,7 +7,8 @@ import runner3 from "../assets/img/runner3.png";
 
 export default function Login({ onLogin }: { onLogin?: () => void }) {
   return (
-    <div className="relative self-start w-full max-w-[var(--frame-width)] h-dvh mx-auto overflow-hidden bg-black">
+    // h-full = 폰 프레임 높이에 딱 맞춤 (min-h-dvh 는 브라우저 창 기준이라 프레임을 넘쳐 스크롤을 만들었음)
+    <div className="relative self-start w-full max-w-[var(--frame-width)] h-full mx-auto overflow-hidden bg-black">
       <img className="absolute inset-0 w-full h-full object-cover" src={bgImage} alt="함께 달리는 러너들" />
       {/* Bottom gradient so the headline/CTA stay legible over the photo */}
       <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black/92 from-25% to-transparent pointer-events-none" />

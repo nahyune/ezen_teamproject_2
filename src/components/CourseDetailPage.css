@@ -2,7 +2,10 @@
 
 @layer components {
 .course-detail {
-  @apply relative mx-auto min-h-[1059px] w-full max-w-[var(--frame-width)] bg-black pb-[110px];
+  /* 예전 전체화면 시절 손으로 맞춘 min-h-[1059px] 하드코딩을 제거 —
+     콘텐츠가 짧으면 프레임 높이(min-h-full)까지만 차지해 빈 공간이 안 생긴다.
+     pb-[110px]는 하단 고정 CTA(88px) 자리 확보용. */
+  @apply relative mx-auto min-h-full w-full max-w-[var(--frame-width)] bg-black pb-[110px];
 }
 
 .course-detail__hero {
@@ -14,12 +17,15 @@
 }
 
 .course-detail__header-gradient {
-  @apply pointer-events-none fixed top-[-39px] left-1/2 z-[95] h-[146px] w-[var(--frame-width)] max-w-full -translate-x-1/2;
+  @apply pointer-events-none fixed left-1/2 z-[95] h-[146px] w-[var(--frame-width)] max-w-full -translate-x-1/2;
+  /* 상태바 높이만큼 아래로 (모바일 --statusbar-h=0 이라 기존과 동일) */
+  top: calc(var(--statusbar-h) - 39px);
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.92) 3.73%, rgba(122, 122, 122, 0) 100%);
 }
 
 .course-detail__header {
-  @apply fixed top-0 left-1/2 z-[96] flex h-16 w-[var(--frame-width)] max-w-full -translate-x-1/2 items-center px-[18px] py-4;
+  @apply fixed left-1/2 z-[96] flex h-16 w-[var(--frame-width)] max-w-full -translate-x-1/2 items-center px-[18px] py-4;
+  top: var(--statusbar-h);
 }
 
 .course-detail__back {

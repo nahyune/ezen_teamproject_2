@@ -11,8 +11,9 @@ export default function OnboardingSlide({ image, imageAlt, eyebrow, titleLines, 
         src={image}
         alt={imageAlt}
       />
-      {/* Bottom gradient so the headline/description stay legible over the photo */}
-      <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/85 from-15% to-transparent pointer-events-none" />
+      {/* Bottom gradient: 텍스트 가독성 + 이미지 하단이 뚝 잘려 보이지 않게
+          맨 아래는 완전 검정(배경색)으로 녹여서 사진 경계를 없앤다 */}
+      <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black from-18% via-black/60 via-45% to-transparent pointer-events-none" />
       {/* Top gradient so the status bar/logo stay legible over bright skies etc. */}
       <div className="absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
 

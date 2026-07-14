@@ -12,6 +12,7 @@ import ChallengeSection from "./components/ChallengeSection";
 import MagazineSection from "./components/MagazineSection";
 import MyPage from "./pages/MyPage";
 import FeedPage from "./pages/FeedPage";
+import PhoneFrame from "./components/PhoneFrame";
 import SettingsPage from "./pages/SettingsPage";
 import BottomNav from "./components/BottomNav";
 import RunnerExplorePage from "./pages/RunnerExplorePage";
@@ -52,9 +53,14 @@ export default function App() {
   useEffect(() => initDragScroll(), [page]);
 
   useEffect(() => {
+    // 스크롤은 이제 창(window)이 아니라 폰 프레임 안(.phone-scroll)에서 일어난다.
+    // 페이지 전환 시 프레임 안쪽 스크롤을 맨 위로 리셋한다.
+    document.querySelector(".phone-scroll")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [page]);
 
+  // 화면별 콘텐츠를 계산한 뒤, 마지막에 PhoneFrame 하나로 감싼다(프레임 통일).
+  const rendered = (() => {
   if (page === "settings") {
     return (
       <div className="phone">
@@ -95,16 +101,16 @@ export default function App() {
   }
 
   if (page === "record") {
-    // 기록하기 전용 폰 프레임(구 record-main.tsx 대응). 랜딩 화면의 하단바는
-    // RecordFlow → RecordPage 내부에서 공통 BottomNav로 렌더된다.
+    // 기록하기: 하단바 없이 폰 프레임에 꽉 차는 한 화면(스크롤 잠금).
+    // 지도 등 움직임은 각 화면 내부에서만 일어난다.
     return (
-      <div className="relative flex min-h-screen w-full max-w-107.5 flex-col bg-black mx-auto">
+      <div className="relative flex h-full w-full max-w-107.5 flex-col overflow-hidden bg-black mx-auto">
         <RecordFlow
           autoStart={recordAutoStart}
           onBack={() => setPage("home")}
           onChatbot={() => setPage("chatbot")}
           onTabNavigate={(key) => {
-            if (key === "record") return;
+            // 완주 '기록 카드' 화면의 하단바에서만 사용
             setRecordAutoStart(false);
             if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
           }}
@@ -200,4 +206,7 @@ export default function App() {
       />
     </div>
   );
+  })();
+
+  return <PhoneFrame>{rendered}</PhoneFrame>;
 }

@@ -13,17 +13,18 @@ type Screen = "record" | "guide" | "countdown" | "running" | "finished" | "card"
 // → (일시정지에서 길게 눌러 종료) → 러닝 완료 → 뒤로가기 → 기록하기.
 // 홈 히어로의 "오늘 기록 시작하기"로 진입하면(autoStart) 기록하기 화면을
 // 건너뛰고 바로 카운트다운부터 시작한다.
-// onTabNavigate: 기록하기 랜딩의 하단바(홈/피드/마이) 탭 전환을 App으로 위임한다.
+// onTabNavigate: 완주 후 '기록 카드' 화면(RunRecordCardPage)의 하단바 탭 전환을 App으로 위임.
+// (기록하기 랜딩(RecordPage)에는 하단바가 없다 — 원 디자인 기준)
 export default function RecordFlow({
   autoStart = false,
-  onTabNavigate,
   onBack,
   onChatbot,
+  onTabNavigate,
 }: {
   autoStart?: boolean;
-  onTabNavigate?: (key: string) => void;
   onBack?: () => void;
   onChatbot?: () => void;
+  onTabNavigate?: (key: string) => void;
 }) {
   const [screen, setScreen] = useState<Screen>(() => (autoStart ? "countdown" : "record"));
 
@@ -51,7 +52,6 @@ export default function RecordFlow({
     <RecordPage
       onGuideOpen={() => setScreen("guide")}
       onStart={() => setScreen("countdown")}
-      onTabNavigate={onTabNavigate}
       onBack={onBack}
       onChatbot={onChatbot}
     />
