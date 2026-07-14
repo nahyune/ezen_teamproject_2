@@ -38,7 +38,13 @@ const kmBadges = [
 // ── 기록 — 러닝완료 (Figma 411:5563) ────────────────────────
 // 일시정지 화면에서 종료 버튼을 길게 누르면 나오는 결과 화면.
 // 뒤로가기(<)를 누르면 기록하기 첫 화면으로 돌아간다.
-export default function RunCompletePage({ onBack }: { onBack?: () => void }) {
+export default function RunCompletePage({
+  onBack,
+  onCreateCard,
+}: {
+  onBack?: () => void;
+  onCreateCard?: () => void;
+}) {
   return (
     <div className="flex flex-1 flex-col items-center bg-black">
       <header className="mt-3 flex w-full items-center justify-between px-4.5 py-4">
@@ -107,6 +113,14 @@ export default function RunCompletePage({ onBack }: { onBack?: () => void }) {
           aria-hidden
         />
       </div>
+
+      <button
+        type="button"
+        onClick={onCreateCard}
+        className="mb-7 h-14 w-95.5 max-w-[calc(100%-48px)] rounded-[28px] bg-primary-lime text-[16px] font-semibold text-[#0f120c]"
+      >
+        기록 카드 만들기
+      </button>
     </div>
   );
 }

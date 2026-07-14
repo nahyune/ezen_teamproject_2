@@ -4,8 +4,9 @@ import RunningGuidePage from "./RunningGuidePage";
 import CountdownPage from "./CountdownPage";
 import RunningPage from "./RunningPage";
 import RunCompletePage from "./RunCompletePage";
+import RunRecordCardPage from "./RunRecordCardPage";
 
-type Screen = "record" | "guide" | "countdown" | "running" | "finished";
+type Screen = "record" | "guide" | "countdown" | "running" | "finished" | "card";
 
 // 기록 탭의 화면 전환 담당:
 // 기록하기 ↔ 러닝 가이드, 시작 → 카운트다운(3·2·1) → 러닝 측정
@@ -36,7 +37,15 @@ export default function RecordFlow({
     return <RunningPage onEnd={() => setScreen("finished")} onBack={onBack} />;
   }
   if (screen === "finished") {
-    return <RunCompletePage onBack={() => setScreen("record")} />;
+    return (
+      <RunCompletePage
+        onBack={() => setScreen("record")}
+        onCreateCard={() => setScreen("card")}
+      />
+    );
+  }
+  if (screen === "card") {
+    return <RunRecordCardPage onClose={onBack} onTabNavigate={onTabNavigate} />;
   }
   return (
     <RecordPage
