@@ -17,10 +17,12 @@ export default function RecordFlow({
   autoStart = false,
   onTabNavigate,
   onBack,
+  onChatbot,
 }: {
   autoStart?: boolean;
   onTabNavigate?: (key: string) => void;
   onBack?: () => void;
+  onChatbot?: () => void;
 }) {
   const [screen, setScreen] = useState<Screen>(() => (autoStart ? "countdown" : "record"));
 
@@ -42,6 +44,7 @@ export default function RecordFlow({
       onStart={() => setScreen("countdown")}
       onTabNavigate={onTabNavigate}
       onBack={onBack}
+      onChatbot={onChatbot}
     />
   );
 }

@@ -56,9 +56,10 @@ export function StatusBar() {
 type AppHeaderProps = {
   variant?: "default" | "settings" | "feed";
   onSettingsClick?: () => void;
+  onChatbotClick?: () => void;
 };
 
-export function AppHeader({ variant = "default", onSettingsClick }: AppHeaderProps) {
+export function AppHeader({ variant = "default", onSettingsClick, onChatbotClick }: AppHeaderProps) {
   return (
     <header className="appheader">
       <div className="appheader__logo" aria-label="W:RUN">
@@ -94,7 +95,7 @@ export function AppHeader({ variant = "default", onSettingsClick }: AppHeaderPro
         </div>
       ) : (
         <div className="appheader__actions">
-          <button type="button" aria-label="챗봇">
+          <button type="button" aria-label="챗봇" onClick={onChatbotClick}>
             <img className="appheader__icon" src={iconChatbot} alt="" />
           </button>
           <button type="button" aria-label="알림">

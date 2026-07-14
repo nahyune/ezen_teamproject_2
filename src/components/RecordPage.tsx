@@ -45,11 +45,13 @@ export default function RecordPage({
   onStart,
   onTabNavigate,
   onBack,
+  onChatbot,
 }: {
   onGuideOpen?: () => void;
   onStart?: () => void;
   onTabNavigate?: (key: string) => void;
   onBack?: () => void;
+  onChatbot?: () => void;
 }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
@@ -196,7 +198,7 @@ export default function RecordPage({
           다른 코스를 원하시면 저에게 알려주세요.
         </p>
 
-        <button type="button" className={`${fabClass} mb-7.5`} aria-label="AI 챗봇">
+        <button type="button" className={`${fabClass} mb-7.5`} aria-label="AI 챗봇" onClick={onChatbot}>
           <img className="size-6" src={iconChatbot} alt="" />
         </button>
 

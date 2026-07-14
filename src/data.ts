@@ -640,3 +640,24 @@ export const suggestedCrews: CrewSuggestion[] = [
   { name: "성수 새벽런", meta: "응원 2.1k · 서울", image: runner5 },
   { name: "한강 브릿지런", meta: "응원 1.4k · 서울", image: runner6 },
 ];
+
+// ── 챗봇 '러니' 리치 콘텐츠 목데이터 ────────────────────────────
+// AI(Claude)는 텍스트만 생성하고, 카드·칩 같은 리치 블록은 앱이 이 데이터로
+// 조립해 붙인다(하이브리드 설계). 실서비스에선 실제 대회/코스 API로 교체.
+// 이미지는 고해상도 확보 시 채움 — 없으면 카드에서 회색 자리로 렌더.
+
+export const runiRaceCards = [
+  { badge: "D-3", title: "한강 마라톤", meta: "07-25(토) · 10km · 접수중", image: race1 },
+  { badge: "D-31", title: "여의도 나이트런", meta: "08-22(토) · 10km · 접수중", image: race2 },
+];
+
+export const runiCrewCards = [
+  { badge: "모집중", title: "여의도 러너스", meta: "토·일 오전 7시 · 멤버 24명", image: runner1 },
+  { badge: "모집중", title: "한강 새벽런 크루", meta: "매일 5'50\" · 멤버 41명", image: runner2 },
+];
+
+export const runiCourseCard = {
+  title: "경복궁 댕댕런 코스",
+  meta: "4.6km · 쉬움 · 예상 32분",
+  image: storyDogMap,
+};
