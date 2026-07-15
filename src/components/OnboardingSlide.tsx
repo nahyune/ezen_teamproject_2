@@ -30,7 +30,7 @@ export default function OnboardingSlide({ image, imageAlt, eyebrow, titleLines, 
 
       <BrandLogo className="absolute top-[58px] left-[var(--gutter)] z-[2]" />
 
-      <div className="absolute left-[var(--gutter)] right-[var(--gutter)] bottom-[40px] z-[2] text-white flex flex-col gap-4">
+      <div className="absolute left-[var(--gutter)] right-[var(--gutter)] bottom-[25px] z-[2] text-white flex flex-col gap-4">
         <p className="font-semibold text-sm leading-[1.3] tracking-[2.1px] text-primary-lime">{eyebrow}</p>
         <h1 className="font-display font-light text-[64px] leading-none text-white">
           {titleLines.map((line, i) => (
