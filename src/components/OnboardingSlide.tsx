@@ -5,15 +5,22 @@ import type { OnboardingSlideData } from "../onboardingData";
 export default function OnboardingSlide({ image, imageAlt, eyebrow, titleLines, descLines }: OnboardingSlideData) {
   return (
     // snap-always: 터치 플링이 아무리 세도 다음 슬라이드에서 반드시 멈춤 (건너뛰기 방지)
-    <div className="relative shrink-0 grow-0 basis-full w-full h-full overflow-hidden bg-black snap-start snap-always">
+    <div className="relative shrink-0 grow-0 basis-full w-full h-full overflow-hidden bg-[var(--bg-app)] snap-start snap-always">
       <img
         className="absolute inset-0 w-full h-full object-cover object-[90%_center] [-webkit-user-drag:none] select-none"
         src={image}
         alt={imageAlt}
       />
-      {/* Bottom gradient: 텍스트 가독성 + 이미지 하단이 뚝 잘려 보이지 않게
-          맨 아래는 완전 검정(배경색)으로 녹여서 사진 경계를 없앤다 */}
-      <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black from-18% via-black/60 via-45% to-transparent pointer-events-none" />
+      {/* Bottom gradient: 텍스트 가독성 + 이미지 하단 경계 제거.
+          목표색을 순검정이 아니라 앱 배경색(--bg-app)으로 맞춰,
+          사진 끝이 배경과 정확히 같은 색으로 녹아 단차가 안 보이게 한다. */}
+      <div
+        className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to top, var(--bg-app) 0%, var(--bg-app) 18%, color-mix(in srgb, var(--bg-app) 60%, transparent) 45%, transparent 100%)",
+        }}
+      />
       {/* Top gradient so the status bar/logo stay legible over bright skies etc. */}
       <div className="absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
 
