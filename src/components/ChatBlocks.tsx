@@ -20,7 +20,7 @@ function TextBubble({ text, role }: { text: string; role: "user" | "assistant" }
   if (role === "user") {
     return (
       <div className="flex justify-end">
-        <p className="body-1 max-w-[80%] rounded-2xl bg-[var(--primary-lime)] px-4 py-2.5 text-black">
+        <p className="chat-body max-w-[80%] rounded-2xl bg-[var(--primary-lime)] px-4 py-2.5 text-black">
           {text}
         </p>
       </div>
@@ -29,7 +29,7 @@ function TextBubble({ text, role }: { text: string; role: "user" | "assistant" }
   return (
     <div className="flex items-start gap-2">
       <RuniAvatar />
-      <p className="body-1 max-w-[80%] rounded-2xl bg-[var(--bg-elevated)] px-4 py-2.5 text-[var(--text-strong)]">
+      <p className="chat-body max-w-[80%] rounded-2xl bg-[var(--bg-elevated)] px-4 py-2.5 text-[var(--text-strong)]">
         {text}
       </p>
     </div>
@@ -139,7 +139,7 @@ function CareCard({
     <div className="flex items-start gap-2">
       <RuniAvatar />
       <div className="flex max-w-[85%] flex-col gap-2.5 rounded-2xl bg-[var(--bg-elevated)] px-4 py-3">
-        <p className="body-1 text-[var(--text-strong)]">⚠️ {text}</p>
+        <p className="chat-body text-[var(--text-strong)]">⚠️ {text}</p>
         {stats && (
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             {stats.map((s) => (
@@ -163,7 +163,7 @@ function ErrorBubble({ text, onRetry }: { text: string; onRetry?: () => void }) 
     <div className="flex items-start gap-2">
       <RuniAvatar />
       <div className="flex max-w-[85%] flex-col items-start gap-2">
-        <p className="body-1 rounded-2xl bg-[var(--bg-elevated)] px-4 py-2.5 text-[var(--text-strong)]">
+        <p className="chat-body rounded-2xl bg-[var(--bg-elevated)] px-4 py-2.5 text-[var(--text-strong)]">
           {text}
         </p>
         <button

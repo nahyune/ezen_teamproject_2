@@ -55,6 +55,16 @@
   font-weight: var(--fw-regular);
 }
 
+/* Chat-Body · Regular · 16 — 챗봇 대화 말풍선 전용.
+   Body-1과 동일하되 행간만 넓혀(--lh-chat) 여러 줄 답변 가독성 확보. */
+.chat-body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-1);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-chat);
+  letter-spacing: var(--ls-base);
+}
+
 /* Body-2 · Regular · 14 — 보조 본문·메타 정보 */
 .body-2 {
   font-size: var(--fs-body-2);
