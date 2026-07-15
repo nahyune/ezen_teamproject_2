@@ -63,151 +63,149 @@ export default function App() {
 
   // 화면별 콘텐츠를 계산한 뒤, 마지막에 PhoneFrame 하나로 감싼다(프레임 통일).
   const rendered = (() => {
-  if (page === "settings") {
+    if (page === "settings") {
+      return (
+        <div className="phone">
+          <SettingsPage onBack={() => setPage("my")} />
+        </div>
+      );
+    }
+
+    if (page === "runners") {
+      return <RunnerExplorePage onBack={() => setPage("home")} />;
+    }
+
+    if (page === "schedule") {
+      return <ScheduleDetailPage onBack={() => setPage("home")} />;
+    }
+
+    if (page === "scheduleList") {
+      return (
+        <ScheduleListPage
+          onBack={() => setPage("home")}
+          onOpenSchedule={() => setPage("schedule")}
+        />
+      );
+    }
+
+    if (page === "race") {
+      return <RaceDetailPage onBack={() => setPage("home")} />;
+    }
+
+    if (page === "challengeDetail") {
+      return <ChallengeDetailPage onBack={() => setPage("home")} />;
+    }
+
+    if (page === "magazineDetail") {
+      return <MagazineDetailPage onBack={() => setPage("home")} />;
+    }
+
+    if (page === "record") {
+      // 기록하기: 하단바 없이 폰 프레임에 꽉 차는 한 화면(스크롤 잠금).
+      // 지도 등 움직임은 각 화면 내부에서만 일어난다.
+      // StatusBarArea 를 껍데기 최상단에 한 번만 두면 기록 관련 모든 화면
+      // (기록·가이드·카운트다운·측정·완료·카드 등)에 공통 적용된다
+      // — 데스크톱: 가짜 상태바 / 실기기: 노치 안전영역 확보.
+      return (
+        <div className="relative mx-auto flex h-full w-full max-w-107.5 flex-col overflow-hidden bg-black">
+          <StatusBarArea />
+          <RecordFlow
+            autoStart={recordAutoStart}
+            onBack={() => setPage("home")}
+            onChatbot={() => setChatbotOpen(true)}
+            onTabNavigate={(key) => {
+              // 완주 '기록 카드' 화면의 하단바에서만 사용
+              setRecordAutoStart(false);
+              if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
+            }}
+          />
+        </div>
+      );
+    }
+
+    if (page === "courses") {
+      return (
+        <div className="phone">
+          <CourseExplorePage
+            kind={courseExploreKind}
+            onBack={() => setPage("home")}
+            onOpenDetail={(detail) => {
+              setCourseDetailKind(detail);
+              setPage("courseDetail");
+            }}
+          />
+        </div>
+      );
+    }
+
+    if (page === "courseDetail") {
+      return (
+        <div className="phone">
+          <CourseDetailPage kind={courseDetailKind} onBack={() => setPage("courses")} />
+        </div>
+      );
+    }
+
     return (
       <div className="phone">
-        <SettingsPage onBack={() => setPage("my")} />
-      </div>
-    );
-  }
-
-  if (page === "runners") {
-    return <RunnerExplorePage onBack={() => setPage("home")} />;
-  }
-
-  if (page === "schedule") {
-    return <ScheduleDetailPage onBack={() => setPage("home")} />;
-  }
-
-  if (page === "scheduleList") {
-    return (
-      <ScheduleListPage
-        onBack={() => setPage("home")}
-        onOpenSchedule={() => setPage("schedule")}
-      />
-    );
-  }
-
-  if (page === "race") {
-    return <RaceDetailPage onBack={() => setPage("home")} />;
-  }
-
-  if (page === "challengeDetail") {
-    return <ChallengeDetailPage onBack={() => setPage("home")} />;
-  }
-
-  if (page === "magazineDetail") {
-    return (
-      <MagazineDetailPage onBack={() => setPage("home")} />
-    );
-  }
-
-  if (page === "record") {
-    // 기록하기: 하단바 없이 폰 프레임에 꽉 차는 한 화면(스크롤 잠금).
-    // 지도 등 움직임은 각 화면 내부에서만 일어난다.
-    // StatusBarArea 를 껍데기 최상단에 한 번만 두면 기록 관련 모든 화면
-    // (기록·가이드·카운트다운·측정·완료·카드 등)에 공통 적용된다
-    // — 데스크톱: 가짜 상태바 / 실기기: 노치 안전영역 확보.
-    return (
-      <div className="relative flex h-full w-full max-w-107.5 flex-col overflow-hidden bg-black mx-auto">
         <StatusBarArea />
-        <RecordFlow
-          autoStart={recordAutoStart}
-          onBack={() => setPage("home")}
-          onChatbot={() => setChatbotOpen(true)}
-          onTabNavigate={(key) => {
-            // 완주 '기록 카드' 화면의 하단바에서만 사용
-            setRecordAutoStart(false);
+        <AppHeader
+          variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
+          onSettingsClick={() => setPage("settings")}
+          onChatbotClick={() => setChatbotOpen(true)}
+        />
+
+        {page === "my" ? (
+          <MyPage />
+        ) : page === "feed" ? (
+          <FeedPage />
+        ) : (
+          <main className="home">
+            {/* 오늘 기록 시작하기 → 기록 화면으로 전환해 바로 카운트다운 시작 */}
+            <HeroSection
+              onStartRecord={() => {
+                setRecordAutoStart(true);
+                setPage("record");
+              }}
+            />
+            <CourseSection
+              onOpenNearby={() => {
+                setCourseExploreKind("nearby");
+                setPage("courses");
+              }}
+              onOpenPopular={() => {
+                setCourseExploreKind("popular");
+                setPage("courses");
+              }}
+              onOpenChallenge={() => {
+                setCourseExploreKind("challenge");
+                setPage("courses");
+              }}
+            />
+            <RunnerSection onViewAll={() => setPage("runners")} />
+            <ScheduleSection
+              onMore={() => setPage("scheduleList")}
+              onOpen={() => setPage("schedule")}
+            />
+            <RaceSection onOpenRace={() => setPage("race")} />
+            <ChallengeSection onOpenChallenge={() => setPage("challengeDetail")} />
+            <MagazineSection onOpenArticle={() => setPage("magazineDetail")} />
+          </main>
+        )}
+
+        <BottomNav
+          active={page === "my" || page === "feed" ? page : "home"}
+          onNavigate={(key) => {
             if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
-          }}
-        />
-      </div>
-    );
-  }
-
-  if (page === "courses") {
-    return (
-      <div className="phone">
-        <CourseExplorePage
-          kind={courseExploreKind}
-          onBack={() => setPage("home")}
-          onOpenDetail={(detail) => {
-            setCourseDetailKind(detail);
-            setPage("courseDetail");
-          }}
-        />
-      </div>
-    );
-  }
-
-  if (page === "courseDetail") {
-    return (
-      <div className="phone">
-        <CourseDetailPage kind={courseDetailKind} onBack={() => setPage("courses")} />
-      </div>
-    );
-  }
-
-  return (
-    <div className="phone">
-      <StatusBarArea />
-      <AppHeader
-        variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
-        onSettingsClick={() => setPage("settings")}
-        onChatbotClick={() => setChatbotOpen(true)}
-      />
-
-      {page === "my" ? (
-        <MyPage />
-      ) : page === "feed" ? (
-        <FeedPage />
-      ) : (
-        <main className="home">
-          {/* 오늘 기록 시작하기 → 기록 화면으로 전환해 바로 카운트다운 시작 */}
-          <HeroSection
-            onStartRecord={() => {
-              setRecordAutoStart(true);
+            // 기록 탭도 같은 SPA 안의 화면으로 전환한다(문서 리로드 없음).
+            if (key === "record") {
+              setRecordAutoStart(false);
               setPage("record");
-            }}
-          />
-          <CourseSection
-            onOpenNearby={() => {
-              setCourseExploreKind("nearby");
-              setPage("courses");
-            }}
-            onOpenPopular={() => {
-              setCourseExploreKind("popular");
-              setPage("courses");
-            }}
-            onOpenChallenge={() => {
-              setCourseExploreKind("challenge");
-              setPage("courses");
-            }}
-          />
-          <RunnerSection onViewAll={() => setPage("runners")} />
-          <ScheduleSection
-            onMore={() => setPage("scheduleList")}
-            onOpen={() => setPage("schedule")}
-          />
-          <RaceSection onOpenRace={() => setPage("race")} />
-          <ChallengeSection onOpenChallenge={() => setPage("challengeDetail")} />
-          <MagazineSection onOpenArticle={() => setPage("magazineDetail")} />
-        </main>
-      )}
-
-      <BottomNav
-        active={page === "my" || page === "feed" ? page : "home"}
-        onNavigate={(key) => {
-          if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
-          // 기록 탭도 같은 SPA 안의 화면으로 전환한다(문서 리로드 없음).
-          if (key === "record") {
-            setRecordAutoStart(false);
-            setPage("record");
-          }
-        }}
-      />
-    </div>
-  );
+            }
+          }}
+        />
+      </div>
+    );
   })();
 
   return (
