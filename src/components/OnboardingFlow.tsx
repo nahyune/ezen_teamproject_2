@@ -28,8 +28,11 @@ function SwipeButton({ label, onComplete, hidden }: { label: string; onComplete?
     // 인라인 transform 은 가로 이동만 담당한다. (세로 -50% 를 중복 적용하면 노브가 위로 튀어오름)
     icon.style.transform = `translateX(${x}px)`;
     labelEl.style.opacity = `${1 - (x / max)}`;
-    // 노브가 지나간 자리만큼 배경을 #D6FF1E로 채운다 (노브 오른쪽 끝까지).
-    fill.style.width = `${x + icon.clientWidth}px`;
+    // 노브가 지나간 자리만큼 배경을 #D6FF1E로 채운다.
+    // x=0일 땐 노브 너비만큼만, x=max(끝까지 드래그)일 땐 컨테이너 끝까지 꽉 차도록 선형 보간.
+    const containerWidth = containerRef.current.clientWidth;
+    const fillWidth = icon.clientWidth + (containerWidth - icon.clientWidth) * (x / max);
+    fill.style.width = `${fillWidth}px`;
   };
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -75,7 +78,7 @@ function SwipeButton({ label, onComplete, hidden }: { label: string; onComplete?
     >
       {/* 노브가 지나간 만큼 #D6FF1E 로 차오르는 진행률 채움 */}
       <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-0 rounded-[30px] bg-[#D6FF1E]"
+        className="pointer-events-none absolute inset-y-0 left-0 w-0 rounded-full bg-[#D6FF1E]"
         ref={fillRef}
         aria-hidden
       />
