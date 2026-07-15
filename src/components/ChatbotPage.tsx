@@ -1,5 +1,4 @@
 import { useRef, useState, type ReactNode } from "react";
-import { StatusBarArea } from "./TopBars";
 import { ChatBlock } from "./ChatBlocks";
 import { sendChat } from "../lib/chatClient";
 import type { ChatMessage, MessageBlock } from "../lib/chatTypes";
@@ -91,10 +90,9 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
   const isEmpty = messages.length === 0;
 
   return (
-    // h-full: 오버레이(absolute inset-0) 높이에 꽉 차게 — 대화 목록은 내부에서만 스크롤
+    // h-full: 오버레이 높이에 꽉 차게 — 대화 목록은 내부에서만 스크롤.
+    // 상태바는 오버레이가 상태바 아래(top:--statusbar-h)에서 시작하므로 여기서 그리지 않는다.
     <div className="phone h-full flex flex-col bg-[var(--bg-app)] text-white">
-      <StatusBarArea />
-
       {/* 헤더: ‹ 뒤로 · 러니(아바타+이름) · ⋯ */}
       <header className="relative flex h-[54px] items-center justify-center px-[var(--gutter)]">
         <button

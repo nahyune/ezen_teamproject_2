@@ -101,7 +101,12 @@
    (visibility 를 트랜지션 끝(0.32s)에 지연 적용해야 내려가는 모션이 보인다) */
 .chatbot-overlay {
   position: absolute;
-  inset: 0;
+  /* 상태바 바로 아래에서 시작 — 뒤 페이지의 상태바가 고정된 채로 보이고,
+     챗봇만 그 아래에서 스르륵 올라온다(상태바가 같이 딸려 올라오지 않음). */
+  top: var(--statusbar-h);
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 120;
   transform: translateY(100%);
   visibility: hidden;
