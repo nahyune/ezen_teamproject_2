@@ -118,6 +118,16 @@
 }
 
 @layer utilities {
+  /* Hide the scrollbar track/thumb while keeping normal (non-carousel) scroll behavior */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Hide scrollbars on horizontal carousels while keeping scroll */
   .no-scrollbar {
     scrollbar-width: none;
