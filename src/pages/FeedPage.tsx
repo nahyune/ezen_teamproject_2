@@ -14,19 +14,19 @@ const avatarPlaceholderClass = "rounded-full bg-[#26262a]"; // 저화질 프로�
 
 function StoryCircle({ story }: { story: FeedStory }) {
   return (
-    <li className="flex w-[62px] shrink-0 flex-col items-center gap-[6px]">
-      <div className="relative flex h-[62px] w-[62px] items-center justify-center">
+    <li className="flex w-[76px] shrink-0 flex-col items-center gap-2">
+      <div className="relative flex h-[78px] w-[78px] items-center justify-center">
         {story.state === "new" ? (
           /* 오렌지 링 = 로그인(접속) 표시 — 악센트 컬러 고정 */
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[var(--primary-orange)] p-[2px]">
+          <div className="flex h-[78px] w-[78px] items-center justify-center rounded-full border-[2.5px] border-[var(--primary-orange)]">
             {story.image ? (
-              <img src={story.image} alt="" className="h-full w-full rounded-full object-cover" />
+              <img src={story.image} alt="" className="h-[68px] w-[68px] rounded-full border border-[rgba(242,242,242,0.95)] object-cover" />
             ) : (
-              <div className={`h-full w-full ${avatarPlaceholderClass}`} />
+              <div className={`h-[68px] w-[68px] border border-[rgba(242,242,242,0.95)] ${avatarPlaceholderClass}`} />
             )}
           </div>
         ) : (
-          <div className="h-14 w-14 overflow-hidden rounded-full">
+          <div className="h-[68px] w-[68px] overflow-hidden rounded-full border border-[rgba(242,242,242,0.95)]">
             {story.image ? (
               <img src={story.image} alt="" className="h-full w-full object-cover" />
             ) : (
@@ -53,7 +53,7 @@ function StoryCircle({ story }: { story: FeedStory }) {
 
 function StoryRail() {
   return (
-    <ul className="no-scrollbar flex gap-4 overflow-x-auto px-[var(--gutter)] pb-3.5 pt-2">
+    <ul className="no-scrollbar mx-[calc(-1*var(--gutter))] mb-5 flex gap-3.5 overflow-x-auto px-[var(--gutter)] pb-3.5 pt-2">
       {feedStories.map((s) => (
         <StoryCircle key={s.name} story={s} />
       ))}
@@ -90,9 +90,11 @@ function FeedCard({ post }: { post: FeedPost }) {
       {/* 게시물 미디어 (336px) — 사용자가 입맛대로 편집해서 올리는 영역.
           이미지가 없는 게시물은 자리만 비워 둠 (추후 직접 교체) */}
       {post.image ? (
-        <img src={post.image} alt="" className="h-[336px] w-full object-cover" />
+        <div className="flex aspect-[3/4] w-full items-center justify-center bg-[#1c1c1f]">
+          <img src={post.image} alt="" className="h-full w-full object-contain" />
+        </div>
       ) : (
-        <div className="h-[336px] w-full bg-[var(--bg-elevated)]" />
+        <div className="aspect-[3/4] w-full bg-[#1c1c1f]" />
       )}
 
       {/* 액션 + 반응 */}

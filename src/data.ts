@@ -42,7 +42,7 @@ import record0612 from "./assets/img/mypage-record-0612.webp";
 import record0611 from "./assets/img/mypage-record-0611.webp";
 import record0605 from "./assets/img/mypage-record-0605.webp";
 import feedImage1 from "./assets/img/feed-image-01.webp";
-import feedImage2 from "./assets/img/feed-image-02.webp";
+import feedKomazawaPark from "./assets/img/feed-komazawa-park.png";
 import storyDogMap from "./assets/img/img-dog-map.webp";
 
 export const heroData = {
@@ -620,7 +620,7 @@ export const feedPosts: FeedPost[] = [
     author: "도쿄원정대",
     avatar: runner4, // 스토리 레일과 동일 인물·동일 사진 (임시 — 고해상도 확보 시 교체)
     meta: "어제 · GPS 아트 · 도쿄",
-    image: feedImage2,
+    image: feedKomazawaPark,
     cheers: 12,
     comments: 62,
     reposts: 50,
