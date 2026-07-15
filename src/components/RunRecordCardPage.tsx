@@ -1,19 +1,17 @@
 import cardPhoto from "../assets/img/300img.png";
 import routeIcon from "../assets/icons/record-card-route.svg";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
-import BottomNav from "./BottomNav";
 
 type Props = {
   onClose?: () => void;
   onShare?: () => void;
-  onTabNavigate?: (key: string) => void;
 };
 
 // ── 기록 — 러닝 완료 (기록 카드) (Figma 767:314) ────────────
 // "기록 카드 만들기"를 누르면 뜨는, 완주 기록을 카드 형태로 보여주는 화면.
-export default function RunRecordCardPage({ onClose, onShare, onTabNavigate }: Props) {
+export default function RunRecordCardPage({ onClose, onShare }: Props) {
   return (
-    <div className="relative flex flex-1 flex-col bg-black pb-35">
+    <div className="scrollbar-hidden relative flex flex-1 min-h-0 flex-col overflow-y-auto bg-black pb-8">
       {/* 상태바 자리 불투명 검정 띠 — 스크롤 시 콘텐츠가 뒤로 사라지고, 흰 10:36 이 위에 얹힘.
           자리를 차지해 아래 콘텐츠를 상태바 높이만큼 내린다(모바일 0 / 웹 52px). */}
       <div className="sticky top-0 z-[1] h-[var(--statusbar-h)] shrink-0 bg-black" aria-hidden />
@@ -101,8 +99,6 @@ export default function RunRecordCardPage({ onClose, onShare, onTabNavigate }: P
       >
         기록만 저장하고 닫기
       </button>
-
-      <BottomNav active="my" onNavigate={onTabNavigate} />
     </div>
   );
 }

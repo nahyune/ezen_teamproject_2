@@ -1,0 +1,57 @@
+@reference "../index.css";
+
+@layer components {
+  .splash-screen {
+    @apply relative h-full min-h-full w-full overflow-hidden bg-black;
+  }
+
+  .splash-screen__content {
+    @apply absolute left-1/2 top-1/2 flex flex-col items-center;
+    animation: splash-fade 3s ease-in-out both;
+  }
+
+  .splash-screen__tagline {
+    @apply mb-[16.6px] whitespace-nowrap text-center text-[16px] leading-[1.4] text-white;
+    font-family: var(--font-display);
+  }
+
+  .splash-screen__tagline span {
+    @apply text-[var(--primary-lime)];
+  }
+
+  .splash-screen__logo {
+    @apply flex items-start;
+  }
+
+  .splash-screen__logo-w {
+    @apply h-[56.754px] w-[45.274px] max-w-none;
+  }
+
+  .splash-screen__logo-run {
+    @apply h-[57.27px] w-[90.613px] max-w-none;
+  }
+
+  .splash-screen__dots {
+    @apply mx-[11.55px] mt-[1.03px] flex flex-col gap-[13.76px];
+  }
+
+  .splash-screen__dots i {
+    @apply block h-[9.631px] w-[11.695px] bg-[var(--primary-lime)];
+  }
+
+  @keyframes splash-fade {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%);
+    }
+    22%,
+    58% {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

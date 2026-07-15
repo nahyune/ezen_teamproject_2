@@ -35,7 +35,7 @@ export default function CountdownPage({ onDone, onBack }: { onDone: () => void; 
       {/* key가 바뀔 때마다 애니메이션이 처음부터 다시 실행된다 */}
       <p
         key={count}
-        className="animate-count-pop absolute top-60 left-1/2 -translate-x-1/2 font-display text-[300px] leading-[normal] text-black"
+        className="animate-count-pop absolute top-[230px] left-1/2 -translate-x-1/2 font-display text-[300px] leading-[normal] text-black"
       >
         {Math.max(count, 1)}
       </p>

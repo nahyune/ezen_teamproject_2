@@ -36,7 +36,7 @@ export default function MyPage() {
             </span>
           </div>
           <p className="text-sm tracking-[-0.42px] text-white/55">{profileData.bio}</p>
-          <div className="flex items-center gap-[5px] px-2.5 py-[5px] rounded-full bg-pill border border-pill-border text-sm tracking-[-0.42px] text-[#f6f6ed]">
+          <div className="inline-flex w-fit max-w-full shrink-0 self-start items-center gap-1 whitespace-nowrap rounded-full border border-pill-border bg-pill px-3.5 py-2 text-sm font-medium leading-none tracking-[-0.42px] text-[#f6f6ed]">
             <img className="w-3.5 h-3.5" src={flameIcon} alt="" />
             <span>{profileData.streakDays}일 연속 러닝 중</span>
           </div>

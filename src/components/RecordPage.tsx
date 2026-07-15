@@ -146,7 +146,7 @@ export default function RecordPage({
           {recommendedCourses.map((c, i) => (
             <article
               key={c.id}
-              className={`relative flex h-35 w-82.5 flex-none snap-center items-end gap-3.5 overflow-hidden rounded-card border border-white/15 bg-elevated/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-md backdrop-saturate-140 transition-[filter,scale] duration-250 ease-[ease] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-br before:from-white/10 before:via-white/2 before:to-transparent pt-5.5 pr-4.5 pb-5.75 pl-4.25 ${
+              className={`relative flex h-35 w-82.5 flex-none snap-center items-center gap-3.5 overflow-hidden rounded-card border border-white/15 bg-elevated/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-md backdrop-saturate-140 transition-[filter,scale] duration-250 ease-[ease] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-br before:from-white/10 before:via-white/2 before:to-transparent pt-5.5 pr-4.5 pb-5.75 pl-4.25 ${
                 i === activeIdx ? "" : "scale-93 blur-[2px]"
               }`}
             >
@@ -163,7 +163,7 @@ export default function RecordPage({
               </div>
               <button
                 type="button"
-                className={`absolute top-6 right-4.5 flex items-center text-[14px] tracking-[-0.42px] text-white/70 ${
+                className={`absolute top-5 right-4.5 flex items-center text-[14px] tracking-[-0.42px] text-white/70 ${
                   i === activeIdx ? "visible" : "invisible"
                 }`}
               >
@@ -179,7 +179,7 @@ export default function RecordPage({
                 </svg>
               </button>
               <img
-                className="h-15.75 w-16 flex-none rounded-[15px] object-cover"
+                className="h-15.75 w-16 flex-none translate-y-5 rounded-[15px] object-cover"
                 src={c.image}
                 alt={c.title}
               />
