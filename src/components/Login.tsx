@@ -30,7 +30,7 @@ export default function Login({ onLogin }: { onLogin?: () => void }) {
         </div>
 
         <button
-          className="w-full h-[58px] rounded-[29px] bg-primary-lime text-black text-[17px] font-bold tracking-[-0.34px] active:scale-[0.99]"
+          className="w-full h-[58px] [@media(max-height:700px)]:h-[46px] rounded-[29px] bg-primary-lime text-black text-[17px] font-bold tracking-[-0.34px] active:scale-[0.99]"
           type="button"
           onClick={onLogin}
         >

@@ -50,7 +50,7 @@ export default function FitOnboardingShell({
 
         <div className="flex flex-col items-center gap-3.5 pb-3.5 [@media(max-height:700px)]:gap-2 [@media(max-height:700px)]:pb-2">
           <button
-            className="w-full h-[58px] [@media(max-height:700px)]:h-[46px] rounded-[29px] bg-primary-lime text-black text-[17px] font-bold tracking-[-0.34px] shadow-[0_0_32px_rgba(212,255,63,0.35)] active:scale-[0.99]"
+            className="w-full h-[58px] [@media(max-height:700px)]:h-[46px] rounded-[29px] bg-primary-lime text-black text-[17px] font-bold tracking-[-0.34px] active:scale-[0.99]"
             type="button"
             onClick={onNext}
           >

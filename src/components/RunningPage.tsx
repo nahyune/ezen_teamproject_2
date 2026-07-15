@@ -171,10 +171,10 @@ export default function RunningPage({
           <img className="size-6" src={iconChatbot} alt="" />
         </button>
 
-        {/* 일시정지 — 라임 글로우 (Figma 0 0 32px rgba(212,255,63,0.3)) */}
+        {/* 일시정지 — 플랫 라임 원형 버튼(글로우 제거, CTA와 톤 통일) */}
         <button
           type="button"
-          className="grid size-27.5 place-items-center rounded-full bg-primary-lime shadow-[0_0_32px_0_rgba(212,255,63,0.3)] active:scale-[0.97]"
+          className="grid size-27.5 place-items-center rounded-full bg-primary-lime active:scale-[0.97]"
           aria-label="일시정지"
           onClick={() => setPaused(true)}
         >
