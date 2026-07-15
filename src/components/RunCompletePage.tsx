@@ -46,7 +46,7 @@ export default function RunCompletePage({
   onCreateCard?: () => void;
 }) {
   return (
-    <div className="flex flex-1 flex-col items-center bg-black">
+    <div className="flex flex-1 min-h-0 flex-col items-center overflow-y-auto bg-black">
       <header className="mt-3 flex w-full items-center justify-between px-4.5 py-4">
         <button type="button" className="size-6.5" aria-label="뒤로가기" onClick={onBack}>
           <img className="size-full" src={iconBack} alt="" />
