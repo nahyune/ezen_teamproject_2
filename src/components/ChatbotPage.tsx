@@ -91,7 +91,8 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
   const isEmpty = messages.length === 0;
 
   return (
-    <div className="phone flex flex-col bg-[var(--bg-app)] text-white">
+    // h-full: 오버레이(absolute inset-0) 높이에 꽉 차게 — 대화 목록은 내부에서만 스크롤
+    <div className="phone h-full flex flex-col bg-[var(--bg-app)] text-white">
       <StatusBarArea />
 
       {/* 헤더: ‹ 뒤로 · 러니(아바타+이름) · ⋯ */}
@@ -122,7 +123,12 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
       </header>
 
       {/* 대화 / 웰컴 영역 */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-[var(--gutter)] pb-[110px] pt-6">
+      {/* overscroll-contain: 오버레이 스크롤이 밑의 페이지로 번지지 않게.
+          스크롤바는 숨기되 스크롤 기능은 유지 */}
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto overscroll-contain px-[var(--gutter)] pb-[110px] pt-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {isEmpty ? (
           <div className="flex flex-col items-center">
             <div className="flex flex-col items-center gap-3 pt-[60px]">

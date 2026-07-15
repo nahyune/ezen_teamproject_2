@@ -39,8 +39,7 @@ type Page =
   | "courseDetail"
   | "challengeDetail"
   | "magazineDetail"
-  | "record"
-  | "chatbot";
+  | "record";
 
 export default function App() {
   const [page, setPage] = useState<Page>("home");
@@ -48,6 +47,9 @@ export default function App() {
   const [courseDetailKind, setCourseDetailKind] = useState<CourseDetailKind>("yeouido");
   // 기록 탭 진입 시 카운트다운부터 바로 시작할지 여부(홈 히어로 "오늘 기록 시작하기").
   const [recordAutoStart, setRecordAutoStart] = useState(false);
+  // 챗봇(러니)은 페이지가 아니라 "항상 뒤에 살아있는 오버레이" — 열림/닫힘만 토글.
+  // 닫아도 언마운트하지 않으므로 대화 내용이 유지되고, 밑의 화면(러닝 타이머 등)도 안 끊긴다.
+  const [chatbotOpen, setChatbotOpen] = useState(false);
 
   // Make the horizontal rows on the current screen draggable with the mouse.
   useEffect(() => initDragScroll(), [page]);
@@ -112,7 +114,7 @@ export default function App() {
         <RecordFlow
           autoStart={recordAutoStart}
           onBack={() => setPage("home")}
-          onChatbot={() => setPage("chatbot")}
+          onChatbot={() => setChatbotOpen(true)}
           onTabNavigate={(key) => {
             // 완주 '기록 카드' 화면의 하단바에서만 사용
             setRecordAutoStart(false);
@@ -121,10 +123,6 @@ export default function App() {
         />
       </div>
     );
-  }
-
-  if (page === "chatbot") {
-    return <ChatbotPage onBack={() => setPage("home")} />;
   }
 
   if (page === "courses") {
@@ -156,7 +154,7 @@ export default function App() {
       <AppHeader
         variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
         onSettingsClick={() => setPage("settings")}
-        onChatbotClick={() => setPage("chatbot")}
+        onChatbotClick={() => setChatbotOpen(true)}
       />
 
       {page === "my" ? (
@@ -212,5 +210,18 @@ export default function App() {
   );
   })();
 
-  return <PhoneFrame>{rendered}</PhoneFrame>;
+  return (
+    <PhoneFrame>
+      {rendered}
+      {/* 챗봇(러니) 오버레이 — 페이지 위로 아래에서 스르륵 올라오는 창(App.css .chatbot-overlay).
+          닫아도 언마운트하지 않고 프레임 아래로 밀어두기만 해서 대화·스크롤이 유지되고,
+          답변이 오는 도중 닫아도 뒤에서 계속 도착한다. 새로고침 시에만 초기화. */}
+      <div
+        className={`chatbot-overlay ${chatbotOpen ? "is-open" : ""}`}
+        aria-hidden={!chatbotOpen || undefined}
+      >
+        <ChatbotPage onBack={() => setChatbotOpen(false)} />
+      </div>
+    </PhoneFrame>
+  );
 }

@@ -49,13 +49,15 @@ function CardRow({
   onChip?: (p: string) => void;
 }) {
   return (
-    <div className="no-scrollbar -mx-[var(--gutter)] flex gap-2.5 overflow-x-auto px-[var(--gutter)] pl-[42px]">
+    // 화면 양끝까지 뚫는 가로스크롤 대신, 채팅 여백(18px) 안에서 두 장을 반반 나눠
+    // 가운데 배치 — 프레임 베젤 때문에 오른쪽 카드가 잘리던 문제 해결.
+    <div className="grid grid-cols-2 gap-2.5">
       {items.map((c) => (
         <button
           key={c.title}
           type="button"
           onClick={() => onChip?.(`${c.title} 자세히 알려줘`)}
-          className="w-[179px] shrink-0 overflow-hidden rounded-[18px] bg-[var(--bg-elevated)] text-left"
+          className="w-full overflow-hidden rounded-[18px] bg-[var(--bg-elevated)] text-left"
         >
           <div className="relative h-[88px] bg-[#2c2c30]">
             {c.image && (

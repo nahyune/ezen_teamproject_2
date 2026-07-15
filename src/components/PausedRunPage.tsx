@@ -30,6 +30,7 @@ type Props = {
   onBack?: () => void;
   onMusicConnect?: () => void;
   musicConnected?: boolean;
+  onChatbot?: () => void;
 };
 
 // ── 기록 — 일시정지 (Figma 411:5468) ────────────────────────
@@ -42,6 +43,7 @@ export default function PausedRunPage({
   onBack,
   onMusicConnect,
   musicConnected,
+  onChatbot,
 }: Props) {
   const holdTimer = useRef<number | null>(null);
 
@@ -105,6 +107,7 @@ export default function PausedRunPage({
         type="button"
         className="absolute bottom-82.25 left-1/2 grid size-14 -translate-x-1/2 place-items-center rounded-full bg-black"
         aria-label="AI 챗봇"
+        onClick={onChatbot}
       >
         <img className="size-6" src={iconChatbot} alt="" />
       </button>

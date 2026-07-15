@@ -28,7 +28,15 @@ function Stat({ value, label }: { value: string; label: string }) {
 // 카운트다운이 끝나면 뜨는 측정 화면. 시간 스탯만 1초에 1씩
 // 올라가고, 일시정지 버튼으로 멈췄다 재개할 수 있다.
 // 세로 간격은 시안 좌표에서 상태바(47px)를 뺀 값 기준.
-export default function RunningPage({ onEnd, onBack }: { onEnd?: () => void; onBack?: () => void }) {
+export default function RunningPage({
+  onEnd,
+  onBack,
+  onChatbot,
+}: {
+  onEnd?: () => void;
+  onBack?: () => void;
+  onChatbot?: () => void;
+}) {
   const [seconds, setSeconds] = useState(START_SECONDS);
   const [paused, setPaused] = useState(false);
   const [view, setView] = useState<"stats" | "map">("stats");
@@ -65,6 +73,7 @@ export default function RunningPage({ onEnd, onBack }: { onEnd?: () => void; onB
         onBack={onBack}
         onMusicConnect={() => setMusicOpen(true)}
         musicConnected={musicConnected}
+        onChatbot={onChatbot}
       />
     );
   }
@@ -77,6 +86,7 @@ export default function RunningPage({ onEnd, onBack }: { onEnd?: () => void; onB
         onBack={() => setView("stats")}
         onMusicConnect={() => setMusicOpen(true)}
         musicConnected={musicConnected}
+        onChatbot={onChatbot}
       />
     );
   }
@@ -159,6 +169,7 @@ export default function RunningPage({ onEnd, onBack }: { onEnd?: () => void; onB
           type="button"
           className="grid size-14 place-items-center rounded-full bg-black"
           aria-label="AI 챗봇"
+          onClick={onChatbot}
         >
           <img className="size-6" src={iconChatbot} alt="" />
         </button>

@@ -25,6 +25,7 @@ type Props = {
   onBack: () => void;
   onMusicConnect?: () => void;
   musicConnected?: boolean;
+  onChatbot?: () => void;
 };
 
 // ── 기록 — 지도(음악x) (Figma 411:5420) ─────────────────────
@@ -38,6 +39,7 @@ export default function RunningMapPage({
   onBack,
   onMusicConnect,
   musicConnected,
+  onChatbot,
 }: Props) {
   return (
     <div className="relative flex-1 overflow-hidden">
@@ -101,6 +103,7 @@ export default function RunningMapPage({
           type="button"
           className="grid size-13 place-items-center rounded-full bg-black shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
           aria-label="AI 챗봇"
+          onClick={onChatbot}
         >
           <img className="size-6" src={iconChatbot} alt="" />
         </button>

@@ -53,6 +53,10 @@
      같이 주면 fixed 가 콘텐츠 따라 밀려 올라가므로 반드시 분리)
    ────────────────────────────────────────────────────────────── */
 .phone-frame {
+  /* 챗봇 등 오버레이(absolute inset-0)가 프레임 기준으로 앵커되도록 */
+  position: relative;
+  /* 슬라이드 오버레이가 닫힘 상태(프레임 아래)로 밀려 있을 때 밖으로 안 비치게 */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   width: var(--frame-width);
@@ -89,4 +93,24 @@
   .phone-scroll {
     border-radius: 42px; /* 안쪽 화면 라운드 (베젤 두께만큼 작게) */
   }
+}
+
+/* ── 챗봇(러니) 슬라이드 오버레이 ─────────────────────────────
+   항상 마운트(대화 유지)하되, 닫힘 = 프레임 아래로 밀어둔 상태.
+   열면 아래→위로 스르륵, 닫으면 스르륵 내려간 뒤 visibility 로 숨김
+   (visibility 를 트랜지션 끝(0.32s)에 지연 적용해야 내려가는 모션이 보인다) */
+.chatbot-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 120;
+  transform: translateY(100%);
+  visibility: hidden;
+  transition:
+    transform 0.32s cubic-bezier(0.32, 0.72, 0.33, 1),
+    visibility 0s linear 0.32s;
+}
+.chatbot-overlay.is-open {
+  transform: translateY(0);
+  visibility: visible;
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.33, 1);
 }

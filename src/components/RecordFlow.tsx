@@ -35,7 +35,7 @@ export default function RecordFlow({
     return <CountdownPage onDone={() => setScreen("running")} onBack={onBack} />;
   }
   if (screen === "running") {
-    return <RunningPage onEnd={() => setScreen("finished")} onBack={onBack} />;
+    return <RunningPage onEnd={() => setScreen("finished")} onBack={onBack} onChatbot={onChatbot} />;
   }
   if (screen === "finished") {
     return (
