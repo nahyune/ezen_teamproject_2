@@ -47,7 +47,7 @@ export default function RunCompletePage({
 }) {
   return (
     <div className="flex flex-1 min-h-0 flex-col items-center overflow-y-auto bg-black">
-      <header className="mt-3 flex w-full items-center justify-between px-4.5 py-4">
+      <header className="mt-3 flex w-full shrink-0 items-center justify-between px-4.5 py-4">
         <button type="button" className="size-6.5" aria-label="뒤로가기" onClick={onBack}>
           <img className="size-full" src={iconBack} alt="" />
         </button>
@@ -57,13 +57,13 @@ export default function RunCompletePage({
       </header>
 
       {/* 총 거리 */}
-      <p className="flex items-baseline gap-1.25 font-display leading-[1.3] whitespace-nowrap">
+      <p className="flex shrink-0 items-baseline gap-1.25 font-display leading-[1.3] whitespace-nowrap">
         <span className="text-[128px] tracking-[-2.56px] text-primary-lime">8.43</span>
         <span className="text-[36px] tracking-[-0.72px] text-[#b1b1b1]">KM</span>
       </p>
 
       {/* 6개 스탯 그리드 (2행 × 3열) */}
-      <div className="mt-4 flex w-87.5 flex-col gap-8">
+      <div className="mt-4 flex w-87.5 shrink-0 flex-col gap-8">
         <div className="flex items-start justify-between">
           <Stat value={`6'05"`} label="평균 페이스" />
           <Stat value="172" label="케이던스" />
@@ -78,7 +78,7 @@ export default function RunCompletePage({
 
       {/* 완주 코스 지도 카드 — 경로/뱃지가 지도 크롭에 맞춰져 있어
           이미지는 시안과 동일한 크기·위치로 고정한다 */}
-      <div className="relative mt-5 mb-5 h-102.75 w-96.75 overflow-hidden rounded-card bg-white">
+      <div className="relative mt-5 mb-5 h-102.75 w-96.75 shrink-0 overflow-hidden rounded-card bg-white">
         <img
           className="absolute -top-27.5 -left-22.75 h-183.25 w-149.5 max-w-none object-cover opacity-67"
           src={finishMapImg}
@@ -117,7 +117,7 @@ export default function RunCompletePage({
       <button
         type="button"
         onClick={onCreateCard}
-        className="mb-5 h-14 w-95.5 max-w-[calc(100%-48px)] rounded-[28px] bg-primary-lime text-[16px] font-semibold text-[#0f120c]"
+        className="mb-5 h-14 w-95.5 max-w-[calc(100%-48px)] shrink-0 rounded-[28px] bg-primary-lime text-[16px] font-semibold text-[#0f120c]"
       >
         기록 카드 만들기
       </button>
