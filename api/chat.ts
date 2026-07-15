@@ -2,8 +2,6 @@
 // ⚠️ API 키(ANTHROPIC_API_KEY)는 이 서버 환경변수에서만 읽는다. 절대 프론트로 내려보내지 않음.
 //    프론트(브라우저)는 이 /api/chat 엔드포인트만 호출한다.
 // 배포: Vercel 환경변수에 ANTHROPIC_API_KEY 등록. 로컬 테스트는 `vercel dev`.
-import Anthropic from "@anthropic-ai/sdk";
-
 export const config = { runtime: "edge" };
 
 // 챗봇 "러니" 페르소나 + 말투/형식 규칙.
@@ -20,13 +18,21 @@ const RUNI_SYSTEM = `너는 러닝 앱 "W:RUN"의 AI 러닝 어시스턴트 "러
 - 러닝과 무관한 요청은 한두 문장으로 정중히 러닝 주제로 유도한다.`;
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
+type AnthropicTextBlock = { type: "text"; text: string };
+type AnthropicResponse = {
+  content?: AnthropicTextBlock[];
+  error?: { message?: string };
+};
+const env =
+  (globalThis as typeof globalThis & { process?: { env?: Record<string, string | undefined> } }).process
+    ?.env ?? {};
 
 // 비용 폭주 방어 (포폴용 — 정상 대화는 넉넉히 허용, 남용만 차단).
 const MAX_MESSAGES = 20; // 최근 N개만 모델로 전달 (그 이전 히스토리는 잘라냄)
 const MAX_CHARS_PER_MESSAGE = 2000; // 메시지 1개당 글자수 상한
 const MAX_TOKENS = 1024; // 응답 길이 상한
 // 채팅 UX엔 빠르고 저렴한 Haiku가 유리. 배포에서 ANTHROPIC_MODEL로 교체 가능.
-const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-haiku-4-5-20251001";
+const MODEL = env.ANTHROPIC_MODEL ?? "claude-haiku-4-5-20251001";
 
 // ── 레이트 리밋 (IP당 요청 수 제한 — 스팸/남용 1차 차단) ─────────────
 // edge 인스턴스 메모리 기반이라 완벽한 분산 상한은 아니지만, 단일 IP의 연타
@@ -94,22 +100,38 @@ export default async function handler(req: Request): Promise<Response> {
   const trimmed = messages.slice(-MAX_MESSAGES);
 
   // 키가 없으면 명확히 알려준다(배포/로컬 설정 누락 진단용).
-  if (!process.env.ANTHROPIC_API_KEY) {
+  const apiKey = env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
     return Response.json({ error: "ANTHROPIC_API_KEY not set on server" }, { status: 500 });
   }
 
-  const client = new Anthropic(); // ANTHROPIC_API_KEY 자동 사용
-
   try {
     // 뼈대: 우선 비스트리밍. 추후 스트리밍(SSE/ReadableStream)으로 확장 예정.
-    const response = await client.messages.create({
-      model: MODEL,
-      max_tokens: MAX_TOKENS,
-      system: RUNI_SYSTEM,
-      messages: trimmed,
+    const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: MAX_TOKENS,
+        system: RUNI_SYSTEM,
+        messages: trimmed,
+      }),
     });
-    const text = response.content
-      .filter((b): b is Anthropic.TextBlock => b.type === "text")
+
+    const response = (await anthropicRes.json()) as AnthropicResponse;
+    if (!anthropicRes.ok) {
+      return Response.json(
+        { error: response.error?.message ?? "Anthropic API request failed" },
+        { status: anthropicRes.status },
+      );
+    }
+
+    const text = (response.content ?? [])
+      .filter((b): b is AnthropicTextBlock => b.type === "text")
       .map((b) => b.text)
       .join("");
     return Response.json({ text });
