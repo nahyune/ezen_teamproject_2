@@ -113,11 +113,6 @@ export default function App() {
             autoStart={recordAutoStart}
             onBack={() => setPage("home")}
             onChatbot={() => setChatbotOpen(true)}
-            onTabNavigate={(key) => {
-              // 완주 '기록 카드' 화면의 하단바에서만 사용
-              setRecordAutoStart(false);
-              if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
-            }}
           />
         </div>
       );
