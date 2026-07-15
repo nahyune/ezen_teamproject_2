@@ -21,7 +21,7 @@ export default function SettingsPage({ onBack }: Props) {
       <div className="flex flex-col gap-12 pt-2 px-[18px] pb-10">
         {settingsGroups.map((group) => (
           <section key={group.title} className="flex flex-col gap-2.5">
-            <p className="text-sm font-medium tracking-[-0.42px] text-primary-lime">
+            <p className="text-xl font-medium tracking-[-0.42px] text-primary-lime">
               {group.title}
             </p>
             <div className="bg-[#161616] rounded-2xl overflow-hidden">

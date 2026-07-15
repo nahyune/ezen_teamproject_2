@@ -21,7 +21,7 @@ const gpsArtIcons: Record<1 | 2, string> = { 1: gpsArt1, 2: gpsArt2 };
 
 export default function MyPage() {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 pb-[130px]">
       <section className="flex items-center gap-4 pt-3.5 px-[18px] pb-1.5">
         <div className="flex-none w-[84px] h-[84px] rounded-full overflow-hidden">
           <img className="w-full h-full object-cover" src={profileData.avatar} alt="" />
