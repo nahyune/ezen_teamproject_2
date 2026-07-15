@@ -1,4 +1,4 @@
-import iconBack from "../assets/icons/guide-back.svg";
+import { BackButton } from "./Icons";
 import iconShare from "../assets/icons/share.svg";
 import iconMarker from "../assets/icons/finish-marker.svg";
 import routeOutline from "../assets/icons/finish-route-1.svg";
@@ -48,9 +48,7 @@ export default function RunCompletePage({
   return (
     <div className="scrollbar-hidden flex flex-1 min-h-0 flex-col items-center overflow-y-auto bg-black">
       <header className="mt-3 flex w-full shrink-0 items-center justify-between px-4.5 py-4">
-        <button type="button" className="size-6.5" aria-label="뒤로가기" onClick={onBack}>
-          <img className="size-full" src={iconBack} alt="" />
-        </button>
+        <BackButton onClick={onBack} />
         <button type="button" className="size-6.5" aria-label="공유">
           <img className="size-full" src={iconShare} alt="" />
         </button>

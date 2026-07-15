@@ -41,8 +41,10 @@ import record0615 from "./assets/img/mypage-record-0615.webp";
 import record0612 from "./assets/img/mypage-record-0612.webp";
 import record0611 from "./assets/img/mypage-record-0611.webp";
 import record0605 from "./assets/img/mypage-record-0605.webp";
-import feedImage1 from "./assets/img/feed-image-01.webp";
-import feedImage2 from "./assets/img/feed-image-02.webp";
+import feedKomazawaPark from "./assets/img/feed-komazawa-park.png";
+import feedRunningSelfie from "./assets/img/feed-running-selfie.webp";
+import feedRunningShoes from "./assets/img/feed-running-shoes.webp";
+import feedStoryAvatarNoRing from "./assets/img/feed-story-avatar-no-ring.png";
 import storyDogMap from "./assets/img/img-dog-map.webp";
 
 export const heroData = {
@@ -580,7 +582,7 @@ export type FeedStory = {
 };
 
 export const feedStories: FeedStory[] = [
-  { name: "내 스토리", image: storyDogMap, state: "me" },
+  { name: "내 스토리", image: feedStoryAvatarNoRing, state: "me" },
   { name: "안정은", image: runner1, state: "new" },
   { name: "러너_준", image: runner2, state: "new" },
   { name: "도쿄원정대", image: runner4, state: "new" },
@@ -595,6 +597,7 @@ export type FeedPost = {
   meta: string;
   /** 사용자가 편집해 올리는 게시물 이미지 (336px 영역) */
   image?: string;
+  images?: string[];
   cheers: number;
   comments: number;
   reposts: number;
@@ -608,7 +611,8 @@ export const feedPosts: FeedPost[] = [
     author: "안정은",
     avatar: runner1, // 스토리 레일과 동일 인물·동일 사진 (임시 — 고해상도 확보 시 교체)
     meta: "오늘 08:05 · 한강 러너스 크루 · 서울",
-    image: feedImage1,
+    image: feedRunningSelfie,
+    images: [feedRunningSelfie, feedRunningShoes],
     cheers: 12,
     comments: 62,
     reposts: 50,
@@ -620,7 +624,7 @@ export const feedPosts: FeedPost[] = [
     author: "도쿄원정대",
     avatar: runner4, // 스토리 레일과 동일 인물·동일 사진 (임시 — 고해상도 확보 시 교체)
     meta: "어제 · GPS 아트 · 도쿄",
-    image: feedImage2,
+    image: feedKomazawaPark,
     cheers: 12,
     comments: 62,
     reposts: 50,

@@ -1,4 +1,4 @@
-import { StatusBarArea } from "../components/TopBars";
+import { BackButton } from "../components/Icons";
 
 type Props = {
   onBack: () => void;
@@ -78,20 +78,6 @@ const badgeToneClass: Record<Badge["tone"], string> = {
   gray: "bg-[#2e2e2e] text-[#9c9c9c]",
 };
 
-function BackIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
-      <path
-        d="M16.1 6.4L9.5 13L16.1 19.6"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.1"
-      />
-    </svg>
-  );
-}
-
 function BadgeView({ badge }: { badge: Badge }) {
   return (
     <span
@@ -145,11 +131,8 @@ export default function ScheduleListPage({ onBack, onOpenSchedule }: Props) {
 
   return (
     <div className="phone bg-[#0a0a0a] text-white">
-      <StatusBarArea />
       <header className="subheader">
-        <button className="grid h-[26px] w-[26px] place-items-center text-white" type="button" onClick={onBack} aria-label="뒤로가기">
-          <BackIcon />
-        </button>
+        <BackButton onClick={onBack} />
         <h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[24px] font-semibold leading-[1.3] tracking-[-0.48px]">
           내 일정
         </h1>

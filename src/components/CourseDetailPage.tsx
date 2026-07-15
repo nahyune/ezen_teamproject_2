@@ -1,6 +1,5 @@
 import { courseDetailPages, type CourseDetailKind } from "../data";
-import { ChevronLeft } from "./Icons";
-import { StatusBarArea } from "./TopBars";
+import { BackButton } from "./Icons";
 import "./CourseDetailPage.css";
 
 type Props = {
@@ -13,18 +12,13 @@ export default function CourseDetailPage({ onBack, kind }: Props) {
 
   return (
     <section className="course-detail">
-      {/* 상태바 — 지도 위에 겹치지 않고 자기 자리(검정 띠)를 차지하고,
-          지도는 그 아래부터 시작. 실기기(안전영역만큼 내려옴)와 동일한 모습. */}
-      <StatusBarArea />
       <div className="course-detail__hero">
         <img src={detail.image} alt="" />
       </div>
 
       <div className="course-detail__header-gradient" aria-hidden />
       <header className="course-detail__header">
-        <button className="course-detail__back" type="button" aria-label="추천 코스로 돌아가기" onClick={onBack}>
-          <ChevronLeft size={26} />
-        </button>
+        <BackButton onClick={onBack} label="추천 코스로 돌아가기" />
       </header>
 
       <main className="course-detail__content">

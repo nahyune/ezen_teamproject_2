@@ -3,7 +3,7 @@ import iconChatbot from "../assets/icons/header-chatbot.svg";
 import iconSparkle from "../assets/icons/sparkle.svg";
 import runMapImg from "../assets/img/run-map.png";
 import MusicPlayerBar from "./MusicPlayerBar";
-import { ChevronLeft } from "./Icons";
+import { BackButton } from "./Icons";
 
 const HOLD_MS = 800; // "길게 눌러 종료" 판정 시간
 
@@ -62,14 +62,10 @@ export default function PausedRunPage({
 
   return (
     <div className="relative flex-1 bg-[#1b1b1b]">
-      <button
-        type="button"
-        aria-label="뒤로가기"
+      <BackButton
         onClick={onBack}
-        className="absolute top-[18px] left-[18px] z-10 grid h-6 w-6 shrink-0 place-items-center text-white"
-      >
-        <ChevronLeft size={24} />
-      </button>
+        className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-10"
+      />
       {/* 상단 지도 스트립 (달리던 코스 + 현재 위치) */}
       <div className="relative h-69.25 w-full overflow-hidden">
         <img

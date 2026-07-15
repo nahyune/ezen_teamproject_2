@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { StatusBarArea } from "./TopBars";
+import { BackButton } from "./Icons";
 
 export default function FitOnboardingShell({
   step,
@@ -31,16 +32,7 @@ export default function FitOnboardingShell({
 
       <div className="flex-1 min-h-0 flex flex-col px-[var(--gutter)]">
         <div className="shrink-0 flex items-center justify-between h-10 mt-2 [@media(max-height:700px)]:mt-1">
-          <button
-            className="w-8 h-8 flex items-center justify-center -ml-[6px] text-white"
-            type="button"
-            onClick={onBack}
-            aria-label="뒤로가기"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
+          <BackButton onClick={onBack} className="-ml-[6px]" />
 
           <div className="flex items-center gap-2.5 font-display text-base leading-none" aria-hidden>
             <span className={step === 1 ? "text-primary-lime" : "text-white/30"}>01</span>

@@ -21,7 +21,7 @@ const gpsArtIcons: Record<1 | 2, string> = { 1: gpsArt1, 2: gpsArt2 };
 
 export default function MyPage() {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 pb-[130px]">
       <section className="flex items-center gap-4 pt-3.5 px-[18px] pb-1.5">
         <div className="flex-none w-[84px] h-[84px] rounded-full overflow-hidden">
           <img className="w-full h-full object-cover" src={profileData.avatar} alt="" />
@@ -36,7 +36,7 @@ export default function MyPage() {
             </span>
           </div>
           <p className="text-sm tracking-[-0.42px] text-white/55">{profileData.bio}</p>
-          <div className="flex items-center gap-[5px] px-2.5 py-[5px] rounded-full bg-pill border border-pill-border text-sm tracking-[-0.42px] text-[#f6f6ed]">
+          <div className="inline-flex w-fit max-w-full shrink-0 self-start items-center gap-1 whitespace-nowrap rounded-full border border-pill-border bg-pill px-3.5 py-2 text-sm font-medium leading-none tracking-[-0.42px] text-[#f6f6ed]">
             <img className="w-3.5 h-3.5" src={flameIcon} alt="" />
             <span>{profileData.streakDays}일 연속 러닝 중</span>
           </div>
@@ -45,21 +45,21 @@ export default function MyPage() {
 
       <section className="pt-3.5 px-[18px] pb-1.5">
         <div className="flex flex-col gap-4 py-[18px] px-5 rounded-card bg-elevated">
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between px-3">
             <div className="flex flex-col items-center gap-1">
-              <p className="font-display text-[26px] leading-none text-white">
+              <p className="font-display text-[26px] leading-8 text-white">
                 {profileStats.records}
               </p>
               <p className="text-sm tracking-[-0.42px] text-white/55">기록</p>
             </div>
             <div className="flex flex-col items-center gap-1">
-              <p className="font-display text-[26px] leading-none text-white">
-                {profileStats.totalDistanceKm} <span className="text-2xl">km</span>
+              <p className="font-display text-[26px] leading-8 text-white">
+                {profileStats.totalDistanceKm} <span className="text-2xl leading-none">km</span>
               </p>
               <p className="text-sm tracking-[-0.42px] text-white/55">누적 거리</p>
             </div>
             <div className="flex flex-col items-center gap-1">
-              <p className="font-display text-[26px] leading-none text-white">
+              <p className="font-display text-[26px] leading-8 text-white">
                 {profileStats.followers}
               </p>
               <p className="text-sm tracking-[-0.42px] text-white/55">팔로워</p>

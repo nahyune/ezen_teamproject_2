@@ -1,4 +1,3 @@
-import { StatusBarArea } from "./TopBars";
 import BrandLogo from "./BrandLogo";
 import bgImage from "../assets/img/on4_img.png";
 import runner1 from "../assets/img/runner1.png";
@@ -12,10 +11,6 @@ export default function Login({ onLogin }: { onLogin?: () => void }) {
       <img className="absolute inset-0 w-full h-full object-cover" src={bgImage} alt="함께 달리는 러너들" />
       {/* Bottom gradient so the headline/CTA stay legible over the photo */}
       <div className="absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black/92 from-25% to-transparent pointer-events-none" />
-
-      <div className="absolute inset-x-0 top-0 z-[2]">
-        <StatusBarArea />
-      </div>
 
       <BrandLogo className="absolute top-[58px] left-[var(--gutter)] z-[2]" />
 
@@ -35,7 +30,7 @@ export default function Login({ onLogin }: { onLogin?: () => void }) {
         </div>
 
         <button
-          className="w-full h-[58px] rounded-[29px] bg-primary-lime text-black text-[17px] font-bold tracking-[-0.34px] active:scale-[0.99]"
+          className="w-full h-[58px] [@media(max-height:700px)]:h-[46px] rounded-[29px] bg-primary-lime text-black text-[17px] font-bold tracking-[-0.34px] active:scale-[0.99]"
           type="button"
           onClick={onLogin}
         >

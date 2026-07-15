@@ -1,6 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
-import { StatusBarArea } from "../components/TopBars";
-import runner1 from "../assets/img/runner1.webp";
+import type { CSSProperties, ReactNode } from "react";import runner1 from "../assets/img/runner1.webp";
+import { BackButton } from "../components/Icons";
 import runner2 from "../assets/img/runner2.webp";
 import runner3 from "../assets/img/runner3.webp";
 import runner4 from "../assets/img/runner4.webp";
@@ -63,19 +62,6 @@ const crews: ProfileItem[] = [
   { image: runner2, name: "한강 브릿지런", meta: "멤버 96 · 여의도", action: "cheer", position: "50% 88%" },
 ];
 
-function BackIcon() {
-  return (
-    <svg width="25" height="25" viewBox="0 0 25 25" fill="none" aria-hidden>
-      <path
-        d="M15.6 5.5L8.6 12.5L15.6 19.5"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.25"
-      />
-    </svg>
-  );
-}
 
 function CloseIcon() {
   return (
@@ -171,16 +157,8 @@ function ProfileRow({ item }: { item: ProfileItem }) {
 export default function RunnerExplorePage({ onBack }: Props) {
   return (
     <div className="phone bg-black text-[var(--text-primary)]">
-      <StatusBarArea />
       <header className="subheader justify-center">
-        <button
-          className="absolute left-[18px] top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center text-white"
-          type="button"
-          onClick={onBack}
-          aria-label="뒤로가기"
-        >
-          <BackIcon />
-        </button>
+        <BackButton onClick={onBack} className="absolute left-[18px] top-1/2 -translate-y-1/2" />
         <h1 className="text-[25px] font-semibold leading-none tracking-[0]">인기 러너</h1>
       </header>
 

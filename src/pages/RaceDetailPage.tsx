@@ -1,4 +1,4 @@
-import { StatusBarArea } from "../components/TopBars";
+import { BackButton } from "../components/Icons";
 import raceHero from "../assets/img/race1.webp";
 
 type Props = {
@@ -23,14 +23,6 @@ const glassCardClass =
   "relative min-h-[94px] overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(29,29,29,0.2)] p-[13px_16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_-1px_0_rgba(0,0,0,0.28)] backdrop-blur-[14px] backdrop-saturate-[145%] before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.02)_46%,rgba(255,255,255,0))] [&>*]:relative";
 const sectionTitleClass = "text-[24px] font-semibold leading-[1.3] tracking-[-0.48px] text-[#f6f6ed]";
 const bodyTextClass = "text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-white/70";
-
-function BackIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M15 5L8 12L15 19" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-    </svg>
-  );
-}
 
 function ShareIcon() {
   return (
@@ -63,11 +55,8 @@ function RouteMiniMap() {
 export default function RaceDetailPage({ onBack }: Props) {
   return (
     <div className="phone bg-black text-[#f6f6ed]">
-      <StatusBarArea />
       <header className="subheader justify-between">
-        <button className="grid h-6 w-6 place-items-center text-[#f6f6ed]" type="button" onClick={onBack} aria-label="뒤로가기">
-          <BackIcon />
-        </button>
+        <BackButton onClick={onBack} />
         <h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[24px] font-semibold leading-[1.3] tracking-[-0.48px]">
           대회 소식
         </h1>

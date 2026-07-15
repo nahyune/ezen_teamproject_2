@@ -65,5 +65,6 @@ export default function OnboardingApp() {
     return <OnboardingFlow onComplete={() => setScreen("login")} />;
   })();
 
-  return <PhoneFrame>{content}</PhoneFrame>;
+  // 온보딩은 전부 몰입 화면(배경 풀블리드) → 상태바 투명.
+  return <PhoneFrame statusBar="clear">{content}</PhoneFrame>;
 }

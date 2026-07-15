@@ -1,5 +1,4 @@
-import { StatusBarArea } from "../components/TopBars";
-import { ChevronLeft } from "../components/Icons";
+import { BackButton } from "../components/Icons";
 import SectionHeader from "../components/SectionHeader";
 import mag1 from "../assets/img/mag1.webp";
 import mag2 from "../assets/img/mag2.webp";
@@ -116,12 +115,8 @@ function ArrowUpRightIcon() {
 export default function MagazineDetailPage({ onBack }: Props) {
   return (
     <div className="phone bg-black text-[#f6f6ed]">
-      <StatusBarArea />
-
       <header className="subheader justify-between">
-        <button className="grid h-6 w-6 shrink-0 place-items-center text-white" type="button" onClick={onBack} aria-label="뒤로가기">
-          <ChevronLeft size={24} />
-        </button>
+        <BackButton onClick={onBack} />
         <h1 className="text-center text-[24px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">매거진</h1>
         <button className="grid h-6 w-6 shrink-0 place-items-center text-white" type="button" aria-label="공유하기">
           <ShareIcon />

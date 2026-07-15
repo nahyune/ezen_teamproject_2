@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft } from "./Icons";
+import { BackButton } from "./Icons";
 
 // ── 기록 — 카운트다운 (Figma 411:5554) ──────────────────────
 // 시작 버튼을 누르는 즉시 3이 뜨고, 1초 간격으로 2 → 1 로 바뀐 뒤
@@ -21,14 +21,11 @@ export default function CountdownPage({ onDone, onBack }: { onDone: () => void; 
 
   return (
     <div className="relative flex-1 bg-primary-lime">
-      <button
-        type="button"
-        aria-label="뒤로가기"
+      <BackButton
         onClick={() => setConfirmExit(true)}
-        className="absolute top-[18px] left-[18px] z-10 grid h-6 w-6 shrink-0 place-items-center text-[#131408]"
-      >
-        <ChevronLeft size={24} />
-      </button>
+        color="text-[#131408]"
+        className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-10"
+      />
       <p className="absolute top-54.75 left-1/2 -translate-x-1/2 font-display text-[14px] tracking-[0.84px] whitespace-nowrap text-[#131408]">
         READY TO RUN©
       </p>

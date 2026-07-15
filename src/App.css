@@ -17,8 +17,9 @@
    내부 콘텐츠(뒤로/타이틀/액션)와 배경색은 각 페이지가 정한다.
    배경은 부모(.phone 등)에서 물려받아 페이지 배경과 이음새 없이 맞춰진다(bg-inherit). */
 .subheader {
-  @apply sticky z-[90] mt-3 mb-3 flex h-[52px] shrink-0 items-center bg-inherit px-[var(--gutter)];
-  /* 고정된 상태바 바로 아래(상태바 높이 + 12px 여백)에 붙는다. */
+  @apply sticky z-[90] mb-3 flex h-[52px] shrink-0 items-center bg-inherit px-[var(--gutter)];
+  /* 상단 여백에 상태바 높이 포함 → sticky 자연 위치가 기준과 일치(헤더 제자리, 겹침 없음). */
+  margin-top: calc(var(--statusbar-h) + 12px);
   top: calc(var(--statusbar-h) + 12px);
 }
 /* 12px 여백(mt/mb + top-3 float)으로 생기는 틈을, 스크롤 시 헤더 배경색으로 덮어
@@ -76,6 +77,30 @@
 }
 .phone-scroll::-webkit-scrollbar {
   display: none;
+}
+
+/* 상태바(10:36) 목업 오버레이 — PhoneFrame 이 딱 한 번 그린다(각 페이지는 안 그림).
+   자리를 차지하지 않는 오버레이라, 각 화면은 "배경은 상단까지 꽉, UI는 상태바
+   높이만큼 여백" 원칙으로 배치한다. */
+.frame-statusbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  pointer-events: none;
+  display: none; /* 모바일: 숨김 (실제 OS 상태바가 존재) */
+}
+@media (min-width: 768px) {
+  .frame-statusbar {
+    display: block;
+    color: #ffffff; /* 글자색 흰색 고정 (자동 대비 blend 제거) */
+  }
+}
+/* 메인·연결 페이지: 상태바에 불투명 배경 → 스크롤 시 콘텐츠가 상태바 뒤로 사라짐.
+   (몰입 화면은 이 클래스를 안 붙여 투명 → 배경이 상단까지 꽉 찬다) */
+.frame-statusbar--solid {
+  background: var(--bg-app);
 }
 
 @media (min-width: 768px) {

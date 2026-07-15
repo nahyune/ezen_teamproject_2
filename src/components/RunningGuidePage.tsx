@@ -1,4 +1,4 @@
-import iconBack from "../assets/icons/guide-back.svg";
+import { BackButton } from "./Icons";
 import iconPlay from "../assets/icons/guide-play.svg";
 import iconArrow from "../assets/icons/guide-arrow.svg";
 
@@ -35,9 +35,7 @@ export default function RunningGuidePage({ onBack }: { onBack?: () => void }) {
     <div className="flex flex-1 flex-col">
       {/* 헤더: 뒤로가기 + 가운데 타이틀 (spacer로 광학 중앙 정렬 유지) */}
       <header className="mt-3 flex items-center justify-between px-4.5 py-2.5">
-        <button type="button" className="size-6.5" aria-label="뒤로가기" onClick={onBack}>
-          <img className="size-full" src={iconBack} alt="" />
-        </button>
+        <BackButton onClick={onBack} />
         <h1 className="text-[24px] font-semibold leading-[1.3] tracking-[-0.48px]">
           러닝 가이드
         </h1>

@@ -13,6 +13,34 @@ export const ChevronLeft = ({ size = 24, className }: P) => (
   </svg>
 );
 
+// 앱 전역 공용 뒤로가기 버튼 — 모든 화면의 '<' 버튼은 이 하나로 통일한다.
+// 26px 탭 영역 + 24px ChevronLeft(흰색). 위치/여백은 className으로만 조정하고
+// 아이콘 모양·크기·색은 건드리지 않는다(오버레이 화면은 absolute 클래스를 넘겨 사용).
+export function BackButton({
+  onClick,
+  className = "",
+  label = "뒤로가기",
+  color = "text-white",
+}: {
+  onClick?: () => void;
+  className?: string;
+  label?: string;
+  // 색은 이 prop으로만 바꾼다(카운트다운처럼 라임 배경 위 어두운 화살표 등).
+  // className에 text-* 를 또 넣으면 Tailwind 색 유틸이 충돌하므로 여기로 넘길 것.
+  color?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={`grid size-[26px] shrink-0 place-items-center ${color} ${className}`}
+    >
+      <ChevronLeft size={24} />
+    </button>
+  );
+}
+
 export const SearchIcon = ({ size = 24, className }: P) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="2" />

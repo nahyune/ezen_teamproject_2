@@ -1,5 +1,4 @@
-import { StatusBarArea } from "../components/TopBars";
-import { ChevronRight } from "../components/Icons";
+import { ChevronRight, BackButton } from "../components/Icons";
 import scheduleImage from "../assets/img/schedule-hero.webp";
 import runner1 from "../assets/img/runner1.webp";
 import runner2 from "../assets/img/runner2.webp";
@@ -22,20 +21,6 @@ const attendees = [
   { image: course1, position: "50% 55%" },
   { image: runner5, position: "50% 49%" },
 ];
-
-function BackIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
-      <path
-        d="M16.1 6.4L9.5 13L16.1 19.6"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.1"
-      />
-    </svg>
-  );
-}
 
 function ShareIcon() {
   return (
@@ -74,11 +59,8 @@ function CheckIcon() {
 export default function ScheduleDetailPage({ onBack }: Props) {
   return (
     <div className="phone bg-[#0a0a0a] text-white">
-      <StatusBarArea />
       <header className="subheader justify-between">
-        <button className="grid h-[26px] w-[26px] place-items-center text-white" type="button" onClick={onBack} aria-label="뒤로가기">
-          <BackIcon />
-        </button>
+        <BackButton onClick={onBack} />
         <button className="grid h-[26px] w-[26px] place-items-center text-white" type="button" aria-label="공유하기">
           <ShareIcon />
         </button>

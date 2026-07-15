@@ -3,6 +3,7 @@ import { ChatBlock } from "./ChatBlocks";
 import { sendChat } from "../lib/chatClient";
 import type { ChatMessage, MessageBlock } from "../lib/chatTypes";
 import runiIcon from "../assets/icons/icon-chatbot.svg";
+import { BackButton } from "./Icons";
 
 // TODO: 로그인 유저 이름으로 교체 (현재는 뼈대용 상수)
 const USER_NAME = "하연";
@@ -95,16 +96,7 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
     <div className="phone h-full flex flex-col bg-[var(--bg-app)] text-white">
       {/* 헤더: ‹ 뒤로 · 러니(아바타+이름) · ⋯ */}
       <header className="relative flex h-[54px] items-center justify-center px-[var(--gutter)]">
-        <button
-          className="absolute left-[18px] grid h-[26px] w-[26px] place-items-center text-white"
-          type="button"
-          onClick={onBack}
-          aria-label="뒤로가기"
-        >
-          <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
-            <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
+        <BackButton onClick={onBack} className="absolute left-[18px]" />
         <div className="flex items-center gap-2">
           <span className="grid h-[30px] w-[30px] place-items-center rounded-full bg-[var(--bg-elevated)]">
             <img src={runiIcon} alt="" className="h-[17px] w-[17px]" />
