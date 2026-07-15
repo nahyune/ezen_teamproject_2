@@ -13,10 +13,9 @@ export default function CourseDetailPage({ onBack, kind }: Props) {
 
   return (
     <section className="course-detail">
-      {/* 상태바 — 히어로 위 최상단 오버레이 (헤더는 CSS에서 상태바 높이만큼 내림) */}
-      <div className="fixed left-1/2 top-0 z-[97] w-[var(--frame-width)] max-w-full -translate-x-1/2 text-white">
-        <StatusBarArea />
-      </div>
+      {/* 상태바 — 지도 위에 겹치지 않고 자기 자리(검정 띠)를 차지하고,
+          지도는 그 아래부터 시작. 실기기(안전영역만큼 내려옴)와 동일한 모습. */}
+      <StatusBarArea />
       <div className="course-detail__hero">
         <img src={detail.image} alt="" />
       </div>

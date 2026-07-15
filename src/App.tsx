@@ -103,8 +103,12 @@ export default function App() {
   if (page === "record") {
     // 기록하기: 하단바 없이 폰 프레임에 꽉 차는 한 화면(스크롤 잠금).
     // 지도 등 움직임은 각 화면 내부에서만 일어난다.
+    // StatusBarArea 를 껍데기 최상단에 한 번만 두면 기록 관련 모든 화면
+    // (기록·가이드·카운트다운·측정·완료·카드 등)에 공통 적용된다
+    // — 데스크톱: 가짜 상태바 / 실기기: 노치 안전영역 확보.
     return (
       <div className="relative flex h-full w-full max-w-107.5 flex-col overflow-hidden bg-black mx-auto">
+        <StatusBarArea />
         <RecordFlow
           autoStart={recordAutoStart}
           onBack={() => setPage("home")}
