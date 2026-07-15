@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import logoW from "../assets/icons/logo-w.svg";
 import logoRun from "../assets/icons/logo-run.svg";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
@@ -28,10 +29,30 @@ export function StatusBarArea() {
   );
 }
 
+// 분이 바뀌는 순간에 맞춰 갱신하는 실제 시계 (매초 setInterval 대신 다음 분까지만 대기)
+function useClock() {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    let timer: number;
+    const tick = () => {
+      setNow(new Date());
+      timer = window.setTimeout(tick, 60_000 - (Date.now() % 60_000));
+    };
+    timer = window.setTimeout(tick, 60_000 - (Date.now() % 60_000));
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  return now;
+}
+
 export function StatusBar() {
+  const now = useClock();
+  const time = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
+
   return (
     <div className="statusbar">
-      <span className="statusbar__time">10:36</span>
+      <span className="statusbar__time">{time}</span>
       <div className="statusbar__right" aria-hidden>
         <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
           <rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor" />

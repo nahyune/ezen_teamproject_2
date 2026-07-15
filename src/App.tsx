@@ -50,6 +50,9 @@ export default function App() {
   // 챗봇(러니)은 페이지가 아니라 "항상 뒤에 살아있는 오버레이" — 열림/닫힘만 토글.
   // 닫아도 언마운트하지 않으므로 대화 내용이 유지되고, 밑의 화면(러닝 타이머 등)도 안 끊긴다.
   const [chatbotOpen, setChatbotOpen] = useState(false);
+  // 피드 스토리 뷰어 열림 여부 — 열려 있는 동안 상태바 오버레이를 투명으로 전환
+  // (스토리 이미지가 상태바 뒤까지 꽉 차 보이게).
+  const [feedStoryOpen, setFeedStoryOpen] = useState(false);
 
   // Make the horizontal rows on the current screen draggable with the mouse.
   useEffect(() => initDragScroll(), [page]);
@@ -152,7 +155,7 @@ export default function App() {
       {page === "my" ? (
         <MyPage />
       ) : page === "feed" ? (
-        <FeedPage />
+        <FeedPage onStoryOpenChange={setFeedStoryOpen} />
       ) : (
         <main className="home">
           {/* 오늘 기록 시작하기 → 기록 화면으로 전환해 바로 카운트다운 시작 */}
@@ -203,8 +206,10 @@ export default function App() {
   })();
 
   return (
-    // 기록하기는 몰입 화면(배경 풀블리드) → 상태바 투명. 그 외는 불투명.
-    <PhoneFrame statusBar={page === "record" ? "clear" : "solid"}>
+    // 기록하기·스토리 뷰어는 몰입 화면(배경 풀블리드) → 상태바 투명. 그 외는 불투명.
+    <PhoneFrame
+      statusBar={page === "record" || (page === "feed" && feedStoryOpen) ? "clear" : "solid"}
+    >
       {rendered}
       {/* 챗봇(러니) 오버레이 — 페이지 위로 아래에서 스르륵 올라오는 창(App.css .chatbot-overlay).
           닫아도 언마운트하지 않고 프레임 아래로 밀어두기만 해서 대화·스크롤이 유지되고,

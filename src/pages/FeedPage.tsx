@@ -6,6 +6,8 @@ import iconMessage from "../assets/icons/icon-message.svg";
 import iconRetweet from "../assets/icons/icon-retweet.svg";
 import sweetPotatoCourseSticker from "../assets/img/feed-yeouido-sweet-potato-map.png";
 import hangangStoryImage from "../assets/img/feed-story-hangang.webp";
+import recoveryFoodStoryImage from "../assets/img/feed-story-recovery-food.png";
+import ahnHangangCrewStoryImage from "../assets/img/feed-story-ahn-hangang-crew.png";
 
 /* 아이콘은 BottomNav와 동일하게 mask 방식 - text 색으로 아이콘 색 제어 */
 const maskIconClass =
@@ -58,57 +60,123 @@ function StoryCircle({ story, onOpen }: { story: FeedStory; onOpen?: () => void 
   );
 }
 
-function StoryRail({ onOpenStory }: { onOpenStory: () => void }) {
+function StoryRail({
+  viewed,
+  onOpenStory,
+}: {
+  viewed: Set<string>;
+  onOpenStory: (story: FeedStory) => void;
+}) {
   return (
     <ul className="no-scrollbar mb-5 flex gap-3.5 overflow-x-auto px-[var(--gutter)] pb-3.5 pt-2">
-      {feedStories.map((s) => (
-        <StoryCircle key={s.name} story={s} onOpen={s.state === "new" ? onOpenStory : undefined} />
-      ))}
+      {feedStories.map((s) => {
+        // 한 번 확인한 스토리는 오렌지 링 없는 "seen" 모양으로 표시 (인스타 방식).
+        // 다만 원래 새 스토리였던 사람은 다시 눌러 재시청할 수 있게 onOpen 은 유지.
+        const display = s.state === "new" && viewed.has(s.name) ? { ...s, state: "seen" as const } : s;
+        return (
+          <StoryCircle
+            key={s.name}
+            story={display}
+            onOpen={s.state === "new" ? () => onOpenStory(s) : undefined}
+          />
+        );
+      })}
     </ul>
   );
 }
 
 /* 피드 카드 */
 
-function StoryViewer({ onClose }: { onClose: () => void }) {
+function StoryViewer({ owner, onClose }: { owner: FeedStory; onClose: () => void }) {
   const [isVisible, setIsVisible] = useState(false);
-  const storyOwner = feedStories[1];
+  const [storyIndex, setStoryIndex] = useState(0);
+  const storyOwner = owner;
+  const isAhnStory = storyOwner === feedStories[1];
+  const isRunnerJunStory = storyOwner === feedStories[2];
+  const storyImage = isRunnerJunStory ? recoveryFoodStoryImage : hangangStoryImage;
 
   useEffect(() => {
+    setStoryIndex(0);
     const showTimer = window.setTimeout(() => setIsVisible(true), 20);
-    const fadeTimer = window.setTimeout(() => setIsVisible(false), 2700);
-    const closeTimer = window.setTimeout(onClose, 3000);
+
+    return () => window.clearTimeout(showTimer);
+  }, [owner]);
+
+  useEffect(() => {
+    if (isAhnStory && storyIndex === 0) {
+      const nextStoryTimer = window.setTimeout(() => setStoryIndex(1), 5000);
+      return () => window.clearTimeout(nextStoryTimer);
+    }
+
+    const fadeTimer = window.setTimeout(() => setIsVisible(false), 4700);
+    const closeTimer = window.setTimeout(onClose, 5000);
 
     return () => {
-      window.clearTimeout(showTimer);
       window.clearTimeout(fadeTimer);
       window.clearTimeout(closeTimer);
     };
-  }, [onClose]);
+  }, [isAhnStory, onClose, storyIndex]);
 
   const handleClose = () => {
     setIsVisible(false);
     window.setTimeout(onClose, 300);
   };
 
+  const handleStoryAdvance = () => {
+    if (!isAhnStory) return;
+    if (storyIndex === 0) {
+      setStoryIndex(1);
+      return;
+    }
+    handleClose();
+  };
+
   return (
+    // fixed = 폰 프레임 기준(프레임의 transform 이 containing block) → 스크롤 위치와
+    // 무관하게 프레임 맨 위부터 꽉 참. z-150: 헤더(90)·챗봇(120) 위, 상태바 오버레이(200) 아래.
     <div
-      className={`absolute left-0 right-0 top-0 z-[200] flex h-[100svh] items-start justify-center bg-black transition-opacity duration-300 ease-out ${
+      className={`fixed inset-0 z-[150] flex items-start justify-center bg-black transition-opacity duration-300 ease-out ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       aria-label="스토리 닫기"
     >
-      <div className="relative h-full w-full max-w-[430px] overflow-hidden bg-black">
+      <div
+        className="relative h-full w-full max-w-[430px] overflow-hidden bg-black"
+        onClick={handleStoryAdvance}
+      >
         <img
-          src={hangangStoryImage}
+          src={storyImage}
           alt=""
-          className="absolute inset-0 z-0 h-full w-full object-cover"
+          className={`absolute inset-0 z-0 h-full w-full object-cover transition-opacity duration-500 ease-out ${
+            isAhnStory && storyIndex === 1 ? "opacity-0" : "opacity-100"
+          }`}
         />
+        {isAhnStory && (
+          <img
+            src={ahnHangangCrewStoryImage}
+            alt=""
+            className={`absolute inset-0 z-0 h-full w-full object-cover transition-opacity duration-500 ease-out ${
+              storyIndex === 1 ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        )}
         <div className="pointer-events-none absolute inset-x-0 top-0 z-[90] h-[170px] bg-gradient-to-b from-black/70 to-transparent" />
-        <div className="absolute left-4 right-4 top-4 z-[100] flex gap-1">
-          <span className="h-0.5 flex-1 rounded-full bg-white" />
+        {/* 스토리 UI(진행바·프로필·닫기)는 상태바 높이만큼 내려서 배치 — 이미지는 맨 위까지 꽉 참 */}
+        <div className="absolute left-4 right-4 top-[calc(var(--statusbar-h)+10px)] z-[100] flex gap-1">
+          {isAhnStory ? (
+            <>
+              <span className="h-[1.4px] flex-1 rounded-full bg-white" />
+              <span
+                className={`h-[1.4px] flex-1 rounded-full transition-colors duration-300 ${
+                  storyIndex === 1 ? "bg-white" : "bg-white/35"
+                }`}
+              />
+            </>
+          ) : (
+            <span className="h-[1.4px] flex-1 rounded-full bg-white" />
+          )}
         </div>
-        <div className="absolute left-4 right-14 top-7 z-[100] flex items-center gap-2.5">
+        <div className="absolute left-4 right-14 top-[calc(var(--statusbar-h)+22px)] z-[100] flex items-center gap-2.5">
           {storyOwner.image ? (
             <img
               src={storyOwner.image}
@@ -129,7 +197,7 @@ function StoryViewer({ onClose }: { onClose: () => void }) {
         </div>
         <button
           type="button"
-          className="absolute right-4 top-7 z-[110] flex h-8 w-8 items-center justify-center rounded-full bg-black/25 text-white shadow-[0_2px_8px_rgba(0,0,0,0.35)] backdrop-blur-sm"
+          className="absolute right-4 top-[calc(var(--statusbar-h)+22px)] z-[110] flex h-8 w-8 items-center justify-center rounded-full bg-black/25 text-white shadow-[0_2px_8px_rgba(0,0,0,0.35)] backdrop-blur-sm"
           onClick={(event) => {
             event.stopPropagation();
             handleClose();
@@ -145,9 +213,16 @@ function StoryViewer({ onClose }: { onClose: () => void }) {
             />
           </svg>
         </button>
-        <p className="absolute left-6 top-[92px] z-[100] rounded-full bg-black/55 px-3 py-1.5 text-[14px] font-medium leading-none tracking-[-0.42px] text-white shadow-[0_2px_8px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+        {!isRunnerJunStory && !(isAhnStory && storyIndex === 1) && (
+        <p className="absolute left-6 top-[calc(var(--statusbar-h)+86px)] z-[100] rounded-full bg-black/55 px-3 py-1.5 text-[14px] font-medium leading-none tracking-[-0.42px] text-white shadow-[0_2px_8px_rgba(0,0,0,0.35)] backdrop-blur-sm">
           오늘은 고구마런!
         </p>
+        )}
+        {isRunnerJunStory && (
+          <p className="absolute left-1/2 top-[42%] z-[100] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-[22px] font-semibold leading-none text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.75)]">
+            오런완💪🔥
+          </p>
+        )}
       </div>
     </div>
   );
@@ -188,7 +263,7 @@ function RunStatsSticker() {
   );
 }
 
-function FeedCard({ post }: { post: FeedPost }) {
+function FeedCard({ post, storySeen }: { post: FeedPost; storySeen?: boolean }) {
   const mediaItems = post.images ?? (post.image ? [post.image] : []);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
 
@@ -203,12 +278,23 @@ function FeedCard({ post }: { post: FeedPost }) {
       {/* 작성자 헤더 */}
       <div className="flex items-center justify-between px-[var(--gutter)] pb-[10px] pt-3.5">
         <div className="flex items-center gap-2.5">
-          {/* 오렌지 링 = 새 소식 표시 */}
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-[var(--primary-orange)] p-[2px]">
+          {/* 오렌지 링 = 새 소식 표시 — 스토리를 확인한 사람은 링 제거(투명 보더로 크기 유지) */}
+          <div
+            className={`flex h-11 w-11 items-center justify-center rounded-full border-2 p-[2px] ${
+              storySeen ? "border-transparent" : "border-[var(--primary-orange)]"
+            }`}
+          >
+            {/* 스토리 레일과 동일한 얇은 흰색 테두리 — 오렌지 링이 사라져도 아바타 윤곽 유지 */}
             {post.avatar ? (
-              <img src={post.avatar} alt="" className="h-full w-full rounded-full object-cover" />
+              <img
+                src={post.avatar}
+                alt=""
+                className="h-full w-full rounded-full border border-[rgba(242,242,242,0.95)] object-cover"
+              />
             ) : (
-              <div className={`h-full w-full ${avatarPlaceholderClass}`} />
+              <div
+                className={`h-full w-full border border-[rgba(242,242,242,0.95)] ${avatarPlaceholderClass}`}
+              />
             )}
           </div>
           <div className="flex flex-col">
@@ -329,18 +415,37 @@ function SuggestedCrews() {
 
 /* 페이지 */
 
-export default function FeedPage() {
-  const [isStoryOpen, setIsStoryOpen] = useState(false);
+export default function FeedPage({
+  onStoryOpenChange,
+}: {
+  /** 스토리 열림/닫힘을 App 에 알림 — 상태바 오버레이를 투명(clear)으로 전환하는 용도 */
+  onStoryOpenChange?: (open: boolean) => void;
+}) {
+  // 현재 보고 있는 스토리(null = 닫힘) + 이번 세션에서 확인한 스토리 이름들.
+  // 확인 기록은 새로고침 시 초기화된다(시연용 — 오렌지 링이 매번 복귀).
+  const [activeStory, setActiveStory] = useState<FeedStory | null>(null);
+  const [viewedStories, setViewedStories] = useState<Set<string>>(new Set());
+
+  const openStory = (story: FeedStory) => {
+    setActiveStory(story);
+    setViewedStories((prev) => new Set(prev).add(story.name));
+    onStoryOpenChange?.(true);
+  };
+
+  const closeStory = () => {
+    setActiveStory(null);
+    onStoryOpenChange?.(false);
+  };
 
   return (
     <main className="relative pb-[150px]">
-      <StoryRail onOpenStory={() => setIsStoryOpen(true)} />
+      <StoryRail viewed={viewedStories} onOpenStory={openStory} />
       <div className="flex flex-col gap-[var(--section-gap)]">
-        <FeedCard post={feedPosts[0]} />
+        <FeedCard post={feedPosts[0]} storySeen={viewedStories.has(feedPosts[0].author)} />
         <SuggestedCrews />
-        <FeedCard post={feedPosts[1]} />
+        <FeedCard post={feedPosts[1]} storySeen={viewedStories.has(feedPosts[1].author)} />
       </div>
-      {isStoryOpen && <StoryViewer onClose={() => setIsStoryOpen(false)} />}
+      {activeStory && <StoryViewer owner={activeStory} onClose={closeStory} />}
     </main>
   );
 }
