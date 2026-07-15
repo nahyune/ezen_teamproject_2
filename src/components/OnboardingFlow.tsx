@@ -6,25 +6,30 @@ function SwipeButton({ label, onComplete, hidden }: { label: string; onComplete?
   const containerRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLSpanElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
-  
+  const fillRef = useRef<HTMLDivElement>(null);
+
   const isDragging = useRef(false);
   const startX = useRef(0);
   const currentX = useRef(0);
 
   const updateDOM = (x: number, animate: boolean = false) => {
-    if (!containerRef.current || !iconRef.current || !labelRef.current) return;
+    if (!containerRef.current || !iconRef.current || !labelRef.current || !fillRef.current) return;
     const max = containerRef.current.clientWidth - iconRef.current.clientWidth - 8;
-    
+
     const icon = iconRef.current;
     const labelEl = labelRef.current;
+    const fill = fillRef.current;
 
     icon.style.transition = animate ? 'transform 0.3s ease' : 'none';
     labelEl.style.transition = animate ? 'opacity 0.3s ease' : 'none';
-    
+    fill.style.transition = animate ? 'width 0.3s ease' : 'none';
+
     // 세로 중앙 정렬은 -translate-y-1/2(Tailwind translate 속성)가 처리하므로
     // 인라인 transform 은 가로 이동만 담당한다. (세로 -50% 를 중복 적용하면 노브가 위로 튀어오름)
     icon.style.transform = `translateX(${x}px)`;
     labelEl.style.opacity = `${1 - (x / max)}`;
+    // 노브가 지나간 자리만큼 배경을 #D6FF1E로 채운다 (노브 오른쪽 끝까지).
+    fill.style.width = `${x + icon.clientWidth}px`;
   };
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -63,11 +68,17 @@ function SwipeButton({ label, onComplete, hidden }: { label: string; onComplete?
 
   return (
     <div
-      className="relative w-[360px] max-w-full h-[65px] [@media(max-height:700px)]:h-[44px] shrink-0 flex items-center justify-center rounded-[30px] bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.03)_100%)] backdrop-blur-[14px] [-webkit-backdrop-filter:blur(14px)] border border-white/18 shadow-[0_8px_32px_0_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.1)] cursor-pointer"
+      className="relative w-[360px] max-w-full h-[65px] [@media(max-height:700px)]:h-[44px] shrink-0 flex items-center justify-center overflow-hidden rounded-[30px] bg-[linear-gradient(135deg,rgba(255,255,255,0.12)_0%,rgba(255,255,255,0.03)_100%)] backdrop-blur-[14px] [-webkit-backdrop-filter:blur(14px)] border border-white/18 shadow-[0_8px_32px_0_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.1)] cursor-pointer"
       ref={containerRef}
       aria-hidden={hidden || undefined}
       style={hidden ? { visibility: "hidden", pointerEvents: "none" } : undefined}
     >
+      {/* 노브가 지나간 만큼 #D6FF1E 로 차오르는 진행률 채움 */}
+      <div
+        className="pointer-events-none absolute inset-y-0 left-0 w-0 rounded-[30px] bg-[#D6FF1E]"
+        ref={fillRef}
+        aria-hidden
+      />
       <span
         className="absolute left-1 top-1/2 -translate-y-1/2 w-[57px] h-[57px] [@media(max-height:700px)]:w-9 [@media(max-height:700px)]:h-9 shrink-0 rounded-full bg-primary-lime flex items-center justify-center"
         ref={iconRef}
