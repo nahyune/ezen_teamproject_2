@@ -55,7 +55,11 @@ export default function FitOnboardingStep2({ onBack, onNext, onSkip }: { onBack?
               }`}
               onClick={() => toggle(i)}
             >
-              <img className="absolute inset-0 w-full h-full object-cover" src={s.image} alt="" />
+              <img
+                className={`absolute inset-0 w-full h-full object-cover ${active ? "" : "brightness-[0.55]"}`}
+                src={s.image}
+                alt=""
+              />
               <div className="absolute inset-x-0 bottom-0 h-[65%] bg-gradient-to-t from-black/75 from-10% to-transparent pointer-events-none" />
               <span
                 className={`absolute left-3 bottom-[10px] text-sm font-semibold tracking-[-0.3px] ${

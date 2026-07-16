@@ -1,5 +1,5 @@
 import { BackButton } from "../components/Icons";
-import { courseExplorePages, type CourseDetailKind, type CourseExploreItem } from "../data";
+import { courseExplorePages, courseLevelColors, type CourseDetailKind, type CourseExploreItem } from "../data";
 import "../components/CourseExplorePage.css";
 
 type Props = {
@@ -19,7 +19,12 @@ export default function CourseRecommendListPage({ onBack, onOpenDetail }: Props)
         <div className="course-list__info">
           <div className="course-list__title-row">
             <h3 className="course-list__title">{course.name}</h3>
-            <span className="course-list__level">{course.level}</span>
+            <span
+              className="course-list__level"
+              style={{ backgroundColor: courseLevelColors[course.level] ?? "#959595" }}
+            >
+              {course.level}
+            </span>
           </div>
           <p className="course-list__meta">
             {course.distance} · {course.duration} · ★ {course.rating}

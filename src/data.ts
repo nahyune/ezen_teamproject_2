@@ -102,6 +102,14 @@ export type CourseExploreItem = CourseRecommendation & {
   detail?: CourseDetailKind;
 };
 
+export const courseLevelColors: Record<string, string> = {
+  초급자: "var(--primary-lime)",
+  중급자: "#FF9F43",
+  상급자: "#E8734F",
+  "가본 곳": "var(--primary-lime)",
+  "안 가본 곳": "#E8734F",
+};
+
 export type CourseExploreData = {
   sectionTitle: string;
   filters: string[];

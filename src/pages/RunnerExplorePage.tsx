@@ -239,7 +239,7 @@ function ProfileRow({
           <button
             className={`h-8.25 w-23.5 rounded-full border text-[13px] font-medium leading-[1.3] tracking-normal max-[360px]:w-22 max-[360px]:text-[12px] ${
               cheered
-                ? "border-[#3a3a3e] bg-[#2a2a2e] text-[rgba(255,255,255,0.48)]"
+                ? "border-(--primary-lime) bg-(--primary-lime) text-black"
                 : "border-(--primary-lime) text-(--primary-lime)"
             }`}
             type="button"
@@ -247,7 +247,7 @@ function ProfileRow({
             disabled={cheered}
             onClick={onCheer}
           >
-            {cheered ? "응원완료" : "응원하기"}
+            {cheered ? "응원했어요" : "응원하기"}
           </button>
           {burst && <CheerBurst items={burst} />}
         </div>

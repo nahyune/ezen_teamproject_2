@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { courseDetailPages, type CourseDetailKind } from "../data";
 import { GWANGHWAMUN_DOG_RUN_CENTER, GWANGHWAMUN_DOG_RUN_PATH } from "../data/gwanghwamunDogRoute";
 import { YEOUIDO_SWEET_POTATO_CENTER, YEOUIDO_SWEET_POTATO_PATH } from "../data/yeouidoSweetPotatoRoute";
@@ -48,6 +48,13 @@ export default function CourseDetailPage({ onBack, onStartCourse, kind }: Props)
   const detail = courseDetailPages[kind];
   const mapConfig = mapCourseConfig[kind];
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState(() =>
+    Math.max(0, detail.variants.findIndex((variant) => variant.active)),
+  );
+
+  useEffect(() => {
+    setSelectedVariant(Math.max(0, courseDetailPages[kind].variants.findIndex((variant) => variant.active)));
+  }, [kind]);
 
   return (
     <section className="course-detail">
@@ -122,13 +129,15 @@ export default function CourseDetailPage({ onBack, onStartCourse, kind }: Props)
         </section>
 
         <section className="course-detail__section">
-          <h2 className="course-detail__section-title">이 장소의 다른 코스</h2>
+          <h2 className="course-detail__section-title">난이도 선택</h2>
           <div className="course-variants">
-            {detail.variants.map((variant) => (
+            {detail.variants.map((variant, index) => (
               <button
                 key={variant.title}
                 type="button"
-                className={`course-variant${variant.active ? " course-variant--active" : ""}`}
+                className={`course-variant${selectedVariant === index ? " course-variant--active" : ""}`}
+                aria-pressed={selectedVariant === index}
+                onClick={() => setSelectedVariant(index)}
               >
                 <span className="course-variant__title">{variant.title}</span>
                 <span className="course-variant__level">{variant.level}</span>

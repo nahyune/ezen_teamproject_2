@@ -60,7 +60,7 @@
 }
 
 .nearby-course__level {
-  @apply shrink-0 rounded-[10px] bg-[var(--primary-lime)] px-2 pt-0.5 pb-[3px] text-xs leading-[1.3] font-light tracking-[-0.36px] text-[#0f0f0f];
+  @apply shrink-0 rounded-[10px] px-2 pt-0.5 pb-[3px] text-xs leading-[1.3] font-light tracking-[-0.36px] text-[#0f0f0f];
 }
 
 .nearby-course__meta {
@@ -76,7 +76,7 @@
 }
 
 .course-filter--active {
-  @apply border-[var(--primary-lime)] bg-[var(--primary-lime)] leading-none font-medium text-black;
+  @apply leading-none font-medium text-black;
 }
 
 .course-list {
@@ -108,7 +108,7 @@
 }
 
 .course-list__level {
-  @apply shrink-0 rounded-[9px] bg-[#959595] px-2 pt-0.5 pb-[3px] text-xs leading-[1.3] font-light tracking-[-0.36px] text-[#0f0f0f];
+  @apply shrink-0 rounded-[9px] px-2 pt-0.5 pb-[3px] text-xs leading-[1.3] font-light tracking-[-0.36px] text-[#0f0f0f];
 }
 
 .course-list__meta {
@@ -117,5 +117,9 @@
 
 .course-list__nearby {
   @apply text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.55)];
+}
+
+.course-list__more {
+  @apply mt-3 flex items-center gap-1 self-center text-sm tracking-[-0.42px] text-[var(--text-strong)];
 }
 }
