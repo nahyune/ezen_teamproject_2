@@ -1,4 +1,11 @@
-import type { CSSProperties, ReactNode } from "react";import runner1 from "../assets/img/runner1.webp";
+import { useState, type CSSProperties, type ReactNode } from "react";import confettiBall from "../assets/emoji/confetti-ball.svg";
+import partyPopper from "../assets/emoji/party-popper.svg";
+import personRunning from "../assets/emoji/person-running.svg";
+import thumbsUp from "../assets/emoji/thumbs-up.svg";
+import partyingFace from "../assets/emoji/partying-face.svg";
+import clappingHands from "../assets/emoji/clapping-hands.svg";
+import womanRunning from "../assets/emoji/woman-running.svg";
+import runner1 from "../assets/img/runner1.webp";
 import { BackButton } from "../components/Icons";
 import runner2 from "../assets/img/runner2.webp";
 import runner3 from "../assets/img/runner3.webp";
@@ -63,6 +70,78 @@ const crews: ProfileItem[] = [
 ];
 
 
+const cheerEmojis = [
+  confettiBall,
+  partyPopper,
+  personRunning,
+  thumbsUp,
+  partyingFace,
+  clappingHands,
+  womanRunning,
+];
+
+type CheerBurstItem = {
+  id: string;
+  emoji: string;
+  left: number;
+  delay: number;
+  rotate: number;
+  size: number;
+};
+
+function shuffled<T>(list: T[]): T[] {
+  const copy = [...list];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// 이모지가 한꺼번에 솟지 않고 하나씩 쭈루룩 이어서 나오도록, cheerEmojis를
+// 섞은 뒤 각 이모지마다 순서대로 일정 간격(step)만큼 딜레이를 늘려준다.
+// 이렇게 하면 이모지 종류마다 정확히 한 번씩만 등장해 중복 없이 나오면서도,
+// 등장 타이밍이 겹치지 않는다. 버튼 가운데(50%)에서 솟아오르는 느낌을 주기
+// 위해 left는 중앙 근처로만 흩뿌린다.
+function buildCheerBurst(): CheerBurstItem[] {
+  const order = shuffled(cheerEmojis);
+  const step = 0.18;
+  return order.map((emoji, i) => ({
+    id: `${i}`,
+    emoji,
+    left: 50 + (Math.random() - 0.5) * 56,
+    delay: i * step,
+    rotate: (Math.random() - 0.5) * 44,
+    size: 20 + Math.random() * 10,
+  }));
+}
+
+function CheerBurst({ items }: { items: CheerBurstItem[] }) {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-1" aria-hidden>
+      {items.map((item) => (
+        <span
+          key={item.id}
+          className="absolute"
+          style={{ left: `${item.left}%`, transform: "translateX(-50%)" }}
+        >
+          <img
+            className="animate-cheer-rise block"
+            src={item.emoji}
+            alt=""
+            style={{
+              animationDelay: `${item.delay}s`,
+              rotate: `${item.rotate}deg`,
+              width: `${item.size}px`,
+              height: `${item.size}px`,
+            }}
+          />
+        </span>
+      ))}
+    </div>
+  );
+}
+
 function CloseIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
@@ -117,7 +196,23 @@ function PageSection({
   );
 }
 
-function ProfileRow({ item }: { item: ProfileItem }) {
+function ProfileRow({
+  item,
+  following,
+  onToggleFollow,
+  onRemove,
+  cheered,
+  burst,
+  onCheer,
+}: {
+  item: ProfileItem;
+  following?: boolean;
+  onToggleFollow?: () => void;
+  onRemove?: () => void;
+  cheered?: boolean;
+  burst?: CheerBurstItem[];
+  onCheer?: () => void;
+}) {
   return (
     <li className={profileRowClass}>
       <Avatar className={profileAvatarClass} item={item} />
@@ -127,25 +222,42 @@ function ProfileRow({ item }: { item: ProfileItem }) {
       </div>
       {item.action === "follow" && (
         <button
-          className="h-[34px] w-[69px] rounded-[10px] bg-[var(--primary-lime)] text-[13px] font-medium tracking-[0] text-black max-[360px]:w-16 max-[360px]:text-[12px]"
+          className={`h-[34px] w-[69px] rounded-[10px] text-[13px] font-medium tracking-[0] max-[360px]:w-16 max-[360px]:text-[12px] ${
+            following
+              ? "bg-[#2a2a2e] text-[rgba(255,255,255,0.48)]"
+              : "bg-[var(--primary-lime)] text-black"
+          }`}
           type="button"
+          aria-pressed={following}
+          onClick={onToggleFollow}
         >
-          팔로우
+          {following ? "팔로잉" : "팔로우"}
         </button>
       )}
       {item.action === "cheer" && (
-        <button
-          className="h-[33px] w-[94px] rounded-full border border-[var(--primary-lime)] text-[13px] font-medium leading-[1.3] tracking-[0] text-[var(--primary-lime)] max-[360px]:w-[88px] max-[360px]:text-[12px]"
-          type="button"
-        >
-          응원하기
-        </button>
+        <div className="relative">
+          <button
+            className={`h-8.25 w-23.5 rounded-full border text-[13px] font-medium leading-[1.3] tracking-normal max-[360px]:w-22 max-[360px]:text-[12px] ${
+              cheered
+                ? "border-[#3a3a3e] bg-[#2a2a2e] text-[rgba(255,255,255,0.48)]"
+                : "border-(--primary-lime) text-(--primary-lime)"
+            }`}
+            type="button"
+            aria-pressed={cheered}
+            disabled={cheered}
+            onClick={onCheer}
+          >
+            {cheered ? "응원완료" : "응원하기"}
+          </button>
+          {burst && <CheerBurst items={burst} />}
+        </div>
       )}
       {item.action && (
         <button
           className="grid h-[34px] w-[18px] place-items-center text-[rgba(255,255,255,0.62)]"
           type="button"
           aria-label={`${item.name} 숨기기`}
+          onClick={onRemove}
         >
           <CloseIcon />
         </button>
@@ -155,6 +267,37 @@ function ProfileRow({ item }: { item: ProfileItem }) {
 }
 
 export default function RunnerExplorePage({ onBack }: Props) {
+  const [runners, setRunners] = useState(popularRunners);
+  const [crewList, setCrewList] = useState(crews);
+  const [followingNames, setFollowingNames] = useState<Set<string>>(new Set());
+  const [cheeredNames, setCheeredNames] = useState<Set<string>>(new Set());
+  const [celebratingBursts, setCelebratingBursts] = useState<Record<string, CheerBurstItem[]>>({});
+
+  const cheer = (name: string) => {
+    setCheeredNames((prev) => new Set(prev).add(name));
+    setCelebratingBursts((prev) => ({ ...prev, [name]: buildCheerBurst() }));
+    setTimeout(() => {
+      setCelebratingBursts((prev) => {
+        if (!(name in prev)) return prev;
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }, 2000);
+  };
+
+  const toggleFollow = (name: string) => {
+    setFollowingNames((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) {
+        next.delete(name);
+      } else {
+        next.add(name);
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="phone bg-black text-[var(--text-primary)]">
       <header className="subheader justify-center">
@@ -190,16 +333,29 @@ export default function RunnerExplorePage({ onBack }: Props) {
 
         <PageSection title="인기 러너" action="모두 보기">
           <ul className="flex flex-col gap-6">
-            {popularRunners.map((item) => (
-              <ProfileRow key={item.name} item={item} />
+            {runners.map((item) => (
+              <ProfileRow
+                key={item.name}
+                item={item}
+                following={followingNames.has(item.name)}
+                onToggleFollow={() => toggleFollow(item.name)}
+                onRemove={() => setRunners((prev) => prev.filter((r) => r.name !== item.name))}
+              />
             ))}
           </ul>
         </PageSection>
 
         <PageSection title="팔로우할 만한 크루" action="모두 보기">
           <ul className="flex flex-col gap-6">
-            {crews.map((item) => (
-              <ProfileRow key={item.name} item={item} />
+            {crewList.map((item) => (
+              <ProfileRow
+                key={item.name}
+                item={item}
+                cheered={cheeredNames.has(item.name)}
+                burst={celebratingBursts[item.name]}
+                onCheer={() => cheer(item.name)}
+                onRemove={() => setCrewList((prev) => prev.filter((c) => c.name !== item.name))}
+              />
             ))}
           </ul>
         </PageSection>

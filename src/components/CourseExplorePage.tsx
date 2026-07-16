@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   courseExplorePages,
   type CourseDetailKind,
@@ -12,8 +13,30 @@ type Props = {
   kind: CourseExploreKind;
 };
 
+function interleaveByLevel(items: CourseExploreItem[]) {
+  const byLevel = new Map<string, CourseExploreItem[]>();
+  for (const item of items) {
+    const bucket = byLevel.get(item.level) ?? [];
+    bucket.push(item);
+    byLevel.set(item.level, bucket);
+  }
+  const buckets = [...byLevel.values()];
+  const mixed: CourseExploreItem[] = [];
+  for (let i = 0; mixed.length < items.length; i++) {
+    for (const bucket of buckets) {
+      if (i < bucket.length) mixed.push(bucket[i]);
+    }
+  }
+  return mixed;
+}
+
 export default function CourseExplorePage({ onBack, onOpenDetail, kind }: Props) {
   const page = courseExplorePages[kind];
+  const [activeFilter, setActiveFilter] = useState(page.filters[0]);
+  const filteredCourses =
+    activeFilter === "전체"
+      ? interleaveByLevel(page.courses)
+      : page.courses.filter((course) => course.level === activeFilter);
 
   const renderCourseCard = (course: CourseExploreItem) => {
     const content = (
@@ -92,11 +115,13 @@ export default function CourseExplorePage({ onBack, onOpenDetail, kind }: Props)
         </section>
 
         <div className="course-filters no-scrollbar">
-          {page.filters.map((filter, index) => (
+          {page.filters.map((filter) => (
             <button
               key={filter}
               type="button"
-              className={`course-filter${index === 0 ? " course-filter--active" : ""}`}
+              className={`course-filter${filter === activeFilter ? " course-filter--active" : ""}`}
+              aria-pressed={filter === activeFilter}
+              onClick={() => setActiveFilter(filter)}
             >
               {filter}
             </button>
@@ -104,7 +129,7 @@ export default function CourseExplorePage({ onBack, onOpenDetail, kind }: Props)
         </div>
 
         <section className="course-list">
-          {page.courses.map(renderCourseCard)}
+          {filteredCourses.map(renderCourseCard)}
         </section>
       </main>
     </section>

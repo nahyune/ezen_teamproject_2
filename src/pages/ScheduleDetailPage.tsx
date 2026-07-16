@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ChevronRight, BackButton } from "../components/Icons";
 import scheduleImage from "../assets/img/schedule-hero.webp";
 import runner1 from "../assets/img/runner1.webp";
@@ -56,7 +57,27 @@ function CheckIcon() {
   );
 }
 
+function AnimatedCheckIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path
+        className="animate-check-draw"
+        d="M4.5 10.4L8.2 14L15.7 6.4"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        pathLength={1}
+        strokeDasharray={1}
+      />
+    </svg>
+  );
+}
+
 export default function ScheduleDetailPage({ onBack }: Props) {
+  const [showAttendConfirm, setShowAttendConfirm] = useState(false);
+  const [attending, setAttending] = useState(false);
+
   return (
     <div className="phone bg-[#0a0a0a] text-white">
       <header className="subheader justify-between">
@@ -138,20 +159,58 @@ export default function ScheduleDetailPage({ onBack }: Props) {
       </main>
 
       <div className="fixed bottom-0 left-1/2 z-[100] flex h-[93px] w-[var(--frame-width)] max-w-full -translate-x-1/2 items-start gap-[10px] border-t border-[#262626] bg-[#0e0e0e] px-[var(--gutter)] pb-7 pt-[14px]">
+        {!attending && (
+          <button
+            className="h-[53px] flex-1 rounded-full bg-[#1d1d1d] text-[16px] font-medium leading-[1.3] tracking-[-0.48px] text-[#9c9c9c]"
+            type="button"
+          >
+            불참
+          </button>
+        )}
         <button
-          className="h-[53px] flex-1 rounded-full bg-[#1d1d1d] text-[16px] font-medium leading-[1.3] tracking-[-0.48px] text-[#9c9c9c]"
+          className={`flex h-[53px] flex-1 items-center justify-center gap-0.5 rounded-full text-[16px] font-medium leading-[1.3] tracking-[-0.48px] ${
+            attending ? "bg-[#2a2a2a] text-white/40" : "bg-[var(--primary-lime)] text-[#0a0a0a]"
+          }`}
           type="button"
+          disabled={attending}
+          onClick={() => setShowAttendConfirm(true)}
         >
-          불참
-        </button>
-        <button
-          className="flex h-[53px] flex-1 items-center justify-center gap-0.5 rounded-full bg-[var(--primary-lime)] text-[16px] font-medium leading-[1.3] tracking-[-0.48px] text-[#0a0a0a]"
-          type="button"
-        >
-          <CheckIcon />
-          참석
+          {!attending && <CheckIcon />}
+          {attending ? "참석 확정" : "참석"}
         </button>
       </div>
+
+      {showAttendConfirm && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 px-[var(--gutter)]"
+          onClick={() => setShowAttendConfirm(false)}
+        >
+          <div
+            className="flex w-full max-w-[320px] flex-col items-center gap-4 rounded-2xl bg-[#1d1d1d] px-6 py-7 text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span className="grid h-12 w-12 animate-count-pop place-items-center rounded-full bg-[var(--primary-lime)] text-[#0a0a0a]">
+              <AnimatedCheckIcon />
+            </span>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-[18px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">참석 완료</h2>
+              <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-[#9c9c9c]">
+                이번 일정에 참석이 확정되었어요.
+              </p>
+            </div>
+            <button
+              className="h-[46px] w-full rounded-full bg-[var(--primary-lime)] text-[16px] font-medium leading-[1.3] tracking-[-0.48px] text-[#0a0a0a]"
+              type="button"
+              onClick={() => {
+                setAttending(true);
+                setShowAttendConfirm(false);
+              }}
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

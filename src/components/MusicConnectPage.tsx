@@ -19,7 +19,7 @@ export default function MusicConnectPage({
       <img src={bgPhoto} alt="" className="absolute inset-0 h-full w-full object-cover" aria-hidden />
       <div className="absolute inset-0 bg-black/30" aria-hidden />
 
-      <div className="absolute inset-x-0 top-0 flex h-12 items-center justify-end px-4.5 py-3">
+      <div className="absolute inset-x-0 top-(--statusbar-h) flex h-12 items-center justify-end px-4.5 py-3">
         <button
           type="button"
           className="grid size-6 place-items-center"

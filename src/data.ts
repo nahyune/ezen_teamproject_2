@@ -46,6 +46,8 @@ import feedRunningSelfie from "./assets/img/feed-running-selfie.webp";
 import feedRunningShoes from "./assets/img/feed-running-shoes.webp";
 import feedStoryAvatarNoRing from "./assets/img/feed-story-avatar-no-ring.png";
 import storyDogMap from "./assets/img/img-dog-map.webp";
+import storyDogRunning from "./assets/img/story-dog-running.webp";
+import storyGpsArtRun from "./assets/img/story-gps-art-run.webp";
 
 export const heroData = {
   title: "어제 저녁 러닝",
@@ -130,6 +132,24 @@ export const courseRecommendations: CourseRecommendation[] = [
     nearby: "내 위치에서 2.1km",
   },
   {
+    image: course2,
+    name: "반포 한강공원 코스",
+    level: "초급자",
+    distance: "3.8km",
+    duration: "약 25분",
+    rating: "4.9",
+    nearby: "내 위치에서 3.5km",
+  },
+  {
+    image: course3,
+    name: "잠실 한 바퀴 코스",
+    level: "초급자",
+    distance: "5.2km",
+    duration: "약 35분",
+    rating: "4.8",
+    nearby: "내 위치에서 4.0km",
+  },
+  {
     image: courseThumbSeoul,
     name: "서울숲 → 뚝섬 왕복",
     level: "중급자",
@@ -139,6 +159,24 @@ export const courseRecommendations: CourseRecommendation[] = [
     nearby: "내 위치에서 4.8km",
   },
   {
+    image: popularCourseMain,
+    name: "뚝섬유원지 왕복",
+    level: "중급자",
+    distance: "5.8km",
+    duration: "약 40분",
+    rating: "4.7",
+    nearby: "내 위치에서 3.9km",
+  },
+  {
+    image: popularCourseSeokchon,
+    name: "성수 한강 왕복",
+    level: "중급자",
+    distance: "7.2km",
+    duration: "약 48분",
+    rating: "4.9",
+    nearby: "내 위치에서 5.5km",
+  },
+  {
     image: courseThumbNamsan,
     name: "남산 순환 코스",
     level: "상급자",
@@ -146,6 +184,24 @@ export const courseRecommendations: CourseRecommendation[] = [
     duration: "약 70분",
     rating: "4.7",
     nearby: "내 위치에서 6.2km",
+  },
+  {
+    image: popularCourseHangang,
+    name: "남산 둘레길 코스",
+    level: "상급자",
+    distance: "8.7km",
+    duration: "약 60분",
+    rating: "4.6",
+    nearby: "내 위치에서 5.8km",
+  },
+  {
+    image: challengeCourseGwanghwamun,
+    name: "북악 스카이웨이 코스",
+    level: "상급자",
+    distance: "11.5km",
+    duration: "약 80분",
+    rating: "4.8",
+    nearby: "내 위치에서 7.4km",
   },
 ];
 
@@ -191,6 +247,24 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         detail: "nodulseom",
       },
       {
+        image: course1,
+        name: "여의도 벚꽃길 코스",
+        level: "초급자",
+        distance: "2.3km",
+        duration: "약 20분",
+        rating: "4.9",
+        nearby: "내 위치에서 1.8km",
+      },
+      {
+        image: course2,
+        name: "반포 무지개다리 코스",
+        level: "초급자",
+        distance: "1.8km",
+        duration: "약 22분",
+        rating: "4.8",
+        nearby: "내 위치에서 3.0km",
+      },
+      {
         image: popularCourseSeokchon,
         name: "석촌 호수 코스",
         level: "중급자",
@@ -200,6 +274,24 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         nearby: "내 위치에서 4.8km",
       },
       {
+        image: course3,
+        name: "잠실 한강공원 코스",
+        level: "중급자",
+        distance: "3.4km",
+        duration: "약 28분",
+        rating: "4.7",
+        nearby: "내 위치에서 3.6km",
+      },
+      {
+        image: courseThumbSeoul,
+        name: "뚝섬 한강공원 코스",
+        level: "중급자",
+        distance: "2.9km",
+        duration: "약 20분",
+        rating: "4.9",
+        nearby: "내 위치에서 4.1km",
+      },
+      {
         image: popularCourseHangang,
         name: "한강대교 코스",
         level: "상급자",
@@ -207,6 +299,24 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         duration: "약 50분",
         rating: "4.7",
         nearby: "내 위치에서 6.2km",
+      },
+      {
+        image: courseThumbNamsan,
+        name: "청담대교 코스",
+        level: "상급자",
+        distance: "7.1km",
+        duration: "약 42분",
+        rating: "4.6",
+        nearby: "내 위치에서 5.0km",
+      },
+      {
+        image: challengeCourseYeontral,
+        name: "성수대교 코스",
+        level: "상급자",
+        distance: "9.0km",
+        duration: "약 55분",
+        rating: "4.8",
+        nearby: "내 위치에서 6.9km",
       },
     ],
   },
@@ -234,6 +344,24 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         detail: "gwanghwamun",
       },
       {
+        image: course1,
+        name: "익선동 골목런 코스",
+        level: "가본 곳",
+        distance: "3.2km",
+        duration: "약 20분",
+        rating: "4.7",
+        nearby: "내 위치에서 1.5km",
+      },
+      {
+        image: courseThumbNamsan,
+        name: "남산 야경런 코스",
+        level: "가본 곳",
+        distance: "5.4km",
+        duration: "약 35분",
+        rating: "4.9",
+        nearby: "내 위치에서 4.2km",
+      },
+      {
         image: challengeCourseYeontral,
         name: "연트럴파크 폭포 코스",
         level: "안 가본 곳",
@@ -250,6 +378,15 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         duration: "약 15분",
         rating: "4.7",
         nearby: "내 위치에서 6.2km",
+      },
+      {
+        image: popularCourseHangang,
+        name: "성수동 골목런 코스",
+        level: "안 가본 곳",
+        distance: "3.6km",
+        duration: "약 22분",
+        rating: "4.6",
+        nearby: "내 위치에서 3.3km",
       },
     ],
   },
@@ -429,6 +566,24 @@ export const challenges: Challenge[] = [
     participants: "8,543명 참여",
     crop: { width: "153.04%", height: "286.94%", left: "-26.52%", top: "-60.7%" },
   },
+  {
+    image: race2,
+    name: "여의도 나이트런 완주",
+    participants: "3,120명 참여",
+    crop: { width: "100%", height: "100%", left: "0", top: "0" },
+  },
+  {
+    image: challengeCourseYeontral,
+    name: "매일 아침 10분 러닝",
+    participants: "9,876명 참여",
+    crop: { width: "100%", height: "100%", left: "0", top: "0" },
+  },
+  {
+    image: popularCourseHangang,
+    name: "한강 노을런 챌린지",
+    participants: "6,402명 참여",
+    crop: { width: "100%", height: "100%", left: "0", top: "0" },
+  },
 ];
 
 export type Article = {
@@ -455,6 +610,21 @@ export const articles: Article[] = [
     image: mag3,
     title: ["서울을", "달리는 크루들"],
     preview: ["첫 번째 크루,", "와우산30을 만나다"],
+  },
+  {
+    image: feedRunningShoes,
+    title: ["여름철 러닝화", "관리 꿀팁"],
+    preview: ["땀과 먼지로부터", "러닝화를 지키는 법"],
+  },
+  {
+    image: storyGpsArtRun,
+    title: ["GPS 아트런", "코스 만드는 법"],
+    preview: ["지도 위에 그림을 그리는", "새로운 러닝 놀이"],
+  },
+  {
+    image: storyDogRunning,
+    title: ["반려견과", "함께 달리는 법"],
+    preview: ["댕댕이와 러닝,", "안전하게 즐기는 방법"],
   },
 ];
 

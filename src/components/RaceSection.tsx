@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { raceFilters, races } from "../data";
 import chevronRight from "../assets/icons/chevron-right.svg";
 import "./RaceSection.css";
@@ -7,13 +8,21 @@ type Props = {
 };
 
 export default function RaceSection({ onOpenRace }: Props) {
+  const [activeFilter, setActiveFilter] = useState(raceFilters[0]);
+
   return (
     <section className="race">
       <div className="race__head">
         <h2 className="race__title">대회 소식</h2>
         <div className="race__filters no-scrollbar">
-          {raceFilters.map((f, i) => (
-            <button key={f} type="button" className={`pill${i === 0 ? " pill--active" : ""}`}>
+          {raceFilters.map((f) => (
+            <button
+              key={f}
+              type="button"
+              className={`pill${f === activeFilter ? " pill--active" : ""}`}
+              aria-pressed={f === activeFilter}
+              onClick={() => setActiveFilter(f)}
+            >
               {f}
             </button>
           ))}

@@ -6,12 +6,13 @@ type Props = {
   onOpenNearby?: () => void;
   onOpenPopular?: () => void;
   onOpenChallenge?: () => void;
+  onSeeAll?: () => void;
 };
 
-export default function CourseSection({ onOpenNearby, onOpenPopular, onOpenChallenge }: Props) {
+export default function CourseSection({ onOpenNearby, onOpenPopular, onOpenChallenge, onSeeAll }: Props) {
   return (
     <section className="courses">
-      <SectionHeader title="이번주 추천코스" />
+      <SectionHeader title="이번주 추천코스" onAction={onSeeAll} />
       <div className="courses__row no-scrollbar">
         {courses.map((c) => {
           const action =

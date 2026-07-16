@@ -21,6 +21,8 @@ import ScheduleListPage from "./pages/ScheduleListPage";
 import RaceDetailPage from "./pages/RaceDetailPage";
 import ChallengeDetailPage from "./pages/ChallengeDetailPage";
 import MagazineDetailPage from "./pages/MagazineDetailPage";
+import MagazineListPage from "./pages/MagazineListPage";
+import CourseRecommendListPage from "./pages/CourseRecommendListPage";
 import RecordFlow from "./components/RecordFlow";
 import ChatbotPage from "./components/ChatbotPage";
 import type { CourseDetailKind, CourseExploreKind } from "./data";
@@ -39,6 +41,8 @@ type Page =
   | "courseDetail"
   | "challengeDetail"
   | "magazineDetail"
+  | "magazineList"
+  | "courseRecommendList"
   | "record";
 
 export default function App() {
@@ -105,6 +109,15 @@ export default function App() {
     );
   }
 
+  if (page === "magazineList") {
+    return (
+      <MagazineListPage
+        onBack={() => setPage("home")}
+        onOpenArticle={() => setPage("magazineDetail")}
+      />
+    );
+  }
+
   if (page === "record") {
     // 기록하기: 하단바 없이 폰 프레임에 꽉 차는 한 화면(스크롤 잠금).
     // 지도 등 움직임은 각 화면 내부에서만 일어난다.
@@ -118,6 +131,18 @@ export default function App() {
           onChatbot={() => setChatbotOpen(true)}
         />
       </div>
+    );
+  }
+
+  if (page === "courseRecommendList") {
+    return (
+      <CourseRecommendListPage
+        onBack={() => setPage("home")}
+        onOpenDetail={(detail) => {
+          setCourseDetailKind(detail);
+          setPage("courseDetail");
+        }}
+      />
     );
   }
 
@@ -178,6 +203,7 @@ export default function App() {
               setCourseExploreKind("challenge");
               setPage("courses");
             }}
+            onSeeAll={() => setPage("courseRecommendList")}
           />
           <RunnerSection onViewAll={() => setPage("runners")} />
           <ScheduleSection
@@ -186,7 +212,10 @@ export default function App() {
           />
           <RaceSection onOpenRace={() => setPage("race")} />
           <ChallengeSection onOpenChallenge={() => setPage("challengeDetail")} />
-          <MagazineSection onOpenArticle={() => setPage("magazineDetail")} />
+          <MagazineSection
+            onOpenArticle={() => setPage("magazineDetail")}
+            onSeeAll={() => setPage("magazineList")}
+          />
         </main>
       )}
 
