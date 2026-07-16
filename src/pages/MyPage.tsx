@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-import { profileData, profileStats, highlights, myRecords } from "../data";
-import { useUserProfile } from "../lib/userProfile";
-=======
 import { useState } from "react";
 import { profileData, profileStats, highlights, myRecords, type MyRecord } from "../data";
->>>>>>> origin/main
+import { useUserProfile } from "../lib/userProfile";
 import flameIcon from "../assets/icons/mypage-flame.svg";
 import hlStreak from "../assets/icons/mypage-hl-streak.svg";
 import hlRace from "../assets/icons/mypage-hl-race.svg";
@@ -52,10 +48,8 @@ const julyDays = Array.from({ length: 31 }, (_, index) => index + 1);
 const streakRunDays = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
 export default function MyPage() {
-<<<<<<< HEAD
   // 프로필 편집(이름·소개·아바타)이 즉시 반영된다. 레벨·스트릭은 목데이터 유지.
   const { profile, avatarSrc } = useUserProfile();
-=======
   const [records, setRecords] = useState<MyRecord[]>(myRecords);
   const [selectedRecord, setSelectedRecord] = useState<MyRecord | null>(null);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
@@ -99,8 +93,6 @@ export default function MyPage() {
     setSelectedRecord(null);
     setIsMoreOpen(false);
   };
-
->>>>>>> origin/main
   return (
     <div className="flex flex-col gap-5 pb-[130px]">
       <section className="flex items-center gap-4 pt-3.5 px-[18px] pb-1.5">
@@ -425,7 +417,7 @@ export default function MyPage() {
               )}
             </div>
             <div className="bg-[#101012] px-4 py-3.5 text-[14px] font-normal leading-[1.5] text-white/85">
-              <span className="mr-2 font-medium text-white">{profileData.name}</span>
+              <span className="mr-2 font-medium text-white">{profile.name}</span>
               {selectedRecord.caption}
             </div>
             <div className="flex items-center gap-5 border-t border-white/8 bg-[#101012] px-4 py-3 text-[13px] font-normal text-white/70">
