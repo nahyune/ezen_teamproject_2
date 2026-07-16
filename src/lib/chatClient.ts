@@ -3,13 +3,16 @@ import { runiRaceCards, runiCrewCards, runiCourseCard } from "../data";
 import type { ChatMessage, MessageBlock } from "./chatTypes";
 import { toAiMessages } from "./chatTypes";
 
+/** AI에 함께 전달할 사용자 프로필 (이름 호칭·레벨 맞춤 답변용) */
+export type ChatUserProfile = { name: string; levelDesc: string };
+
 /** 대화 내역을 서버로 보내고 러니의 답변 텍스트를 받는다. (비스트리밍)
  *  ⚠️ 로컬 vite(npm run dev)엔 /api/chat 이 없어 404 — 배포 또는 `vercel dev`에서 동작. */
-async function fetchAiText(messages: ChatMessage[]): Promise<string> {
+async function fetchAiText(messages: ChatMessage[], profile?: ChatUserProfile): Promise<string> {
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages: toAiMessages(messages) }),
+    body: JSON.stringify({ messages: toAiMessages(messages), profile }),
   });
   const data = (await res.json().catch(() => ({}))) as { text?: string; error?: string };
   if (!res.ok) throw new Error(data.error ?? `요청 실패 (${res.status})`);
@@ -54,12 +57,17 @@ function enrichBlocks(userText: string, aiText: string): MessageBlock[] {
   return blocks;
 }
 
-/** 유저 메시지를 보내고, 러니의 리치 답변(블록 배열)을 받는다. */
-export async function sendChat(history: ChatMessage[], userInput: string): Promise<MessageBlock[]> {
+/** 유저 메시지를 보내고, 러니의 리치 답변(블록 배열)을 받는다.
+ *  profile 을 넘기면 AI가 사용자 이름을 부르고 러닝 레벨에 맞춰 답한다. */
+export async function sendChat(
+  history: ChatMessage[],
+  userInput: string,
+  profile?: ChatUserProfile,
+): Promise<MessageBlock[]> {
   const next: ChatMessage[] = [
     ...history,
     { role: "user", blocks: [{ type: "text", text: userInput }] },
   ];
-  const aiText = await fetchAiText(next);
+  const aiText = await fetchAiText(next, profile);
   return enrichBlocks(userInput, aiText);
 }

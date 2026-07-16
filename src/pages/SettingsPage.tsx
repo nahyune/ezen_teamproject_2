@@ -4,9 +4,11 @@ import chevronRight from "../assets/icons/settings-chevron-right.svg";
 
 type Props = {
   onBack?: () => void;
+  /** "프로필 편집" 행 클릭 → 프로필 편집 페이지로 이동 */
+  onOpenProfile?: () => void;
 };
 
-export default function SettingsPage({ onBack }: Props) {
+export default function SettingsPage({ onBack, onOpenProfile }: Props) {
   const [toggles, setToggles] = useState(defaultSettingsToggles);
 
   return (
@@ -28,7 +30,12 @@ export default function SettingsPage({ onBack }: Props) {
               {group.rows.map((row, i) => (
                 <Fragment key={row.label}>
                   {i > 0 && <div className="h-px bg-[#262626]" />}
-                  <div className="flex items-center justify-between px-4 py-[17px]">
+                  <div
+                    className={`flex items-center justify-between px-4 py-[17px] ${
+                      row.label === "프로필 편집" ? "cursor-pointer" : ""
+                    }`}
+                    onClick={row.label === "프로필 편집" ? onOpenProfile : undefined}
+                  >
                     <span className="text-base tracking-[-0.48px] text-white">{row.label}</span>
                     {row.kind === "toggle" ? (
                       <button
