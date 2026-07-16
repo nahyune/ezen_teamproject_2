@@ -41,11 +41,14 @@ import record0615 from "./assets/img/mypage-record-0615.webp";
 import record0612 from "./assets/img/mypage-record-0612.webp";
 import record0611 from "./assets/img/mypage-record-0611.webp";
 import record0605 from "./assets/img/mypage-record-0605.webp";
-import feedKomazawaPark from "./assets/img/feed-komazawa-park.png";
+import feedKomazawaPark from "./assets/img/feed-komazawa-park.webp";
 import feedRunningSelfie from "./assets/img/feed-running-selfie.webp";
 import feedRunningShoes from "./assets/img/feed-running-shoes.webp";
-import feedStoryAvatarNoRing from "./assets/img/feed-story-avatar-no-ring.png";
+import feedAhnHangangCrew from "./assets/img/feed-story-ahn-hangang-crew.webp";
+import feedStoryAvatarNoRing from "./assets/img/feed-story-avatar-no-ring.webp";
 import storyDogMap from "./assets/img/img-dog-map.webp";
+import storyDogRunning from "./assets/img/story-dog-running.webp";
+import storyGpsArtRun from "./assets/img/story-gps-art-run.webp";
 
 export const heroData = {
   title: "어제 저녁 러닝",
@@ -130,6 +133,24 @@ export const courseRecommendations: CourseRecommendation[] = [
     nearby: "내 위치에서 2.1km",
   },
   {
+    image: course2,
+    name: "반포 한강공원 코스",
+    level: "초급자",
+    distance: "3.8km",
+    duration: "약 25분",
+    rating: "4.9",
+    nearby: "내 위치에서 3.5km",
+  },
+  {
+    image: course3,
+    name: "잠실 한 바퀴 코스",
+    level: "초급자",
+    distance: "5.2km",
+    duration: "약 35분",
+    rating: "4.8",
+    nearby: "내 위치에서 4.0km",
+  },
+  {
     image: courseThumbSeoul,
     name: "서울숲 → 뚝섬 왕복",
     level: "중급자",
@@ -139,6 +160,24 @@ export const courseRecommendations: CourseRecommendation[] = [
     nearby: "내 위치에서 4.8km",
   },
   {
+    image: popularCourseMain,
+    name: "뚝섬유원지 왕복",
+    level: "중급자",
+    distance: "5.8km",
+    duration: "약 40분",
+    rating: "4.7",
+    nearby: "내 위치에서 3.9km",
+  },
+  {
+    image: popularCourseSeokchon,
+    name: "성수 한강 왕복",
+    level: "중급자",
+    distance: "7.2km",
+    duration: "약 48분",
+    rating: "4.9",
+    nearby: "내 위치에서 5.5km",
+  },
+  {
     image: courseThumbNamsan,
     name: "남산 순환 코스",
     level: "상급자",
@@ -146,6 +185,24 @@ export const courseRecommendations: CourseRecommendation[] = [
     duration: "약 70분",
     rating: "4.7",
     nearby: "내 위치에서 6.2km",
+  },
+  {
+    image: popularCourseHangang,
+    name: "남산 둘레길 코스",
+    level: "상급자",
+    distance: "8.7km",
+    duration: "약 60분",
+    rating: "4.6",
+    nearby: "내 위치에서 5.8km",
+  },
+  {
+    image: challengeCourseGwanghwamun,
+    name: "북악 스카이웨이 코스",
+    level: "상급자",
+    distance: "11.5km",
+    duration: "약 80분",
+    rating: "4.8",
+    nearby: "내 위치에서 7.4km",
   },
 ];
 
@@ -191,6 +248,24 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         detail: "nodulseom",
       },
       {
+        image: course1,
+        name: "여의도 벚꽃길 코스",
+        level: "초급자",
+        distance: "2.3km",
+        duration: "약 20분",
+        rating: "4.9",
+        nearby: "내 위치에서 1.8km",
+      },
+      {
+        image: course2,
+        name: "반포 무지개다리 코스",
+        level: "초급자",
+        distance: "1.8km",
+        duration: "약 22분",
+        rating: "4.8",
+        nearby: "내 위치에서 3.0km",
+      },
+      {
         image: popularCourseSeokchon,
         name: "석촌 호수 코스",
         level: "중급자",
@@ -200,6 +275,24 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         nearby: "내 위치에서 4.8km",
       },
       {
+        image: course3,
+        name: "잠실 한강공원 코스",
+        level: "중급자",
+        distance: "3.4km",
+        duration: "약 28분",
+        rating: "4.7",
+        nearby: "내 위치에서 3.6km",
+      },
+      {
+        image: courseThumbSeoul,
+        name: "뚝섬 한강공원 코스",
+        level: "중급자",
+        distance: "2.9km",
+        duration: "약 20분",
+        rating: "4.9",
+        nearby: "내 위치에서 4.1km",
+      },
+      {
         image: popularCourseHangang,
         name: "한강대교 코스",
         level: "상급자",
@@ -207,6 +300,24 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         duration: "약 50분",
         rating: "4.7",
         nearby: "내 위치에서 6.2km",
+      },
+      {
+        image: courseThumbNamsan,
+        name: "청담대교 코스",
+        level: "상급자",
+        distance: "7.1km",
+        duration: "약 42분",
+        rating: "4.6",
+        nearby: "내 위치에서 5.0km",
+      },
+      {
+        image: challengeCourseYeontral,
+        name: "성수대교 코스",
+        level: "상급자",
+        distance: "9.0km",
+        duration: "약 55분",
+        rating: "4.8",
+        nearby: "내 위치에서 6.9km",
       },
     ],
   },
@@ -234,6 +345,24 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         detail: "gwanghwamun",
       },
       {
+        image: course1,
+        name: "익선동 골목런 코스",
+        level: "가본 곳",
+        distance: "3.2km",
+        duration: "약 20분",
+        rating: "4.7",
+        nearby: "내 위치에서 1.5km",
+      },
+      {
+        image: courseThumbNamsan,
+        name: "남산 야경런 코스",
+        level: "가본 곳",
+        distance: "5.4km",
+        duration: "약 35분",
+        rating: "4.9",
+        nearby: "내 위치에서 4.2km",
+      },
+      {
         image: challengeCourseYeontral,
         name: "연트럴파크 폭포 코스",
         level: "안 가본 곳",
@@ -250,6 +379,15 @@ export const courseExplorePages: Record<CourseExploreKind, CourseExploreData> = 
         duration: "약 15분",
         rating: "4.7",
         nearby: "내 위치에서 6.2km",
+      },
+      {
+        image: popularCourseHangang,
+        name: "성수동 골목런 코스",
+        level: "안 가본 곳",
+        distance: "3.6km",
+        duration: "약 22분",
+        rating: "4.6",
+        nearby: "내 위치에서 3.3km",
       },
     ],
   },
@@ -489,6 +627,24 @@ export const challenges: Challenge[] = [
     participants: "8,543명 참여",
     crop: { width: "153.04%", height: "286.94%", left: "-26.52%", top: "-60.7%" },
   },
+  {
+    image: race2,
+    name: "여의도 나이트런 완주",
+    participants: "3,120명 참여",
+    crop: { width: "100%", height: "100%", left: "0", top: "0" },
+  },
+  {
+    image: challengeCourseYeontral,
+    name: "매일 아침 10분 러닝",
+    participants: "9,876명 참여",
+    crop: { width: "100%", height: "100%", left: "0", top: "0" },
+  },
+  {
+    image: popularCourseHangang,
+    name: "한강 노을런 챌린지",
+    participants: "6,402명 참여",
+    crop: { width: "100%", height: "100%", left: "0", top: "0" },
+  },
 ];
 
 export type Article = {
@@ -515,6 +671,21 @@ export const articles: Article[] = [
     image: mag3,
     title: ["서울을", "달리는 크루들"],
     preview: ["첫 번째 크루,", "와우산30을 만나다"],
+  },
+  {
+    image: feedRunningShoes,
+    title: ["여름철 러닝화", "관리 꿀팁"],
+    preview: ["땀과 먼지로부터", "러닝화를 지키는 법"],
+  },
+  {
+    image: storyGpsArtRun,
+    title: ["GPS 아트런", "코스 만드는 법"],
+    preview: ["지도 위에 그림을 그리는", "새로운 러닝 놀이"],
+  },
+  {
+    image: storyDogRunning,
+    title: ["반려견과", "함께 달리는 법"],
+    preview: ["댕댕이와 러닝,", "안전하게 즐기는 방법"],
   },
 ];
 
@@ -547,22 +718,41 @@ export type MyRecord = {
   gpsArt?: 1 | 2;
   distanceKm: string;
   date: string;
+  caption: string;
+  cheers: number;
+  reposts: number;
+  comments: Array<{ author: string; text: string }>;
   pb?: boolean;
 };
 
+const myRecordComments = [
+  [
+    { author: "안정은", text: "오늘 페이스 정말 좋았어요!" },
+    { author: "러너_준", text: "다음 러닝도 응원할게요." },
+  ],
+  [
+    { author: "김페이스", text: "코스가 너무 좋아 보여요." },
+    { author: "도쿄원정대", text: "완주 수고했어요!" },
+  ],
+  [
+    { author: "서울원정대", text: "기록이 점점 좋아지네요." },
+    { author: "안정은", text: "다음에는 같이 달려요!" },
+  ],
+];
+
 export const myRecords: MyRecord[] = [
-  { image: record0708, distanceKm: "8.75", date: "7월 8일 · 경복궁" },
-  { image: record0707, distanceKm: "6.2", date: "7월 7일 · 여의도" },
-  { gpsArt: 1, distanceKm: "5.0", date: "7월 5일 · GPS 아트" },
-  { image: record0630, distanceKm: "4.8", date: "6월 30일 · 석촌호수" },
-  { image: record0628, distanceKm: "21.1", date: "6월 28일 · 하프 대회", pb: true },
-  { image: record0627, distanceKm: "5.2", date: "6월 27일 · 한강공원" },
-  { image: record0626, distanceKm: "7.4", date: "6월 26일 · 도심" },
-  { gpsArt: 2, distanceKm: "10.0", date: "6월 21일 · GPS 아트" },
-  { image: record0615, distanceKm: "6.5", date: "6월 15일 · 야간런" },
-  { image: record0612, distanceKm: "10.0", date: "6월 12일 · 10K 대회" },
-  { image: record0611, distanceKm: "3.2", date: "6월 11일 · 리커버리" },
-  { image: record0605, distanceKm: "12.6", date: "6월 5일 · 남산" },
+  { image: record0708, distanceKm: "8.75", date: "7월 8일 · 경복궁", caption: "아침 공기 좋았던 경복궁 러닝. 오늘도 기분 좋게 완주!", cheers: 28, reposts: 4, comments: myRecordComments[0] },
+  { image: record0707, distanceKm: "6.2", date: "7월 7일 · 여의도", caption: "여의도 한강을 따라 가볍게 달린 저녁 러닝.", cheers: 19, reposts: 2, comments: myRecordComments[1] },
+  { gpsArt: 1, distanceKm: "5.0", date: "7월 5일 · GPS 아트", caption: "오늘의 GPS 아트 완성. 코스를 따라 달리는 재미가 쏠쏠해요.", cheers: 34, reposts: 7, comments: myRecordComments[2] },
+  { image: record0630, distanceKm: "4.8", date: "6월 30일 · 석촌호수", caption: "석촌호수 한 바퀴, 가볍게 리듬 찾기.", cheers: 16, reposts: 1, comments: myRecordComments[0] },
+  { image: record0628, distanceKm: "21.1", date: "6월 28일 · 하프 대회", caption: "첫 하프 마라톤에서 새로운 PB 달성!", cheers: 52, reposts: 9, comments: myRecordComments[1], pb: true },
+  { image: record0627, distanceKm: "5.2", date: "6월 27일 · 한강공원", caption: "해 질 무렵 한강 러닝. 바람이 딱 좋았던 날.", cheers: 23, reposts: 3, comments: myRecordComments[2] },
+  { image: record0626, distanceKm: "7.4", date: "6월 26일 · 도심", caption: "익숙한 도심 코스를 새로운 페이스로 달려봤어요.", cheers: 21, reposts: 2, comments: myRecordComments[0] },
+  { gpsArt: 2, distanceKm: "10.0", date: "6월 21일 · GPS 아트", caption: "10km를 채우며 완성한 두 번째 GPS 아트.", cheers: 41, reposts: 8, comments: myRecordComments[1] },
+  { image: record0615, distanceKm: "6.5", date: "6월 15일 · 야간런", caption: "조용한 밤거리에서 집중한 6.5km.", cheers: 14, reposts: 1, comments: myRecordComments[2] },
+  { image: record0612, distanceKm: "10.0", date: "6월 12일 · 10K 대회", caption: "끝까지 페이스를 지키며 10K 완주!", cheers: 37, reposts: 6, comments: myRecordComments[0] },
+  { image: record0611, distanceKm: "3.2", date: "6월 11일 · 리커버리", caption: "몸을 풀어주는 짧고 편안한 리커버리 런.", cheers: 12, reposts: 1, comments: myRecordComments[1] },
+  { image: record0605, distanceKm: "12.6", date: "6월 5일 · 남산", caption: "오르막은 힘들었지만 정상에서 만난 풍경은 최고.", cheers: 31, reposts: 5, comments: myRecordComments[2] },
 ];
 
 export type SettingsRow =
@@ -639,6 +829,16 @@ export type FeedStory = {
   image?: string;
   /** me = 내 스토리(+배지) · new = 새 소식(오렌지 링 = 접속 표시) · seen = 확인함 */
   state: "me" | "new" | "seen";
+  storyImage?: string;
+  storyText?: string;
+  storyTextX?: number;
+  storyTextY?: number;
+  storySlides?: Array<{
+    image: string;
+    text?: string;
+    textX?: number;
+    textY?: number;
+  }>;
 };
 
 export const feedStories: FeedStory[] = [
@@ -663,6 +863,7 @@ export type FeedPost = {
   reposts: number;
   likedBy: string;
   commentPreview: string;
+  caption?: string;
 };
 
 export const feedPosts: FeedPost[] = [
@@ -671,8 +872,8 @@ export const feedPosts: FeedPost[] = [
     author: "안정은",
     avatar: runner1, // 스토리 레일과 동일 인물·동일 사진 (임시 — 고해상도 확보 시 교체)
     meta: "오늘 08:05 · 한강 러너스 크루 · 서울",
-    image: feedRunningSelfie,
-    images: [feedRunningSelfie, feedRunningShoes],
+    image: feedAhnHangangCrew,
+    images: [feedAhnHangangCrew, feedRunningSelfie, feedRunningShoes],
     cheers: 12,
     comments: 62,
     reposts: 50,

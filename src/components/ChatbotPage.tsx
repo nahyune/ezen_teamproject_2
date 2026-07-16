@@ -4,9 +4,8 @@ import { sendChat } from "../lib/chatClient";
 import type { ChatMessage, MessageBlock } from "../lib/chatTypes";
 import runiIcon from "../assets/icons/icon-chatbot.svg";
 import { BackButton } from "./Icons";
+import { useUserProfile } from "../lib/userProfile";
 
-// TODO: 로그인 유저 이름으로 교체 (현재는 뼈대용 상수)
-const USER_NAME = "하연";
 
 type Suggestion = { title: string; desc: string; prompt: string; icon: ReactNode };
 
@@ -49,6 +48,7 @@ const suggestions: Suggestion[] = [
 ];
 
 export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
+  const { profile } = useUserProfile(); // 프로필 편집값이 AI 호칭·응답에 반영됨
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -74,7 +74,7 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
     scrollToEnd();
 
     try {
-      const blocks = await sendChat(history, content);
+      const blocks = await sendChat(history, content, { name: profile.name, levelDesc: profile.levelDesc });
       setMessages([...withUser, { role: "assistant", blocks }]);
     } catch {
       const errBlock: MessageBlock = {
@@ -125,7 +125,7 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
               <span className="grid h-[72px] w-[72px] place-items-center rounded-full bg-[var(--bg-elevated)]">
                 <img src={runiIcon} alt="" className="h-[46px] w-[46px]" />
               </span>
-              <h1 className="subtitle-1 text-[var(--text-strong)]">안녕하세요, {USER_NAME}님!</h1>
+              <h1 className="subtitle-1 text-[var(--text-strong)]">안녕하세요, {profile.name}님!</h1>
               <p className="body-2 text-center text-white/70">
                 대회 찾기부터 코스 그리기까지,
                 <br />

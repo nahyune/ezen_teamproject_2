@@ -44,6 +44,7 @@
 /* ── App header ─────────────────────────────────────────── */
 .appheader {
   @apply sticky z-[90] mb-3 flex h-[52px] items-center justify-between bg-[var(--bg-app)] px-[var(--gutter)];
+  position: sticky;
   /* 상단 여백에 상태바 높이를 포함 → sticky 자연 위치가 기준과 일치해 헤더가
      상태바 바로 아래 제자리에 붙고, 콘텐츠는 헤더 아래에서 시작(겹침 없음). */
   margin-top: calc(var(--statusbar-h) + 12px);

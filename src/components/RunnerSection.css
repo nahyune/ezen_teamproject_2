@@ -6,7 +6,7 @@
 }
 
 .runners__row {
-  @apply flex gap-3.5 overflow-x-auto px-[var(--gutter)] mx-[calc(-1*var(--gutter))];
+  @apply flex gap-3.5 overflow-x-auto px-[var(--gutter)] mx-[calc(-1*var(--gutter))] touch-pan-x;
 }
 
 .runner {
@@ -14,8 +14,11 @@
 }
 
 .runner__ring {
-  @apply flex h-[78px] w-[78px] items-center justify-center rounded-full border-[2.5px] border-[var(--primary-orange)];
-  /* Figma "Ellipse 3832": 2.5px orange stroke */
+  @apply flex h-[78px] w-[78px] items-center justify-center rounded-full border-[2.5px] border-transparent;
+}
+
+.runner__ring--story {
+  @apply border-[var(--primary-orange)];
 }
 
 .runner__avatar {

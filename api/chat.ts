@@ -71,8 +71,9 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   let messages: ChatMessage[];
+  let profile: { name?: unknown; levelDesc?: unknown } | undefined;
   try {
-    ({ messages } = await req.json());
+    ({ messages, profile } = await req.json());
   } catch {
     return Response.json({ error: "invalid JSON body" }, { status: 400 });
   }
@@ -105,6 +106,18 @@ export default async function handler(req: Request): Promise<Response> {
     return Response.json({ error: "ANTHROPIC_API_KEY not set on server" }, { status: 500 });
   }
 
+  // 프로필(이름·러닝 레벨)을 시스템 프롬프트에 주입 — 프로필 편집이 AI 응답에 실제 반영.
+  // 문자열만, 길이 상한으로 프롬프트 인젝션·남용 방어.
+  let system = RUNI_SYSTEM;
+  const userName = typeof profile?.name === "string" ? profile.name.trim().slice(0, 30) : "";
+  const userLevel =
+    typeof profile?.levelDesc === "string" ? profile.levelDesc.trim().slice(0, 60) : "";
+  if (userName || userLevel) {
+    system += `\n\n[사용자 정보]`;
+    if (userName) system += `\n- 이름: ${userName} — 대화에서 자연스럽게 "${userName}님"이라고 부른다.`;
+    if (userLevel) system += `\n- 러닝 레벨: ${userLevel} — 이 수준에 맞춰 코스·훈련을 제안한다.`;
+  }
+
   try {
     // 뼈대: 우선 비스트리밍. 추후 스트리밍(SSE/ReadableStream)으로 확장 예정.
     const anthropicRes = await fetch("https://api.anthropic.com/v1/messages", {
@@ -117,7 +130,7 @@ export default async function handler(req: Request): Promise<Response> {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: MAX_TOKENS,
-        system: RUNI_SYSTEM,
+        system,
         messages: trimmed,
       }),
     });

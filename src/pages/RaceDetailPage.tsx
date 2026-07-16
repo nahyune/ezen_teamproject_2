@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BackButton } from "../components/Icons";
 import raceHero from "../assets/img/race1.webp";
 
@@ -35,6 +36,23 @@ function ShareIcon() {
   );
 }
 
+function AnimatedCheckIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path
+        className="animate-check-draw"
+        d="M4.5 10.4L8.2 14L15.7 6.4"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        pathLength={1}
+        strokeDasharray={1}
+      />
+    </svg>
+  );
+}
+
 function RouteMiniMap() {
   return (
     <svg className="h-[72px] w-[72px] shrink-0 basis-[72px]" width="72" height="72" viewBox="0 0 80 80" fill="none" aria-hidden>
@@ -53,6 +71,9 @@ function RouteMiniMap() {
 }
 
 export default function RaceDetailPage({ onBack }: Props) {
+  const [showJoinConfirm, setShowJoinConfirm] = useState(false);
+  const [joined, setJoined] = useState(false);
+
   return (
     <div className="phone bg-black text-[#f6f6ed]">
       <header className="subheader justify-between">
@@ -142,13 +163,48 @@ export default function RaceDetailPage({ onBack }: Props) {
         <p className={`${bodyTextClass} px-[var(--gutter)]`}>기록칩 · 완주 메달 · 물품보관 · 현장 포토존 제공</p>
 
         <button
-          className="mx-[var(--gutter)] h-12 w-[calc(100%-36px)] rounded-full bg-[var(--primary-lime)] text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-black"
+          className={`mx-[var(--gutter)] h-12 w-[calc(100%-36px)] rounded-full text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] ${
+            joined ? "bg-[#2a2a2a] text-white/40" : "bg-[var(--primary-lime)] text-black"
+          }`}
           type="button"
+          disabled={joined}
+          onClick={() => setShowJoinConfirm(true)}
         >
-          참가하기
+          {joined ? "참가 신청 완료" : "참가 신청하기"}
         </button>
       </main>
 
+      {showJoinConfirm && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 px-[var(--gutter)]"
+          onClick={() => setShowJoinConfirm(false)}
+        >
+          <div
+            className="flex w-full max-w-[320px] flex-col items-center gap-4 rounded-2xl bg-[#1d1d1d] px-6 py-7 text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span className="grid h-12 w-12 animate-count-pop place-items-center rounded-full bg-[var(--primary-lime)] text-black">
+              <AnimatedCheckIcon />
+            </span>
+            <div className="flex flex-col gap-1">
+              <h2 className="text-[18px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">참가 신청 완료</h2>
+              <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-white/70">
+                이 대회에 참가 신청이 완료되었어요.
+              </p>
+            </div>
+            <button
+              className="h-[46px] w-full rounded-full bg-[var(--primary-lime)] text-[16px] font-medium leading-[1.3] tracking-[-0.48px] text-black"
+              type="button"
+              onClick={() => {
+                setJoined(true);
+                setShowJoinConfirm(false);
+              }}
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

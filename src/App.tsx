@@ -12,8 +12,11 @@ import ChallengeSection from "./components/ChallengeSection";
 import MagazineSection from "./components/MagazineSection";
 import MyPage from "./pages/MyPage";
 import FeedPage from "./pages/FeedPage";
+import CreatePostPage, { type CreatePostDraft } from "./pages/CreatePostPage";
+import CreateStoryPage, { type CreateStoryDraft } from "./pages/CreateStoryPage";
 import PhoneFrame from "./components/PhoneFrame";
 import SettingsPage from "./pages/SettingsPage";
+import ProfileEditPage from "./pages/ProfileEditPage";
 import BottomNav from "./components/BottomNav";
 import RunnerExplorePage from "./pages/RunnerExplorePage";
 import ScheduleDetailPage from "./pages/ScheduleDetailPage";
@@ -21,9 +24,19 @@ import ScheduleListPage from "./pages/ScheduleListPage";
 import RaceDetailPage from "./pages/RaceDetailPage";
 import ChallengeDetailPage from "./pages/ChallengeDetailPage";
 import MagazineDetailPage from "./pages/MagazineDetailPage";
+import MagazineListPage from "./pages/MagazineListPage";
+import CourseRecommendListPage from "./pages/CourseRecommendListPage";
 import RecordFlow from "./components/RecordFlow";
 import ChatbotPage from "./components/ChatbotPage";
-import { courseDetailPages, type CourseDetailKind, type CourseExploreKind } from "./data";
+import {
+  courseDetailPages,
+  feedStories,
+  profileData,
+  type CourseDetailKind,
+  type CourseExploreKind,
+  type FeedPost,
+  type FeedStory,
+} from "./data";
 import { GWANGHWAMUN_DOG_RUN_CENTER, GWANGHWAMUN_DOG_RUN_PATH } from "./data/gwanghwamunDogRoute";
 import { YEOUIDO_SWEET_POTATO_CENTER, YEOUIDO_SWEET_POTATO_PATH } from "./data/yeouidoSweetPotatoRoute";
 import { NAMSAN_HEART_CENTER, NAMSAN_HEART_PATH } from "./data/namsanHeartRoute";
@@ -68,8 +81,11 @@ const runCourseMaps: Partial<Record<CourseDetailKind, RunCourseMap>> = {
 type Page =
   | "home"
   | "feed"
+  | "createPost"
+  | "createStory"
   | "my"
   | "settings"
+  | "profileEdit"
   | "runners"
   | "schedule"
   | "scheduleList"
@@ -78,6 +94,8 @@ type Page =
   | "courseDetail"
   | "challengeDetail"
   | "magazineDetail"
+  | "magazineList"
+  | "courseRecommendList"
   | "record";
 
 export default function App() {
@@ -89,6 +107,9 @@ export default function App() {
   const [selectedRunCourseLabel, setSelectedRunCourseLabel] = useState<string | null>(null);
   const [selectedRunCourseMap, setSelectedRunCourseMap] = useState<RunCourseMap | null>(null);
   const [chatbotOpen, setChatbotOpen] = useState(false);
+  const [feedStoryOpen, setFeedStoryOpen] = useState(false);
+  const [createdFeedPosts, setCreatedFeedPosts] = useState<FeedPost[]>([]);
+  const [createdStory, setCreatedStory] = useState<FeedStory | null>(null);
 
   useEffect(() => initDragScroll(), [page]);
 
@@ -111,19 +132,86 @@ export default function App() {
       setSelectedRunCourseMap(null);
       setPage("record");
     }
-    if (key === "courseDetail:gwanghwamun" || key === "courseDetail:yeouidoGoguma" || key === "courseDetail:namsanHeart" || key === "courseDetail:yeouido" || key === "courseDetail:nodulseom") {
+    if (key.startsWith("courseDetail:")) {
       const detailKind = key.replace("courseDetail:", "") as CourseDetailKind;
-      setCourseDetailKind(detailKind);
-      setCourseDetailBackPage("record");
-      setPage("courseDetail");
+      if (courseDetailPages[detailKind]) {
+        setCourseDetailKind(detailKind);
+        setCourseDetailBackPage("record");
+        setPage("courseDetail");
+      }
     }
   };
 
   const rendered = (() => {
+    if (page === "createStory") {
+      const publishStory = (draft: CreateStoryDraft) => {
+        setCreatedStory((current) => {
+          const previousSlides = current?.storySlides ?? (current?.storyImage ? [{
+            image: current.storyImage,
+            text: current.storyText,
+            textX: current.storyTextX,
+            textY: current.storyTextY,
+          }] : []);
+          const nextSlide = {
+            image: draft.image,
+            text: draft.text,
+            textX: draft.textX,
+            textY: draft.textY,
+          };
+
+          return {
+            name: "내 스토리",
+            image: feedStories[0].image,
+            state: "me",
+            storyImage: current?.storyImage ?? draft.image,
+            storyText: current?.storyText ?? draft.text,
+            storyTextX: current?.storyTextX ?? draft.textX,
+            storyTextY: current?.storyTextY ?? draft.textY,
+            storySlides: [...previousSlides, nextSlide],
+          };
+        });
+        setPage("feed");
+      };
+
+      return <CreateStoryPage onBack={() => setPage("feed")} onPublish={publishStory} />;
+    }
+
+    if (page === "createPost") {
+      const publishPost = (draft: CreatePostDraft) => {
+        const post: FeedPost = {
+          id: Date.now(),
+          author: profileData.name,
+          avatar: feedStories[0].image,
+          meta: draft.location ? `방금 전 · ${draft.location}` : "방금 전",
+          image: draft.images[0],
+          images: draft.images,
+          caption: draft.caption,
+          cheers: 0,
+          comments: 0,
+          reposts: 0,
+          likedBy: "아직 좋아요가 없습니다",
+          commentPreview: "첫 댓글을 남겨보세요",
+        };
+
+        setCreatedFeedPosts((posts) => [post, ...posts]);
+        setPage("feed");
+      };
+
+      return <CreatePostPage onBack={() => setPage("feed")} onPublish={publishPost} />;
+    }
+
     if (page === "settings") {
       return (
         <div className="phone">
-          <SettingsPage onBack={() => setPage("my")} />
+          <SettingsPage onBack={() => setPage("my")} onOpenProfile={() => setPage("profileEdit")} />
+        </div>
+      );
+    }
+
+    if (page === "profileEdit") {
+      return (
+        <div className="phone">
+          <ProfileEditPage onBack={() => setPage("settings")} />
         </div>
       );
     }
@@ -141,6 +229,14 @@ export default function App() {
     if (page === "race") return <RaceDetailPage onBack={() => setPage("home")} />;
     if (page === "challengeDetail") return <ChallengeDetailPage onBack={() => setPage("home")} />;
     if (page === "magazineDetail") return <MagazineDetailPage onBack={() => setPage("home")} />;
+    if (page === "magazineList") {
+      return (
+        <MagazineListPage
+          onBack={() => setPage("home")}
+          onOpenArticle={() => setPage("magazineDetail")}
+        />
+      );
+    }
 
     if (page === "record") {
       return (
@@ -154,6 +250,19 @@ export default function App() {
             onNavigate={navigateMain}
           />
         </div>
+      );
+    }
+
+    if (page === "courseRecommendList") {
+      return (
+        <CourseRecommendListPage
+          onBack={() => setPage("home")}
+          onOpenDetail={(detail) => {
+            setCourseDetailKind(detail);
+            setCourseDetailBackPage("courseRecommendList");
+            setPage("courseDetail");
+          }}
+        />
       );
     }
 
@@ -194,14 +303,37 @@ export default function App() {
       <div className="phone">
         <AppHeader
           variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
+          onLogoClick={() => {
+            if (page !== "home") {
+              setPage("home");
+              return;
+            }
+            document.querySelector(".phone-scroll")?.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+            window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+          }}
           onSettingsClick={() => setPage("settings")}
           onChatbotClick={() => setChatbotOpen(true)}
+          onCreatePostClick={() => setPage("createPost")}
+          onCreateStoryClick={() => setPage("createStory")}
         />
 
         {page === "my" ? (
           <MyPage />
         ) : page === "feed" ? (
-          <FeedPage />
+          <FeedPage
+            onStoryOpenChange={setFeedStoryOpen}
+            onCreateStory={() => setPage("createStory")}
+            createdPosts={createdFeedPosts}
+            createdStory={createdStory}
+            onDeletePost={(postId) => {
+              setCreatedFeedPosts((posts) => posts.filter((post) => post.id !== postId));
+            }}
+            onUpdatePost={(postId, caption) => {
+              setCreatedFeedPosts((posts) =>
+                posts.map((post) => (post.id === postId ? { ...post, caption } : post)),
+              );
+            }}
+          />
         ) : (
           <main className="home">
             <HeroSection
@@ -225,15 +357,22 @@ export default function App() {
                 setCourseExploreKind("challenge");
                 setPage("courses");
               }}
+              onSeeAll={() => setPage("courseRecommendList")}
             />
-            <RunnerSection onViewAll={() => setPage("runners")} />
+            <RunnerSection
+              onViewAll={() => setPage("runners")}
+              onStoryOpenChange={setFeedStoryOpen}
+            />
             <ScheduleSection
               onMore={() => setPage("scheduleList")}
               onOpen={() => setPage("schedule")}
             />
             <RaceSection onOpenRace={() => setPage("race")} />
             <ChallengeSection onOpenChallenge={() => setPage("challengeDetail")} />
-            <MagazineSection onOpenArticle={() => setPage("magazineDetail")} />
+            <MagazineSection
+              onOpenArticle={() => setPage("magazineDetail")}
+              onSeeAll={() => setPage("magazineList")}
+            />
           </main>
         )}
 
@@ -245,7 +384,7 @@ export default function App() {
     );
   })();
 
-  const clearStatusBar = page === "record" || (page === "courseDetail" && Boolean(runCourseMaps[courseDetailKind]));
+  const clearStatusBar = page === "record" || (page === "courseDetail" && Boolean(runCourseMaps[courseDetailKind])) || ((page === "feed" || page === "home") && feedStoryOpen);
 
   return (
     <PhoneFrame statusBar={clearStatusBar ? "clear" : "solid"}>

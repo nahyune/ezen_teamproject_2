@@ -138,3 +138,21 @@
   transform: translateY(0);
   visibility: visible;
 }
+
+@keyframes feed-heart-float {
+  0% {
+    opacity: 0;
+    transform: translateY(2px) scale(0.55);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-38px) scale(1.05);
+  }
+}
+
+.feed-heart-float {
+  animation: feed-heart-float 850ms ease-out forwards;
+}

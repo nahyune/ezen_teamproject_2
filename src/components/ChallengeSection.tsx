@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { challenges } from "../data";
 import { ChevronDown } from "./Icons";
 import "./ChallengeSection.css";
@@ -6,17 +7,22 @@ type Props = {
   onOpenChallenge?: () => void;
 };
 
+const collapsedCount = 3;
+
 export default function ChallengeSection({ onOpenChallenge }: Props) {
+  const [expanded, setExpanded] = useState(false);
+  const visibleChallenges = expanded ? challenges : challenges.slice(0, collapsedCount);
+
   return (
     <section className="challenge">
       <h2 className="challenge__title">챌린지</h2>
       <ul className="challenge__list">
-        {challenges.map((c) => (
+        {visibleChallenges.map((c) => (
           <li key={c.name}>
             <button
               className="challenge-item"
               type="button"
-              onClick={c.name === "경복궁 댕댕런" ? onOpenChallenge : undefined}
+              onClick={onOpenChallenge}
             >
             <div className="challenge-item__img">
               <img
@@ -38,10 +44,16 @@ export default function ChallengeSection({ onOpenChallenge }: Props) {
           </li>
         ))}
       </ul>
-      <button className="challenge__more" type="button">
-        더보기
-        <ChevronDown size={16} />
-      </button>
+      {challenges.length > collapsedCount && (
+        <button
+          className="challenge__more"
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+        >
+          {expanded ? "닫기" : "더보기"}
+          <ChevronDown size={16} className={expanded ? "rotate-180" : undefined} />
+        </button>
+      )}
     </section>
   );
 }

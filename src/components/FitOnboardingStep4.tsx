@@ -47,7 +47,7 @@ export default function FitOnboardingStep4({ onBack, onFinish }: { onBack?: () =
               key={option.title}
               type="button"
               className={`relative flex items-center gap-3.5 py-4 px-4.5 rounded-card bg-elevated text-left ${
-                active ? "border-[1.5px] border-primary-lime" : "border border-white/6"
+                active ? "border border-primary-lime" : "border border-white/6"
               }`}
               onClick={() => setSelected(i)}
             >

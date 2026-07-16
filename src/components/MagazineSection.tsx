@@ -4,19 +4,20 @@ import "./MagazineSection.css";
 
 type Props = {
   onOpenArticle?: () => void;
+  onSeeAll?: () => void;
 };
 
-export default function MagazineSection({ onOpenArticle }: Props) {
+export default function MagazineSection({ onOpenArticle, onSeeAll }: Props) {
   return (
     <section className="magazine">
-      <SectionHeader title="매거진" />
+      <SectionHeader title="매거진" onAction={onSeeAll} />
       <div className="magazine__row no-scrollbar">
         {articles.map((a) => (
           <button
             key={a.title.join("")}
             type="button"
             className="article-card"
-            onClick={a.title.join("") === "런린이첫 러닝화 가이드" ? onOpenArticle : undefined}
+            onClick={onOpenArticle}
           >
             <img className="article-card__bg" src={a.image} alt="" style={a.imageBox} />
             <div className="article-card__scrim" />
