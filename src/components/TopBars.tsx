@@ -77,6 +77,7 @@ export function StatusBar() {
 
 type AppHeaderProps = {
   variant?: "default" | "settings" | "feed";
+  onLogoClick?: () => void;
   onSettingsClick?: () => void;
   onChatbotClick?: () => void;
   onCreatePostClick?: () => void;
@@ -112,6 +113,7 @@ const feedActivities = [
 
 export function AppHeader({
   variant = "default",
+  onLogoClick,
   onSettingsClick,
   onChatbotClick,
   onCreatePostClick,
@@ -135,7 +137,7 @@ export function AppHeader({
 
   return (
     <header ref={headerRef} className="appheader">
-      <div className="appheader__logo" aria-label="W:RUN">
+      <button type="button" className="appheader__logo" aria-label="홈으로 이동" onClick={onLogoClick}>
         <img className="appheader__logo-w" src={logoW} alt="" />
         <span className="appheader__logo-dots" aria-hidden>
           <i />
@@ -143,7 +145,7 @@ export function AppHeader({
           <i />
         </span>
         <img className="appheader__logo-run" src={logoRun} alt="" />
-      </div>
+      </button>
       {variant === "settings" ? (
         <button type="button" aria-label="설정" onClick={onSettingsClick}>
           <img className="appheader__icon" src={iconSettings} alt="" />

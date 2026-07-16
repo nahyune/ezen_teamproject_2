@@ -228,6 +228,14 @@ export default function App() {
     <div className="phone">
       <AppHeader
         variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
+        onLogoClick={() => {
+          if (page !== "home") {
+            setPage("home");
+            return;
+          }
+          document.querySelector(".phone-scroll")?.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        }}
         onSettingsClick={() => setPage("settings")}
         onChatbotClick={() => setChatbotOpen(true)}
         onCreatePostClick={() => setPage("createPost")}
