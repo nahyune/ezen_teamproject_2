@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useRef, useState, type ChangeEvent, type DragEvent } from "react";
 import { BackButton } from "../components/Icons";
 import LocationPickerPage from "./LocationPickerPage";
+import exampleRunSelfie from "../assets/img/feed-running-selfie.webp";
+import exampleRunShoes from "../assets/img/feed-running-shoes.webp";
+import exampleHangangCrew from "../assets/img/feed-story-ahn-hangang-crew.webp";
 
 export type CreatePostDraft = {
   images: string[];
@@ -13,12 +16,19 @@ type Props = {
   onPublish: (draft: CreatePostDraft) => void;
 };
 
+const exampleImages = [
+  { src: exampleHangangCrew, label: "크루런" },
+  { src: exampleRunSelfie, label: "러닝셀피" },
+  { src: exampleRunShoes, label: "러닝화" },
+];
+
 export default function CreatePostPage({ onBack, onPublish }: Props) {
   const [images, setImages] = useState<string[]>([]);
   const [activeImage, setActiveImage] = useState(0);
   const [caption, setCaption] = useState("");
   const [location, setLocation] = useState("");
   const [isChoosingLocation, setIsChoosingLocation] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const imageUrlsRef = useRef<string[]>([]);
   const publishedRef = useRef(false);
 
@@ -28,24 +38,57 @@ export default function CreatePostPage({ onBack, onPublish }: Props) {
     };
   }, []);
 
-  const handleImages = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files ?? []).slice(0, 5 - images.length);
+  const addImages = (nextImages: string[]) => {
+    if (nextImages.length === 0) return;
+    setImages((current) => {
+      const availableSlots = 5 - current.length;
+      const acceptedImages = nextImages.slice(0, availableSlots);
+      if (acceptedImages.length === 0) return current;
+      setActiveImage(current.length);
+      return [...current, ...acceptedImages];
+    });
+  };
+
+  const addFiles = (fileList: File[]) => {
+    const files = fileList.filter((file) => file.type.startsWith("image/")).slice(0, 5 - images.length);
     if (files.length === 0) return;
 
     const nextImages = files.map((file) => URL.createObjectURL(file));
     imageUrlsRef.current = [...imageUrlsRef.current, ...nextImages];
-    setImages((current) => [...current, ...nextImages]);
+    addImages(nextImages);
+  };
+
+  const handleImages = (event: ChangeEvent<HTMLInputElement>) => {
+    addFiles(Array.from(event.target.files ?? []));
     event.target.value = "";
   };
 
   const removeActiveImage = () => {
     const target = images[activeImage];
     if (!target) return;
-    URL.revokeObjectURL(target);
+    if (imageUrlsRef.current.includes(target)) URL.revokeObjectURL(target);
     imageUrlsRef.current = imageUrlsRef.current.filter((url) => url !== target);
     const nextImages = images.filter((_, index) => index !== activeImage);
     setImages(nextImages);
     setActiveImage((index) => Math.max(0, Math.min(index, nextImages.length - 1)));
+  };
+
+  const addExampleImage = (image: string) => {
+    if (images.length >= 5) return;
+    addImages([image]);
+  };
+
+  const handleDropImage = (event: DragEvent<HTMLElement>) => {
+    event.preventDefault();
+    setIsDragOver(false);
+
+    const draggedExample = event.dataTransfer.getData("text/plain");
+    if (exampleImages.some((image) => image.src === draggedExample)) {
+      addExampleImage(draggedExample);
+      return;
+    }
+
+    addFiles(Array.from(event.dataTransfer.files));
   };
 
   const handlePublish = () => {
@@ -104,7 +147,22 @@ export default function CreatePostPage({ onBack, onPublish }: Props) {
             )}
           </div>
         ) : (
-          <label className="mx-[var(--gutter)] mt-3 flex aspect-[3/4] cursor-pointer flex-col items-center justify-center gap-3 rounded-[8px] border border-dashed border-white/20 bg-[#151517] text-white/55">
+          <div className="mx-[var(--gutter)] mt-3 flex flex-col gap-4">
+          <label
+            className={`flex aspect-[3/4] cursor-pointer flex-col items-center justify-center gap-3 rounded-[8px] border border-dashed bg-[#151517] text-white/55 transition-colors ${
+              isDragOver ? "border-[var(--primary-lime)] bg-[#202315] text-[var(--primary-lime)]" : "border-white/20"
+            }`}
+            onDragEnter={(event) => {
+              event.preventDefault();
+              setIsDragOver(true);
+            }}
+            onDragOver={(event) => {
+              event.preventDefault();
+              setIsDragOver(true);
+            }}
+            onDragLeave={() => setIsDragOver(false)}
+            onDrop={handleDropImage}
+          >
             <svg className="h-9 w-9" viewBox="0 0 24 24" fill="none" aria-hidden>
               <rect x="3.5" y="4.5" width="17" height="15" rx="2" stroke="currentColor" strokeWidth="1.4" />
               <path d="m6.5 16 4-4 3 3 2-2 2.5 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
@@ -114,6 +172,33 @@ export default function CreatePostPage({ onBack, onPublish }: Props) {
             <span className="text-[12px] font-normal text-white/35">최대 5장</span>
             <input type="file" accept="image/*" multiple className="hidden" onChange={handleImages} />
           </label>
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-[13px] font-medium text-white/70">예시 이미지</span>
+              <span className="text-[11px] font-normal text-white/35">바로 넣어보기</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {exampleImages.map((image) => (
+                <button
+                  key={image.src}
+                  type="button"
+                  draggable
+                  className="relative aspect-square overflow-hidden rounded-[6px] bg-[#1c1c1f]"
+                  onClick={() => addExampleImage(image.src)}
+                  onDragStart={(event) => {
+                    event.dataTransfer.setData("text/plain", image.src);
+                    event.dataTransfer.effectAllowed = "copy";
+                  }}
+                >
+                  <img src={image.src} alt="" className="h-full w-full object-cover" />
+                  <span className="absolute inset-x-0 bottom-0 bg-black/55 px-1.5 py-1 text-[11px] font-medium text-white">
+                    {image.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+          </div>
         )}
 
         {images.length > 0 && (

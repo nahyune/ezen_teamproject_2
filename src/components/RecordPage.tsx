@@ -139,7 +139,12 @@ export default function RecordPage({
 
       <header className="relative z-1 mb-3 mt-[calc(var(--statusbar-h)+12px)] flex h-13 items-center justify-between px-4.5">
         <div className="flex items-center">
-          <div className="flex h-[21.6px] items-center gap-[4.6px]" aria-label="W:RUN">
+          <button
+            type="button"
+            className="flex h-[21.6px] items-center gap-[4.6px]"
+            aria-label="홈으로 이동"
+            onClick={() => onNavigate?.("home")}
+          >
             <img className="h-[21.44px] w-[17.1px]" src={logoW} alt="" />
             <span className="flex h-5.25 flex-col justify-between py-[0.3px]" aria-hidden>
               <i className="block h-[3.64px] w-[4.42px] bg-primary-lime" />
@@ -147,7 +152,7 @@ export default function RecordPage({
               <i className="block h-[3.64px] w-[4.42px] bg-primary-lime" />
             </span>
             <img className="h-[21.64px] w-[34.23px]" src={logoRun} alt="" />
-          </div>
+          </button>
         </div>
         <button type="button" aria-label="알림">
           <img className="size-6" src={iconBell} alt="" />

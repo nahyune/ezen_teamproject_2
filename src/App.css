@@ -156,3 +156,17 @@
 .feed-heart-float {
   animation: feed-heart-float 850ms ease-out forwards;
 }
+
+@keyframes story-progress-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.story-progress-fill {
+  animation: story-progress-fill 5s linear forwards;
+  transform-origin: left center;
+}

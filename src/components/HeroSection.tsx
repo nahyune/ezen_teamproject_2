@@ -2,11 +2,17 @@ import { heroData } from "../data";
 import route from "../assets/icons/route.svg";
 import "./HeroSection.css";
 
-export default function HeroSection({ onStartRecord }: { onStartRecord?: () => void }) {
+export default function HeroSection({
+  onStartRecord,
+  image = heroData.image,
+}: {
+  onStartRecord?: () => void;
+  image?: string;
+}) {
   return (
     <section className="hero">
       <div className="hero__card">
-        <img className="hero__bg" src={heroData.image} alt="" />
+        <img className="hero__bg" src={image} alt="" />
         <div className="hero__tint" />
         <div className="hero__scrim" />
         <img className="hero__route" src={route} alt="" />

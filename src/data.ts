@@ -841,11 +841,13 @@ export type FeedStory = {
   storyText?: string;
   storyTextX?: number;
   storyTextY?: number;
+  storyTextColor?: string;
   storySlides?: Array<{
     image: string;
     text?: string;
     textX?: number;
     textY?: number;
+    textColor?: string;
   }>;
 };
 
@@ -912,6 +914,10 @@ export const suggestedCrews: CrewSuggestion[] = [
   // 크루 이미지는 임시 (고해상도 확보 시 교체)
   { name: "성수 새벽런", meta: "응원 2.1k · 서울", image: runner5 },
   { name: "한강 브릿지런", meta: "응원 1.4k · 서울", image: runner6 },
+  { name: "여의도 러너스", meta: "응원 980 · 여의도", image: runner1 },
+  { name: "남산 업힐클럽", meta: "응원 842 · 남산", image: runner2 },
+  { name: "석촌 호수런", meta: "응원 760 · 송파", image: runner3 },
+  { name: "광화문 페이스", meta: "응원 621 · 종로", image: runner4 },
 ];
 
 // ── 챗봇 '러니' 리치 콘텐츠 목데이터 ────────────────────────────

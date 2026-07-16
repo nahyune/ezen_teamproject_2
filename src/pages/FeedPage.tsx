@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent, type UIEvent } from "react
 import { feedStories, feedPosts, suggestedCrews } from "../data";
 import type { FeedStory, FeedPost } from "../data";
 import iconHeart from "../assets/icons/icon-heart.svg";
+import iconHeartStroke from "../assets/icons/icon-heart-stroke.svg";
 import iconMessage from "../assets/icons/icon-message.svg";
 import iconRetweet from "../assets/icons/icon-retweet.svg";
 import sweetPotatoCourseSticker from "../assets/img/feed-yeouido-sweet-potato-map.webp";
@@ -10,6 +11,13 @@ import recoveryFoodStoryImage from "../assets/img/feed-story-recovery-food.webp"
 import ahnHangangCrewStoryImage from "../assets/img/feed-story-ahn-hangang-crew.webp";
 import tokyoSushiStoryImage from "../assets/img/feed-story-tokyo-sushi.webp";
 import tokyoKomazawaStoryImage from "../assets/img/feed-story-tokyo-komazawa.webp";
+import confettiBall from "../assets/emoji/confetti-ball.svg";
+import partyPopper from "../assets/emoji/party-popper.svg";
+import personRunning from "../assets/emoji/person-running.svg";
+import thumbsUp from "../assets/emoji/thumbs-up.svg";
+import partyingFace from "../assets/emoji/partying-face.svg";
+import clappingHands from "../assets/emoji/clapping-hands.svg";
+import womanRunning from "../assets/emoji/woman-running.svg";
 
 /* 아이콘은 BottomNav와 동일하게 mask 방식 - text 색으로 아이콘 색 제어 */
 const maskIconClass =
@@ -17,6 +25,73 @@ const maskIconClass =
 
 const avatarPlaceholderClass = "rounded-full bg-[#26262a]"; // 저화질 프로필 미사용 시 자리만
 /* 스토리 레일 */
+
+const cheerEmojis = [
+  confettiBall,
+  partyPopper,
+  personRunning,
+  thumbsUp,
+  partyingFace,
+  clappingHands,
+  womanRunning,
+];
+
+type CheerBurstItem = {
+  id: string;
+  emoji: string;
+  left: number;
+  delay: number;
+  rotate: number;
+  size: number;
+};
+
+function shuffled<T>(list: T[]): T[] {
+  const copy = [...list];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function buildCheerBurst(): CheerBurstItem[] {
+  const order = shuffled(cheerEmojis);
+  const step = 0.18;
+  return order.map((emoji, i) => ({
+    id: `${i}`,
+    emoji,
+    left: 50 + (Math.random() - 0.5) * 56,
+    delay: i * step,
+    rotate: (Math.random() - 0.5) * 44,
+    size: 20 + Math.random() * 10,
+  }));
+}
+
+function CheerBurst({ items }: { items: CheerBurstItem[] }) {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-1" aria-hidden>
+      {items.map((item) => (
+        <span
+          key={item.id}
+          className="absolute"
+          style={{ left: `${item.left}%`, transform: "translateX(-50%)" }}
+        >
+          <img
+            className="animate-cheer-rise block"
+            src={item.emoji}
+            alt=""
+            style={{
+              animationDelay: `${item.delay}s`,
+              rotate: `${item.rotate}deg`,
+              width: `${item.size}px`,
+              height: `${item.size}px`,
+            }}
+          />
+        </span>
+      ))}
+    </div>
+  );
+}
 
 function StoryCircle({ story, onOpen, onCreateStory, hasUnreadStory = false }: { story: FeedStory; onOpen?: () => void; onCreateStory?: () => void; hasUnreadStory?: boolean }) {
   return (
@@ -117,6 +192,7 @@ export function StoryViewer({ owner, onClose }: { owner: FeedStory; onClose: () 
     text: storyOwner.storyText,
     textX: storyOwner.storyTextX,
     textY: storyOwner.storyTextY,
+    textColor: storyOwner.storyTextColor,
   }] : []);
   const isCustomStory = customStories.length > 0;
   const storyCount = isCustomStory ? customStories.length : isAhnStory || isTokyoStory ? 2 : 1;
@@ -145,8 +221,8 @@ export function StoryViewer({ owner, onClose }: { owner: FeedStory; onClose: () 
       return () => window.clearTimeout(nextStoryTimer);
     }
 
-    const fadeTimer = window.setTimeout(() => setIsVisible(false), 4700);
-    const closeTimer = window.setTimeout(onClose, 5000);
+    const fadeTimer = window.setTimeout(() => setIsVisible(false), 5000);
+    const closeTimer = window.setTimeout(onClose, 5300);
 
     return () => {
       window.clearTimeout(fadeTimer);
@@ -214,10 +290,19 @@ export function StoryViewer({ owner, onClose }: { owner: FeedStory; onClose: () 
           {Array.from({ length: storyCount }, (_, index) => (
             <span
               key={index}
-              className={`h-[1.4px] flex-1 rounded-full transition-colors duration-300 ${
-                index <= storyIndex ? "bg-white" : "bg-white/35"
-              }`}
-            />
+              className="h-[1.4px] flex-1 overflow-hidden rounded-full bg-white/35"
+            >
+              <span
+                key={`${storyIndex}-${index}`}
+                className={`block h-full rounded-full bg-white ${
+                  index === storyIndex ? "story-progress-fill" : ""
+                }`}
+                style={{
+                  transform: index < storyIndex ? "scaleX(1)" : index > storyIndex ? "scaleX(0)" : undefined,
+                  transformOrigin: "left center",
+                }}
+              />
+            </span>
           ))}
         </div>
         <div className="absolute left-4 right-14 top-[calc(var(--statusbar-h)+22px)] z-[100] flex items-center gap-2.5">
@@ -265,7 +350,11 @@ export function StoryViewer({ owner, onClose }: { owner: FeedStory; onClose: () 
         {isCustomStory && activeCustomStory?.text && (
           <p
             className="absolute z-[100] -translate-x-1/2 -translate-y-1/2 whitespace-pre-wrap text-center text-[22px] font-semibold leading-[1.3] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.75)]"
-            style={{ left: `${activeCustomStory.textX ?? 50}%`, top: `${activeCustomStory.textY ?? 42}%` }}
+            style={{
+              left: `${activeCustomStory.textX ?? 50}%`,
+              top: `${activeCustomStory.textY ?? 42}%`,
+              color: activeCustomStory.textColor ?? "#ffffff",
+            }}
           >
             {activeCustomStory.text}
           </p>
@@ -404,6 +493,8 @@ function FeedCard({
     setReportNotice(true);
     window.setTimeout(() => setReportNotice(false), 1800);
   };
+  const showLikedBy = !isMine || !liked;
+  const showCommentPreview = !isMine || localComments.length === 0;
 
   if (hidden) return null;
 
@@ -579,7 +670,21 @@ function FeedCard({
                 ))}
               </span>
             )}
-            <span className={`h-5 w-5 ${maskIconClass}`} style={{ maskImage: `url("${iconHeart}")`, WebkitMaskImage: `url("${iconHeart}")` }} />
+            {liked ? (
+              <span
+                className={`appheader__icon h-5 w-5 ${maskIconClass}`}
+                style={{
+                  maskImage: `url("${iconHeart}")`,
+                  WebkitMaskImage: `url("${iconHeart}")`,
+                }}
+              />
+            ) : (
+              <img
+                className="appheader__icon h-5 w-5"
+                src={iconHeartStroke}
+                alt=""
+              />
+            )}
             <span className="subtitle-2">응원 {post.cheers + (liked ? 1 : 0)}</span>
           </button>
           <button
@@ -627,8 +732,8 @@ function FeedCard({
               <strong className="font-medium">{post.author}</strong> {post.caption}
             </p>
           )}
-          <p className="body-1 text-white">{post.likedBy}</p>
-          <p className="body-1 text-white">{post.commentPreview}</p>
+          {showLikedBy && <p className="body-1 text-white">{post.likedBy}</p>}
+          {showCommentPreview && <p className="body-1 text-white">{post.commentPreview}</p>}
           {localComments.map((comment, index) => (
             <p key={`${post.id}-comment-${index}`} className="body-1 text-white">
               나 · {comment}
@@ -736,6 +841,7 @@ function FeedCard({
 
 function SuggestedCrews() {
   const [cheeredCrews, setCheeredCrews] = useState<Set<string>>(new Set());
+  const [celebratingBursts, setCelebratingBursts] = useState<Record<string, CheerBurstItem[]>>({});
 
   const handleCrewCheer = (crewName: string) => {
     setCheeredCrews((current) => {
@@ -744,6 +850,15 @@ function SuggestedCrews() {
       next.add(crewName);
       return next;
     });
+    setCelebratingBursts((current) => ({ ...current, [crewName]: buildCheerBurst() }));
+    window.setTimeout(() => {
+      setCelebratingBursts((current) => {
+        if (!(crewName in current)) return current;
+        const next = { ...current };
+        delete next[crewName];
+        return next;
+      });
+    }, 1800);
   };
 
   return (
@@ -754,7 +869,7 @@ function SuggestedCrews() {
           모두 보기
         </button>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="no-scrollbar grid auto-cols-[calc((100%-12px)/2)] grid-flow-col gap-3 overflow-x-auto pb-1">
         {suggestedCrews.map((crew) => {
           const isCheered = cheeredCrews.has(crew.name);
           return (
@@ -778,7 +893,8 @@ function SuggestedCrews() {
               disabled={isCheered}
               aria-pressed={isCheered}
             >
-              {isCheered && (
+              {celebratingBursts[crew.name] && <CheerBurst items={celebratingBursts[crew.name]} />}
+              {false && (
                 <span className="pointer-events-none absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2" aria-hidden>
                   {[0, 1, 2, 3, 4].map((heart) => (
                     <span

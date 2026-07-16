@@ -27,6 +27,7 @@ import MagazineDetailPage from "./pages/MagazineDetailPage";
 import MagazineListPage from "./pages/MagazineListPage";
 import CourseRecommendListPage from "./pages/CourseRecommendListPage";
 import RecordFlow from "./components/RecordFlow";
+import type { SharedRunCard } from "./components/RunRecordCardPage";
 import ChatbotPage from "./components/ChatbotPage";
 import {
   courseDetailPages,
@@ -110,6 +111,7 @@ export default function App() {
   const [feedStoryOpen, setFeedStoryOpen] = useState(false);
   const [createdFeedPosts, setCreatedFeedPosts] = useState<FeedPost[]>([]);
   const [createdStory, setCreatedStory] = useState<FeedStory | null>(null);
+  const [sharedHeroImage, setSharedHeroImage] = useState<string>();
 
   useEffect(() => initDragScroll(), [page]);
 
@@ -142,6 +144,27 @@ export default function App() {
     }
   };
 
+  const shareRunCard = (card: SharedRunCard) => {
+    const post: FeedPost = {
+      id: Date.now(),
+      author: profileData.name,
+      avatar: feedStories[0].image,
+      meta: "방금 전 · 러닝 기록",
+      image: card.image,
+      images: [card.image],
+      caption: `${card.title} · ${card.distance}km 러닝을 완료했어요.`,
+      cheers: 0,
+      comments: 0,
+      reposts: 0,
+      likedBy: "아직 좋아요가 없습니다",
+      commentPreview: "첫 댓글을 남겨보세요",
+    };
+
+    setCreatedFeedPosts((posts) => [post, ...posts]);
+    setSharedHeroImage(card.image);
+    setPage("feed");
+  };
+
   const rendered = (() => {
     if (page === "createStory") {
       const publishStory = (draft: CreateStoryDraft) => {
@@ -151,12 +174,14 @@ export default function App() {
             text: current.storyText,
             textX: current.storyTextX,
             textY: current.storyTextY,
+            textColor: current.storyTextColor,
           }] : []);
           const nextSlide = {
             image: draft.image,
             text: draft.text,
             textX: draft.textX,
             textY: draft.textY,
+            textColor: draft.textColor,
           };
 
           return {
@@ -167,6 +192,7 @@ export default function App() {
             storyText: current?.storyText ?? draft.text,
             storyTextX: current?.storyTextX ?? draft.textX,
             storyTextY: current?.storyTextY ?? draft.textY,
+            storyTextColor: current?.storyTextColor ?? draft.textColor,
             storySlides: [...previousSlides, nextSlide],
           };
         });
@@ -248,6 +274,7 @@ export default function App() {
             onBack={() => setPage("home")}
             onChatbot={() => setChatbotOpen(true)}
             onNavigate={navigateMain}
+            onShareCard={shareRunCard}
           />
         </div>
       );
@@ -337,6 +364,7 @@ export default function App() {
         ) : (
           <main className="home">
             <HeroSection
+              image={sharedHeroImage}
               onStartRecord={() => {
                 setSelectedRunCourseLabel(null);
                 setSelectedRunCourseMap(null);

@@ -4,7 +4,7 @@ import RunningGuidePage from "./RunningGuidePage";
 import CountdownPage from "./CountdownPage";
 import RunningPage, { type RunCourseMap, type RunSummary } from "./RunningPage";
 import RunCompletePage from "./RunCompletePage";
-import RunRecordCardPage from "./RunRecordCardPage";
+import RunRecordCardPage, { type SharedRunCard } from "./RunRecordCardPage";
 import MusicConnectPage from "./MusicConnectPage";
 
 type Screen = "record" | "guide" | "countdown" | "running" | "finished" | "card" | "music";
@@ -21,6 +21,7 @@ export default function RecordFlow({
   onBack,
   onChatbot,
   onNavigate,
+  onShareCard,
 }: {
   autoStart?: boolean;
   selectedCourseLabel?: string | null;
@@ -28,6 +29,7 @@ export default function RecordFlow({
   onBack?: () => void;
   onChatbot?: () => void;
   onNavigate?: (key: string) => void;
+  onShareCard?: (card: SharedRunCard) => void;
 }) {
   const [screen, setScreen] = useState<Screen>(() => (autoStart ? "countdown" : "record"));
   const [runSummary, setRunSummary] = useState<RunSummary | null>(null);
@@ -78,7 +80,7 @@ export default function RecordFlow({
     );
   }
   if (screen === "card") {
-    return <RunRecordCardPage summary={runSummary} onClose={onBack} />;
+    return <RunRecordCardPage summary={runSummary} onClose={onBack} onShare={onShareCard} />;
   }
   return (
     <RecordPage
