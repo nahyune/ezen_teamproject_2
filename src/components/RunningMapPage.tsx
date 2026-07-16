@@ -1,27 +1,50 @@
+import { useState } from "react";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
-import iconSparkle from "../assets/icons/sparkle.svg";
-import runMapImg from "../assets/img/run-map.png";
 import MusicPlayerBar from "./MusicPlayerBar";
+import MapBackdrop from "./MapBackdrop";
 import { BackButton } from "./Icons";
+
+export const RUNNING_MAP_LOCATION = { lat: 37.5769, lng: 126.9828 }; // 경복궁과 안국역 사이
+export const RUNNING_MAP_DESTINATION = { lat: 37.5795, lng: 126.9872 };
+export const RUNNING_MAP_WAYPOINTS = [
+  { lat: 37.5778, lng: 126.9848 },
+  { lat: 37.5788, lng: 126.9861 },
+];
+export const RUNNING_ROUTE_DURATION_MS = 600000;
+
+export type MapPoint = { lat: number; lng: number };
 
 const formatTime = (total: number) =>
   `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
 
-// 지도 위라 스탯 라벨까지 전부 흰색 (러닝 화면은 라벨이 회색)
 function Stat({ value, label }: { value: string; label: string }) {
+  const paceValueOffset = label === "평균 페이스" ? " translate-x-[3px]" : "";
+  const paceLabelOffset = label === "평균 페이스" ? " -translate-x-[4px]" : "";
+
   return (
-    <div className="flex flex-col items-center gap-1 text-white">
-      <span className="font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap">
+    <div className="flex w-22 flex-col items-center gap-1 text-center text-white">
+      <span className={"w-full text-center font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap tabular-nums" + paceValueOffset}>
         {value}
       </span>
-      <span className="text-[16px] leading-[1.3] tracking-[-0.48px]">{label}</span>
+      <span className={"w-full text-center text-[16px] leading-[1.3] tracking-[-0.48px]" + paceLabelOffset}>
+        {label}
+      </span>
     </div>
   );
 }
 
 type Props = {
   seconds: number;
+  distance: string;
+  pace: string;
+  bpm: number;
   paused: boolean;
+  roadPath: MapPoint[];
+  routeProgress: number;
+  mapCenter?: MapPoint;
+  mapLevel?: number;
+  markerFollowsCenter?: boolean;
+  showRoutePreview?: boolean;
   onTogglePause: () => void;
   onBack: () => void;
   onMusicConnect?: () => void;
@@ -29,28 +52,44 @@ type Props = {
   onChatbot?: () => void;
 };
 
-// ── 기록 — 지도(음악x) (Figma 411:5420) ─────────────────────
-// 러닝 화면에서 코스 칩을 누르면 나오는 지도 뷰. 타이머 상태는
-// RunningPage가 소유하므로 지도를 보는 동안에도 초가 계속 오른다.
-// 위치 값은 시안 좌표에서 상태바(47px)를 뺀 기준.
 export default function RunningMapPage({
   seconds,
+  distance,
+  pace,
+  bpm,
   paused,
+  roadPath,
+  routeProgress,
+  mapCenter = RUNNING_MAP_LOCATION,
+  mapLevel = 4,
+  markerFollowsCenter = true,
+  showRoutePreview = true,
   onTogglePause,
   onBack,
   onMusicConnect,
   musicConnected,
   onChatbot,
 }: Props) {
+  const [initialRouteProgress] = useState(routeProgress);
+
   return (
     <div className="relative flex-1 overflow-hidden">
-      {/* 지도 배경 + 상하 스크림 */}
-      <img
-        className="absolute inset-0 h-full w-full object-cover"
-        src={runMapImg}
-        alt=""
-        aria-hidden
-      />
+      <div className="absolute inset-0">
+        <MapBackdrop
+          center={mapCenter}
+          interactive
+          level={mapLevel}
+          markerPosition={roadPath[0] ?? mapCenter}
+          markerVariant="orange"
+          markerAnimated={!paused && roadPath.length > 1}
+          markerFollowsCenter={markerFollowsCenter}
+          markerPath={roadPath.length > 1 ? roadPath : undefined}
+          markerPathDurationMs={RUNNING_ROUTE_DURATION_MS}
+          showTraveledPath
+          showRoutePreview={showRoutePreview}
+          traveledPathProgress={initialRouteProgress}
+        />
+      </div>
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -59,34 +98,22 @@ export default function RunningMapPage({
         }}
       />
 
-      {/* 뒤로가기 (러닝 화면으로) */}
       <BackButton
         onClick={onBack}
-        className="absolute top-[calc(var(--statusbar-h)+46px)] left-3.5 z-10"
+        className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-10 drop-shadow-[0_0_4px_rgba(0,0,0,0.75)]"
       />
 
-      {/* 진행 거리 / 목표 거리 */}
-      <p className="absolute top-[calc(var(--statusbar-h)+37px)] left-17.25 flex items-baseline gap-1.5 leading-[0.95] whitespace-nowrap">
-        <span className="font-display text-[48px] text-primary-lime">3.42</span>
+      <p className="absolute top-[calc(var(--statusbar-h)+37px)] left-13.75 flex min-w-[164px] items-baseline justify-center gap-1.5 leading-[0.95] whitespace-nowrap">
+        <span className="font-display text-[48px] text-primary-lime tabular-nums">{distance}</span>
         <span className="text-[32px] text-[#b1b1b1]">/8km</span>
       </p>
 
-      {/* 시간 · 평균 페이스 · BPM — 러닝 화면과 같은 숫자가 이어진다 */}
-      <div className="absolute top-[calc(var(--statusbar-h)+111px)] left-1/2 flex -translate-x-1/2 items-start gap-11">
+      <div className="absolute top-[calc(var(--statusbar-h)+105px)] left-1/2 flex -translate-x-1/2 items-start gap-4 min-[390px]:gap-7">
         <Stat value={formatTime(seconds)} label="시간" />
-        <Stat value={`5'30"`} label="평균 페이스" />
-        <Stat value="156" label="BPM" />
+        <Stat value={pace} label="평균 페이스" />
+        <Stat value={String(bpm)} label="BPM" />
       </div>
 
-      {/* 현재 위치 마커 — 피그마와 같은 링 달린 마커 */}
-      <img
-        className="absolute top-[42%] left-[40%] size-6"
-        src={iconSparkle}
-        alt=""
-        aria-hidden
-      />
-
-      {/* 챗봇 · 일시정지 */}
       <div className="absolute bottom-43 left-1/2 flex -translate-x-1/2 flex-col items-center gap-5">
         <button
           type="button"

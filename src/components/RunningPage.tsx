@@ -1,23 +1,86 @@
 import { useEffect, useState } from "react";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
-import RunningMapPage from "./RunningMapPage";
+import RunningMapPage, {
+  RUNNING_MAP_DESTINATION,
+  RUNNING_MAP_LOCATION,
+  RUNNING_MAP_WAYPOINTS,
+  RUNNING_ROUTE_DURATION_MS,
+  type MapPoint,
+} from "./RunningMapPage";
 import MusicConnectPage from "./MusicConnectPage";
 import MusicPlayerBar from "./MusicPlayerBar";
 import PausedRunPage from "./PausedRunPage";
 import { BackButton } from "./Icons";
 
-const START_SECONDS = 16 * 60 + 47; // 디자인 시안의 16:47부터 시작
-
 const formatTime = (total: number) =>
   `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
 
+// 평균 페이스(초/km) → m'ss" 표기. 거리 0일 땐 0'00".
+const formatPace = (secPerKm: number) => {
+  if (!isFinite(secPerKm) || secPerKm <= 0) return `0'00"`;
+  const m = Math.floor(secPerKm / 60);
+  const s = Math.round(secPerKm % 60);
+  return `${m}'${String(s).padStart(2, "0")}"`;
+};
+
+// 시뮬레이션 기준 페이스 ≈ 5'30"/km (약 3.03 m/s)
+const BASE_SPEED_MPS = 1000 / 330;
+
+const getRouteLength = (path: MapPoint[]) =>
+  path.slice(1).reduce((total, point, index) => {
+    const prev = path[index];
+    return total + Math.hypot(point.lat - prev.lat, point.lng - prev.lng);
+  }, 0);
+
+const getPointOnRoute = (path: MapPoint[], targetDistance: number) => {
+  let travelled = 0;
+  for (let index = 1; index < path.length; index += 1) {
+    const start = path[index - 1];
+    const end = path[index];
+    const segmentLength = Math.hypot(end.lat - start.lat, end.lng - start.lng);
+    if (travelled + segmentLength >= targetDistance) {
+      const ratio = segmentLength === 0 ? 0 : (targetDistance - travelled) / segmentLength;
+      return {
+        lat: start.lat + (end.lat - start.lat) * ratio,
+        lng: start.lng + (end.lng - start.lng) * ratio,
+      };
+    }
+    travelled += segmentLength;
+  }
+  return path[path.length - 1] ?? RUNNING_MAP_LOCATION;
+};
+
+export type RunCourseMap = {
+  center: MapPoint;
+  path: MapPoint[];
+  level: number;
+};
+
+export type RunSummary = {
+  seconds: number;
+  distance: string;
+  pace: string;
+  bpm: number;
+  calories: number;
+  altitude: string;
+  mapPath?: MapPoint[];
+  mapProgress?: number;
+  mapPosition?: MapPoint;
+  mapCenter?: MapPoint;
+  mapLevel?: number;
+  mapShowRoutePreview?: boolean;
+};
+
 function Stat({ value, label }: { value: string; label: string }) {
+  const paceValueOffset = label === "평균 페이스" ? " translate-x-[3px]" : "";
+  const paceLabelOffset = label === "평균 페이스" ? " -translate-x-[4px]" : "";
+
   return (
-    <div className="flex flex-col items-center gap-1">
-      <span className="font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-white">
+    <div className="flex w-22 flex-col items-center gap-1 text-center">
+      <span className={"w-full text-center font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-white tabular-nums" + paceValueOffset}>
         {value}
       </span>
-      <span className="text-[16px] leading-[1.3] tracking-[-0.48px] text-[#b1b1b1]">
+      <span className={"w-full text-center text-[16px] leading-[1.3] tracking-[-0.48px] text-[#b1b1b1]" + paceLabelOffset}>
         {label}
       </span>
     </div>
@@ -31,24 +94,79 @@ function Stat({ value, label }: { value: string; label: string }) {
 export default function RunningPage({
   onEnd,
   onBack,
+  onCancelRun,
   onChatbot,
+  selectedCourseLabel,
+  selectedCourseMap,
 }: {
-  onEnd?: () => void;
+  onEnd?: (summary: RunSummary) => void;
   onBack?: () => void;
+  onCancelRun?: () => void;
   onChatbot?: () => void;
+  selectedCourseLabel?: string | null;
+  selectedCourseMap?: RunCourseMap | null;
 }) {
-  const [seconds, setSeconds] = useState(START_SECONDS);
+  // 실제 러닝을 시작한 것처럼 모든 수치가 0에서 시작해 매초 시뮬레이션으로 오른다.
+  const [seconds, setSeconds] = useState(0);
+  const [distanceKm, setDistanceKm] = useState(0);
+  const [bpm, setBpm] = useState(0);
   const [paused, setPaused] = useState(false);
   const [view, setView] = useState<"stats" | "map">("stats");
   const [musicOpen, setMusicOpen] = useState(false);
   const [musicConnected, setMusicConnected] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
+  const [roadPath, setRoadPath] = useState<MapPoint[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch("/api/kakao-directions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        origin: RUNNING_MAP_LOCATION,
+        destination: RUNNING_MAP_DESTINATION,
+        waypoints: RUNNING_MAP_WAYPOINTS,
+      }),
+    })
+      .then(async (res) => {
+        const data = (await res.json()) as { path?: MapPoint[]; error?: string };
+        if (!res.ok) throw new Error(data.error ?? "카카오 도로 경로를 불러오지 못했습니다");
+        if (!cancelled && data.path && data.path.length > 1) setRoadPath(data.path);
+      })
+      .catch((err) => console.warn(err));
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (paused || confirmExit) return;
-    const timer = setInterval(() => setSeconds((s) => s + 1), 1000);
+    const timer = setInterval(() => {
+      setSeconds((s) => s + 1);
+      // 매초 이동 거리: 기준 페이스 ± 소폭 변동
+      setDistanceKm((d) => d + (BASE_SPEED_MPS + (Math.random() - 0.5) * 0.6) / 1000);
+      // 심박: 시작 후 러닝 구간(150~165)까지 서서히 오른 뒤 소폭 변동
+      setBpm((b) => (b < 150 ? Math.min(150, b + 8) : 150 + Math.round(Math.random() * 15)));
+    }, 1000);
     return () => clearInterval(timer);
   }, [paused, confirmExit]);
+
+  // 파생 수치(시간·거리로 계산)
+  const distance = distanceKm.toFixed(2);
+  const pace = formatPace(distanceKm > 0 ? seconds / distanceKm : 0);
+  const calories = Math.round(distanceKm * 62);
+  const altitude = `${Math.round(distanceKm * 4)}m`;
+  const routeProgress = ((seconds * 1000) % RUNNING_ROUTE_DURATION_MS) / RUNNING_ROUTE_DURATION_MS;
+  const selectedPath = selectedCourseMap?.path && selectedCourseMap.path.length > 1 ? selectedCourseMap.path : null;
+  const activeMapPath = selectedPath ?? (roadPath.length > 1 ? roadPath : []);
+  const activeRoutePosition =
+    activeMapPath.length > 1 ? getPointOnRoute(activeMapPath, routeProgress * getRouteLength(activeMapPath)) : RUNNING_MAP_LOCATION;
+  const activeMapCenter = selectedCourseMap?.center ?? RUNNING_MAP_LOCATION;
+  const activeMapLevel = selectedCourseMap?.level ?? 4;
+  const showRoutePreview = Boolean(selectedPath);
+  const routeChipLabel = `${selectedCourseLabel ?? "자유 러닝"} · 지도 보기`;
 
   // 지도/일시정지/음악 뷰로 바꿔도 이 컴포넌트가 유지되므로 타이머 상태가 이어진다.
   // 음악 화면을 닫으면 열기 직전 뷰(스탯/지도/일시정지)로 그대로 돌아간다.
@@ -68,8 +186,34 @@ export default function RunningPage({
     return (
       <PausedRunPage
         seconds={seconds}
+        distance={distance}
+        pace={pace}
+        bpm={bpm}
+        calories={calories}
+        altitude={altitude}
+        mapPath={activeMapPath}
+        mapProgress={routeProgress}
+        mapPosition={activeRoutePosition}
+        mapCenter={activeMapCenter}
+        mapLevel={activeMapLevel}
+        showRoutePreview={showRoutePreview}
         onResume={() => setPaused(false)}
-        onEnd={onEnd}
+        onEnd={() =>
+          onEnd?.({
+            seconds,
+            distance,
+            pace,
+            bpm,
+            calories,
+            altitude,
+            mapPath: activeMapPath,
+            mapProgress: routeProgress,
+            mapPosition: activeRoutePosition,
+            mapCenter: activeMapCenter,
+            mapLevel: activeMapLevel,
+            mapShowRoutePreview: showRoutePreview,
+          })
+        }
         onBack={onBack}
         onMusicConnect={() => setMusicOpen(true)}
         musicConnected={musicConnected}
@@ -81,7 +225,16 @@ export default function RunningPage({
     return (
       <RunningMapPage
         seconds={seconds}
+        distance={distance}
+        pace={pace}
+        bpm={bpm}
         paused={paused}
+        roadPath={activeMapPath}
+        routeProgress={routeProgress}
+        mapCenter={activeMapCenter}
+        mapLevel={activeMapLevel}
+        markerFollowsCenter
+        showRoutePreview={showRoutePreview}
         onTogglePause={() => setPaused(true)}
         onBack={() => setView("stats")}
         onMusicConnect={() => setMusicOpen(true)}
@@ -120,7 +273,7 @@ export default function RunningPage({
             </button>
             <button
               type="button"
-              onClick={onBack}
+              onClick={onCancelRun}
               className="mt-2.5 h-11 w-full text-[14px] text-white/50"
             >
               그만할래요
@@ -136,7 +289,7 @@ export default function RunningPage({
         onClick={() => setView("map")}
       >
         <span className="size-1.75 rounded-full bg-primary-lime" />
-        여의도 고구마런 (8km)
+        <span>{routeChipLabel}</span>
         <svg width={7} height={12} viewBox="0 0 7 12" fill="none" aria-hidden>
           <path
             d="M1 1l5 5-5 5"
@@ -149,16 +302,20 @@ export default function RunningPage({
       </button>
 
       {/* 누적 거리 */}
-      <p className="mt-15.25 flex items-baseline gap-1.25 font-display leading-[1.3] whitespace-nowrap">
-        <span className="text-[128px] tracking-[-2.56px] text-primary-lime">3.42</span>
-        <span className="text-[36px] tracking-[-0.72px] text-[#b1b1b1]">KM</span>
+      <p className="mt-15.25 flex w-full items-baseline justify-center font-display leading-[1.3] whitespace-nowrap">
+        <span className="inline-flex min-w-[296px] items-baseline justify-center gap-1.25">
+          <span className="text-[128px] tracking-[-2.56px] text-primary-lime tabular-nums">
+            {distance}
+          </span>
+          <span className="text-[36px] tracking-[-0.72px] text-[#b1b1b1]">KM</span>
+        </span>
       </p>
 
       {/* 시간 · 평균 페이스 · BPM */}
-      <div className="mt-5 flex items-start justify-center gap-11">
+      <div className="mt-5 flex items-start justify-center gap-4 min-[390px]:gap-7">
         <Stat value={formatTime(seconds)} label="시간" />
-        <Stat value={`5'30"`} label="평균 페이스" />
-        <Stat value="156" label="BPM" />
+        <Stat value={pace} label="평균 페이스" />
+        <Stat value={String(bpm)} label="BPM" />
       </div>
 
       <div className="mt-auto flex flex-col items-center gap-5">

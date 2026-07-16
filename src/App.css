@@ -120,14 +120,12 @@
   }
 }
 
-/* ── 챗봇(러니) 슬라이드 오버레이 ─────────────────────────────
+/* ── 챗봇(러니) 오버레이 ─────────────────────────────
    항상 마운트(대화 유지)하되, 닫힘 = 프레임 아래로 밀어둔 상태.
-   열면 아래→위로 스르륵, 닫으면 스르륵 내려간 뒤 visibility 로 숨김
-   (visibility 를 트랜지션 끝(0.32s)에 지연 적용해야 내려가는 모션이 보인다) */
+   슬라이드 없이 열면 즉시 나타나고 닫으면 즉시 사라진다. */
 .chatbot-overlay {
   position: absolute;
-  /* 상태바 바로 아래에서 시작 — 뒤 페이지의 상태바가 고정된 채로 보이고,
-     챗봇만 그 아래에서 스르륵 올라온다(상태바가 같이 딸려 올라오지 않음). */
+  /* 상태바 바로 아래에서 시작 — 뒤 페이지의 상태바가 고정된 채로 보인다. */
   top: var(--statusbar-h);
   left: 0;
   right: 0;
@@ -135,14 +133,10 @@
   z-index: 120;
   transform: translateY(100%);
   visibility: hidden;
-  transition:
-    transform 0.32s cubic-bezier(0.32, 0.72, 0.33, 1),
-    visibility 0s linear 0.32s;
 }
 .chatbot-overlay.is-open {
   transform: translateY(0);
   visibility: visible;
-  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.33, 1);
 }
 
 @keyframes feed-heart-float {

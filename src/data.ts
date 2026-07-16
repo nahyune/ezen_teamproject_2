@@ -84,7 +84,7 @@ export type CourseRecommendation = {
   nearby: string;
 };
 
-export type CourseDetailKind = "yeouido" | "nodulseom" | "gwanghwamun";
+export type CourseDetailKind = "yeouido" | "nodulseom" | "gwanghwamun" | "yeouidoGoguma" | "namsanHeart";
 
 type CourseHero = {
   image: string;
@@ -399,12 +399,12 @@ export const courseDetailPages: Record<CourseDetailKind, CourseDetailData> = {
     title: "여의도 한 바퀴",
     level: "초급자",
     rating: "5.0",
-    location: "영등포구 여의도동 · 내 위치에서 2.1km",
+    location: "영등포구 여의도동 · 여의나루역 출발",
     stats: [
       { label: "거리", value: "4.6km" },
       { label: "예상 시간", value: "30-40분" },
-      { label: "고도", value: "+12m" },
-      { label: "노면", value: "우레탄" },
+      { label: "고도", value: "±12m" },
+      { label: "노면", value: "공원길" },
     ],
     variants: [
       { title: "1바퀴 4.6km", level: "초급자", active: true },
@@ -413,45 +413,105 @@ export const courseDetailPages: Record<CourseDetailKind, CourseDetailData> = {
     ],
     amenities: [
       { value: "2", label: "화장실" },
+      { value: "5", label: "쉼터" },
       { value: "4", label: "급수대" },
       { value: "3", label: "보관함" },
-      { value: "여의도역", label: "지하철" },
-      { value: "5", label: "쉼터" },
+      { value: "여의나루", label: "지하철" },
     ],
-    social: "이번 주 328명이 뛴 코스",
+    social: "이번 주 328명이 뛴 여의도 한강공원 입문 코스",
     reviews: [
       '"밤 9시 이후엔 자전거 많아요"  ★ 5.0',
-      '"3km 지점 급수대 이용 가능해요"  ★ 4.5',
+      '"평지라 페이스 잡기 좋아요"  ★ 4.5',
     ],
   },
   nodulseom: {
     image: popularCourseDetailMap,
     title: "노들섬 코스",
-    level: "가볍게",
+    level: "초급자",
     rating: "5.0",
-    location: "영등포구 여의도동 · 내 위치에서 2.1km",
+    location: "용산구 양녕로 · 노들섬 출발",
     stats: [
-      { label: "거리", value: "4.6km" },
-      { label: "예상 시간", value: "30–40분" },
-      { label: "고도", value: "±12m" },
-      { label: "노면", value: "우레탄" },
+      { label: "거리", value: "1.5km" },
+      { label: "예상 시간", value: "약 30분" },
+      { label: "고도", value: "±8m" },
+      { label: "노면", value: "산책로" },
     ],
     variants: [
-      { title: "1바퀴 4.6km", level: "가볍게", active: true },
-      { title: "2바퀴 9.2km", level: "제대로" },
-      { title: "반포까지 12km", level: "도전" },
+      { title: "섬 한 바퀴 1.5km", level: "초급자", active: true },
+      { title: "한강대교 연결 4km", level: "중급자" },
+      { title: "반포 방향 8km", level: "상급자" },
     ],
     amenities: [
       { value: "12", label: "화장실" },
+      { value: "3", label: "쉼터" },
       { value: "4", label: "급수대" },
       { value: "3", label: "보관함" },
-      { value: "노들역", label: "지하철" },
-      { value: "3", label: "쉼터" },
+      { value: "노들", label: "지하철" },
     ],
-    social: "이번 주 500명이 뛴 코스",
+    social: "이번 주 500명이 뛴 노들섬 산책로 코스",
     reviews: [
-      '"힘들 줄만 알았는데 끝나고 나니 또 뛰고 싶어졌습니다."  ★ 5.0',
-      '"오늘은 기록보다 풍경을 즐기면서 천천히 뛰었습니다."  ★ 4.5',
+      '"가볍게 몸 풀고 한강 풍경 보기 좋아요."  ★ 5.0',
+      '"짧은 코스라 러닝 초반 워밍업으로 좋아요."  ★ 4.5',
+    ],
+  },
+  yeouidoGoguma: {
+    image: courseDetailMap,
+    title: "여의도 고구마런",
+    level: "추천",
+    rating: "5.0",
+    location: "영등포구 여의도동 · 여의나루역 2번 출구",
+    stats: [
+      { label: "거리", value: "8.0km" },
+      { label: "예상 시간", value: "45-55분" },
+      { label: "고도", value: "±6m" },
+      { label: "노면", value: "보행로" },
+    ],
+    variants: [
+      { title: "고구마런 8km", level: "추천", active: true },
+      { title: "반고구마런 6km", level: "가볍게" },
+      { title: "2바퀴 16km", level: "도전" },
+    ],
+    amenities: [
+      { value: "여의나루", label: "지하철" },
+      { value: "한강공원", label: "출발" },
+      { value: "서강대교", label: "경유" },
+      { value: "샛강", label: "공원" },
+      { value: "63빌딩", label: "전망" },
+    ],
+    social: "SNS 인증 3,500건 넘은 GPS 드로잉 코스",
+    reviews: [
+      '"길을 익히고 뛰어야 고구마 모양이 예쁘게 나와요."  ★ 5.0',
+      '"평지라 부담은 적지만 보행로가 좁은 구간은 조심해야 해요."  ★ 4.5',
+    ],
+  },
+  namsanHeart: {
+    image: courseDetailMap,
+    title: "남산 하트런",
+    level: "쉬움",
+    rating: "4.9",
+    location: "서울 · 약수 인근",
+    stats: [
+      { label: "거리", value: "8.8km" },
+      { label: "예상 시간", value: "약 53분" },
+      { label: "고도", value: "34-129m" },
+      { label: "노면", value: "도심로" },
+    ],
+    variants: [
+      { title: "하트런 8.8km", level: "쉬움", active: true },
+      { title: "중거리 템포런", level: "훈련" },
+      { title: "페이스 조절", level: "연습" },
+    ],
+    amenities: [
+      { value: "28", label: "화장실" },
+      { value: "21", label: "쉼터" },
+      { value: "11", label: "식수대" },
+      { value: "2", label: "자판기" },
+      { value: "약수", label: "지하철" },
+    ],
+    social: "남산을 하트 모양으로 달리는 8.8km GPS 코스",
+    reviews: [
+      '"초보자도 편하게 달릴 수 있지만 8km 후반 페이스 조절이 좋아요."  ★ 5.0',
+      '"약수·동대입구·버티고개 쪽 접근성이 좋아요."  ★ 4.5',
     ],
   },
   gwanghwamun: {
@@ -459,23 +519,23 @@ export const courseDetailPages: Record<CourseDetailKind, CourseDetailData> = {
     title: "광화문 댕댕런",
     level: "가본 곳",
     rating: "5.0",
-    location: "영등포구 여의도동 · 내 위치에서 2.1km",
+    location: "종로구 세종로 · 광화문 출발",
     stats: [
-      { label: "거리", value: "7.6km" },
-      { label: "예상 시간", value: "47-57분" },
-      { label: "고도", value: "±12m" },
-      { label: "노면", value: "우레탄" },
+      { label: "거리", value: "8.7km" },
+      { label: "예상 시간", value: "60-75분" },
+      { label: "고도", value: "±43m" },
+      { label: "노면", value: "보도" },
     ],
     variants: [
-      { title: "1바퀴 7.6km", level: "가볍게", active: true },
-      { title: "2바퀴 15.2km", level: "제대로" },
+      { title: "1바퀴 8.7km", level: "가볍게", active: true },
+      { title: "2바퀴 17.4km", level: "제대로" },
     ],
     amenities: [
       { value: "36", label: "화장실" },
+      { value: "3", label: "쉼터" },
       { value: "6", label: "급수대" },
       { value: "3", label: "자판기" },
       { value: "광화문역", label: "지하철" },
-      { value: "3", label: "쉼터" },
     ],
     social: "이번 주 275명이 뛴 코스",
     reviews: [

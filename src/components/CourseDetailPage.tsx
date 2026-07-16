@@ -1,25 +1,104 @@
+import { useState } from "react";
 import { courseDetailPages, type CourseDetailKind } from "../data";
+import { GWANGHWAMUN_DOG_RUN_CENTER, GWANGHWAMUN_DOG_RUN_PATH } from "../data/gwanghwamunDogRoute";
+import { YEOUIDO_SWEET_POTATO_CENTER, YEOUIDO_SWEET_POTATO_PATH } from "../data/yeouidoSweetPotatoRoute";
+import { NAMSAN_HEART_CENTER, NAMSAN_HEART_PATH } from "../data/namsanHeartRoute";
+import { YEOUIDO_LOOP_CENTER, YEOUIDO_LOOP_PATH } from "../data/yeouidoLoopRoute";
+import { NODULSEOM_CENTER, NODULSEOM_PATH } from "../data/nodulseomRoute";
 import { BackButton } from "./Icons";
+import MapBackdrop from "./MapBackdrop";
 import "./CourseDetailPage.css";
+
 
 type Props = {
   onBack: () => void;
+  onStartCourse: () => void;
   kind: CourseDetailKind;
 };
 
-export default function CourseDetailPage({ onBack, kind }: Props) {
+const mapCourseConfig: Partial<Record<CourseDetailKind, { center: { lat: number; lng: number }; path: { lat: number; lng: number }[]; level: number }>> = {
+  yeouido: {
+    center: YEOUIDO_LOOP_CENTER,
+    path: YEOUIDO_LOOP_PATH,
+    level: 5,
+  },
+  nodulseom: {
+    center: NODULSEOM_CENTER,
+    path: NODULSEOM_PATH,
+    level: 5,
+  },
+  gwanghwamun: {
+    center: GWANGHWAMUN_DOG_RUN_CENTER,
+    path: GWANGHWAMUN_DOG_RUN_PATH,
+    level: 6,
+  },
+  yeouidoGoguma: {
+    center: YEOUIDO_SWEET_POTATO_CENTER,
+    path: YEOUIDO_SWEET_POTATO_PATH,
+    level: 6,
+  },
+  namsanHeart: {
+    center: NAMSAN_HEART_CENTER,
+    path: NAMSAN_HEART_PATH,
+    level: 6,
+  },
+};
+
+export default function CourseDetailPage({ onBack, onStartCourse, kind }: Props) {
   const detail = courseDetailPages[kind];
+  const mapConfig = mapCourseConfig[kind];
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   return (
     <section className="course-detail">
-      <div className="course-detail__hero">
-        <img src={detail.image} alt="" />
+      <div className={`course-detail__hero${mapConfig ? " course-detail__hero--map" : ""}`}>
+        {mapConfig ? (
+          <button
+            type="button"
+            className="course-detail__map-trigger"
+            aria-label="지도 전체화면으로 보기"
+            onClick={() => setIsMapOpen(true)}
+          >
+            <MapBackdrop
+              center={mapConfig.center}
+              level={mapConfig.level}
+              markerPosition={mapConfig.path[0]}
+              markerVariant="orange"
+              markerPath={mapConfig.path}
+              showTraveledPath
+              traveledPathProgress={1}
+            />
+          </button>
+        ) : (
+          <img src={detail.image} alt="" />
+        )}
       </div>
 
       <div className="course-detail__header-gradient" aria-hidden />
       <header className="course-detail__header">
         <BackButton onClick={onBack} label="추천 코스로 돌아가기" />
       </header>
+
+      {isMapOpen && mapConfig && (
+        <div className="course-detail__map-fullscreen">
+          <MapBackdrop
+            center={mapConfig.center}
+            interactive
+            level={mapConfig.level}
+            markerPosition={mapConfig.path[0]}
+            markerVariant="orange"
+            markerPath={mapConfig.path}
+            showTraveledPath
+            traveledPathProgress={1}
+          />
+          <div className="course-detail__map-fullscreen-gradient" aria-hidden />
+          <BackButton
+            onClick={() => setIsMapOpen(false)}
+            label="지도 닫기"
+            className="course-detail__map-fullscreen-back"
+          />
+        </div>
+      )}
 
       <main className="course-detail__content">
         <section className="course-detail__summary">
@@ -83,7 +162,7 @@ export default function CourseDetailPage({ onBack, kind }: Props) {
 
       <div className="course-detail__cta">
         <button className="course-detail__route" type="button">길찾기</button>
-        <button className="course-detail__start" type="button">이 코스로 러닝 시작</button>
+        <button className="course-detail__start" type="button" onClick={onStartCourse}>이 코스로 러닝 시작</button>
       </div>
     </section>
   );
