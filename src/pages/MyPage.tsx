@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { profileData, profileStats, highlights, myRecords, type MyRecord } from "../data";
 import { useUserProfile } from "../lib/userProfile";
+import ProfileMusicBar from "../components/ProfileMusicBar";
 import flameIcon from "../assets/icons/mypage-flame.svg";
 import hlStreak from "../assets/icons/mypage-hl-streak.svg";
 import hlRace from "../assets/icons/mypage-hl-race.svg";
@@ -95,25 +96,30 @@ export default function MyPage() {
   };
   return (
     <div className="flex flex-col gap-5 pb-[130px]">
-      <section className="flex items-center gap-4 pt-3.5 px-[18px] pb-1.5">
-        <div className="flex-none w-[84px] h-[84px] rounded-full overflow-hidden">
-          <img className="w-full h-full object-cover" src={avatarSrc} alt="" />
-        </div>
-        <div className="flex-1 min-w-0 flex flex-col gap-[7px]">
-          <div className="flex items-center gap-2">
-            <p className="text-2xl font-semibold tracking-[-0.48px] text-white">
-              {profile.name}
-            </p>
-            <span className="px-2.5 py-1 rounded-full bg-primary-lime font-display text-[11px] tracking-[0.33px] text-black">
-              {profileData.level}
-            </span>
+      <section className="flex flex-col gap-4 pt-3.5 px-[18px] pb-1.5">
+        <div className="flex items-center gap-4">
+          {/* 뮤직 바가 추가돼 세로가 깊어진 만큼 아바타를 84 → 96px 로 키움 */}
+          <div className="flex-none w-[96px] h-[96px] rounded-full overflow-hidden">
+            <img className="w-full h-full object-cover" src={avatarSrc} alt="" />
           </div>
-          <p className="text-sm tracking-[-0.42px] text-white/55">{profile.bio}</p>
-          <div className="inline-flex w-fit max-w-full shrink-0 self-start items-center gap-1 whitespace-nowrap rounded-full border border-pill-border bg-pill px-3.5 py-2 text-sm font-medium leading-none tracking-[-0.42px] text-[#f6f6ed]">
-            <img className="w-3.5 h-3.5" src={flameIcon} alt="" />
-            <span>{profileData.streakDays}일 연속 러닝 중</span>
+          <div className="flex-1 min-w-0 flex flex-col gap-[7px]">
+            <div className="flex items-center gap-2">
+              <p className="text-2xl font-semibold tracking-[-0.48px] text-white">
+                {profile.name}
+              </p>
+              <span className="px-2.5 py-1 rounded-full bg-primary-lime font-display text-[11px] tracking-[0.33px] text-black">
+                {profileData.level}
+              </span>
+            </div>
+            <p className="text-sm tracking-[-0.42px] text-white/55">{profile.bio}</p>
+            <div className="inline-flex w-fit max-w-full shrink-0 self-start items-center gap-1 whitespace-nowrap rounded-full border border-pill-border bg-pill px-3.5 py-2 text-sm font-medium leading-none tracking-[-0.42px] text-[#f6f6ed]">
+              <img className="w-3.5 h-3.5" src={flameIcon} alt="" />
+              <span>{profileData.streakDays}일 연속 러닝 중</span>
+            </div>
           </div>
         </div>
+        {/* 프로필 뮤직 바 — 대표 러닝곡 하이라이트 30초 순차 재생 (곡 없으면 미표시) */}
+        <ProfileMusicBar />
       </section>
 
       <section className="pt-3.5 px-[18px] pb-1.5">
