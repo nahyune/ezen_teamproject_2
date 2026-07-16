@@ -1,9 +1,19 @@
-import { BackButton } from "./Icons";
 import iconShare from "../assets/icons/share.svg";
-import iconMarker from "../assets/icons/finish-marker.svg";
-import routeOutline from "../assets/icons/finish-route-1.svg";
-import routeLine from "../assets/icons/finish-route-2.svg";
-import finishMapImg from "../assets/img/finish-map.png";
+import MapBackdrop from "./MapBackdrop";
+import { RUNNING_MAP_LOCATION } from "./RunningMapPage";
+import type { RunSummary } from "./RunningPage";
+
+const formatTime = (total: number) =>
+  `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+
+const fallbackSummary: RunSummary = {
+  seconds: 51 * 60 + 17,
+  distance: "8.43",
+  pace: `6'05"`,
+  bpm: 162,
+  calories: 512,
+  altitude: "12m",
+};
 
 function Stat({ value, label, suffix }: { value: string; label: string; suffix?: string }) {
   return (
@@ -23,93 +33,58 @@ function Stat({ value, label, suffix }: { value: string; label: string; suffix?:
   );
 }
 
-// 완주 코스 지도 위 km 뱃지 위치 (카드 기준 px)
-const kmBadges = [
-  { label: "1 km", left: 292, top: 242 },
-  { label: "2 km", left: 263, top: 292 },
-  { label: "3 km", left: 185, top: 308 },
-  { label: "4 km", left: 102, top: 264 },
-  { label: "5 km", left: 52, top: 195 },
-  { label: "6 km", left: 31, top: 114 },
-  { label: "7 km", left: 126, top: 115 },
-  { label: "8 km", left: 208, top: 162 },
-];
 
-// ── 기록 — 러닝완료 (Figma 411:5563) ────────────────────────
-// 일시정지 화면에서 종료 버튼을 길게 누르면 나오는 결과 화면.
-// 뒤로가기(<)를 누르면 기록하기 첫 화면으로 돌아간다.
 export default function RunCompletePage({
-  onBack,
+  summary,
   onCreateCard,
 }: {
-  onBack?: () => void;
+  summary?: RunSummary | null;
   onCreateCard?: () => void;
 }) {
+  const result = summary ?? fallbackSummary;
+  const cadence = summary ? String(Math.round(result.bpm * 1.06)) : "172";
   return (
-    <div className="scrollbar-hidden flex flex-1 min-h-0 flex-col items-center overflow-y-auto bg-black">
-      <header className="mt-3 flex w-full shrink-0 items-center justify-between px-4.5 py-4">
-        <BackButton onClick={onBack} />
+    <div className="scrollbar-hidden relative flex flex-1 min-h-0 animate-run-complete-fade flex-col items-center overflow-y-auto bg-black">
+      <div className="fixed top-0 left-0 right-0 z-10 h-[var(--statusbar-h)] bg-black" aria-hidden />
+      <header className="mt-[calc(var(--statusbar-h)+12px)] flex h-13 w-full shrink-0 items-center justify-end px-4.5">
         <button type="button" className="size-6.5" aria-label="공유">
           <img className="size-full" src={iconShare} alt="" />
         </button>
       </header>
 
-      {/* 총 거리 */}
       <p className="flex shrink-0 items-baseline gap-1.25 font-display leading-[1.3] whitespace-nowrap">
-        <span className="text-[128px] tracking-[-2.56px] text-primary-lime">8.43</span>
+        <span className="text-[128px] tracking-[-2.56px] text-primary-lime tabular-nums">{result.distance}</span>
         <span className="text-[36px] tracking-[-0.72px] text-[#b1b1b1]">KM</span>
       </p>
 
-      {/* 6개 스탯 그리드 (2행 × 3열) */}
       <div className="mt-4 flex w-87.5 shrink-0 flex-col gap-8">
         <div className="flex items-start justify-between">
-          <Stat value={`6'05"`} label="평균 페이스" />
-          <Stat value="172" label="케이던스" />
-          <Stat value="51:17" label="시간" />
+          <Stat value={result.pace} label="평균 페이스" />
+          <Stat value={cadence} label="케이던스" />
+          <Stat value={formatTime(result.seconds)} label="시간" />
         </div>
         <div className="flex items-start justify-between">
-          <Stat value="512" label="칼로리" />
-          <Stat value="12m" label="고도" />
-          <Stat value="162" label="BPM" suffix="♡" />
+          <Stat value={String(result.calories)} label="칼로리" />
+          <Stat value={result.altitude} label="고도" />
+          <Stat value={String(result.bpm)} label="BPM" suffix="♡" />
         </div>
       </div>
 
-      {/* 완주 코스 지도 카드 — 경로/뱃지가 지도 크롭에 맞춰져 있어
-          이미지는 시안과 동일한 크기·위치로 고정한다 */}
       <div className="relative mt-5 mb-5 h-102.75 w-96.75 shrink-0 overflow-hidden rounded-card bg-white">
-        <img
-          className="absolute -top-27.5 -left-22.75 h-183.25 w-149.5 max-w-none object-cover opacity-67"
-          src={finishMapImg}
-          alt=""
-          aria-hidden
+        <MapBackdrop
+          center={result.mapCenter ?? result.mapPosition ?? RUNNING_MAP_LOCATION}
+          level={result.mapLevel ?? 4}
+          markerPosition={result.mapPosition ?? RUNNING_MAP_LOCATION}
+          markerVariant="orange"
+          markerPath={result.mapPath && result.mapPath.length > 1 ? result.mapPath : undefined}
+          showTraveledPath
+          showRoutePreview={result.mapShowRoutePreview ?? false}
+          traveledPathProgress={result.mapProgress ?? 1}
         />
 
-        <span className="absolute top-4.5 left-3.75 flex h-8.25 w-33.25 items-center justify-center rounded-[5px] bg-white text-[14px] leading-[1.3] tracking-[-0.42px] text-black">
+        <span className="absolute top-4.5 left-3.75 z-10 flex h-8.25 w-33.25 items-center justify-center rounded-[5px] bg-white text-[14px] leading-[1.3] tracking-[-0.42px] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
           서울특별시, 대한민국
         </span>
-
-        {/* 달린 경로 (외곽선 + 라임 라인) */}
-        <div className="absolute top-28 left-13.25 h-50.5 w-71">
-          <img className="absolute inset-[-2%] size-auto max-w-none h-[104%] w-[104%]" src={routeOutline} alt="" aria-hidden />
-          <img className="absolute inset-[-2%] size-auto max-w-none h-[104%] w-[104%]" src={routeLine} alt="" aria-hidden />
-        </div>
-
-        {kmBadges.map((b) => (
-          <span
-            key={b.label}
-            className="absolute flex h-5 w-12 items-center justify-center rounded-full bg-white text-center text-[14px] font-medium leading-[1.3] tracking-[-0.42px] whitespace-nowrap text-black"
-            style={{ left: b.left, top: b.top }}
-          >
-            {b.label}
-          </span>
-        ))}
-
-        <img
-          className="absolute top-45.75 left-60.75 size-6"
-          src={iconMarker}
-          alt=""
-          aria-hidden
-        />
       </div>
 
       <button

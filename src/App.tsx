@@ -23,8 +23,47 @@ import ChallengeDetailPage from "./pages/ChallengeDetailPage";
 import MagazineDetailPage from "./pages/MagazineDetailPage";
 import RecordFlow from "./components/RecordFlow";
 import ChatbotPage from "./components/ChatbotPage";
-import type { CourseDetailKind, CourseExploreKind } from "./data";
+import { courseDetailPages, type CourseDetailKind, type CourseExploreKind } from "./data";
+import { GWANGHWAMUN_DOG_RUN_CENTER, GWANGHWAMUN_DOG_RUN_PATH } from "./data/gwanghwamunDogRoute";
+import { YEOUIDO_SWEET_POTATO_CENTER, YEOUIDO_SWEET_POTATO_PATH } from "./data/yeouidoSweetPotatoRoute";
+import { NAMSAN_HEART_CENTER, NAMSAN_HEART_PATH } from "./data/namsanHeartRoute";
+import { YEOUIDO_LOOP_CENTER, YEOUIDO_LOOP_PATH } from "./data/yeouidoLoopRoute";
+import { NODULSEOM_CENTER, NODULSEOM_PATH } from "./data/nodulseomRoute";
 import "./App.css";
+
+type RunCourseMap = {
+  center: { lat: number; lng: number };
+  path: { lat: number; lng: number }[];
+  level: number;
+};
+
+const runCourseMaps: Partial<Record<CourseDetailKind, RunCourseMap>> = {
+  yeouido: {
+    center: YEOUIDO_LOOP_CENTER,
+    path: YEOUIDO_LOOP_PATH,
+    level: 5,
+  },
+  nodulseom: {
+    center: NODULSEOM_CENTER,
+    path: NODULSEOM_PATH,
+    level: 5,
+  },
+  gwanghwamun: {
+    center: GWANGHWAMUN_DOG_RUN_CENTER,
+    path: GWANGHWAMUN_DOG_RUN_PATH,
+    level: 6,
+  },
+  yeouidoGoguma: {
+    center: YEOUIDO_SWEET_POTATO_CENTER,
+    path: YEOUIDO_SWEET_POTATO_PATH,
+    level: 6,
+  },
+  namsanHeart: {
+    center: NAMSAN_HEART_CENTER,
+    path: NAMSAN_HEART_PATH,
+    level: 6,
+  },
+};
 
 type Page =
   | "home"
@@ -45,170 +84,172 @@ export default function App() {
   const [page, setPage] = useState<Page>("home");
   const [courseExploreKind, setCourseExploreKind] = useState<CourseExploreKind>("nearby");
   const [courseDetailKind, setCourseDetailKind] = useState<CourseDetailKind>("yeouido");
-  // 기록 탭 진입 시 카운트다운부터 바로 시작할지 여부(홈 히어로 "오늘 기록 시작하기").
+  const [courseDetailBackPage, setCourseDetailBackPage] = useState<Page>("courses");
   const [recordAutoStart, setRecordAutoStart] = useState(false);
-  // 챗봇(러니)은 페이지가 아니라 "항상 뒤에 살아있는 오버레이" — 열림/닫힘만 토글.
-  // 닫아도 언마운트하지 않으므로 대화 내용이 유지되고, 밑의 화면(러닝 타이머 등)도 안 끊긴다.
+  const [selectedRunCourseLabel, setSelectedRunCourseLabel] = useState<string | null>(null);
+  const [selectedRunCourseMap, setSelectedRunCourseMap] = useState<RunCourseMap | null>(null);
   const [chatbotOpen, setChatbotOpen] = useState(false);
 
-  // Make the horizontal rows on the current screen draggable with the mouse.
   useEffect(() => initDragScroll(), [page]);
 
   useEffect(() => {
-    // 스크롤은 이제 창(window)이 아니라 폰 프레임 안(.phone-scroll)에서 일어난다.
-    // 페이지 전환 시 프레임 안쪽 스크롤을 맨 위로 리셋한다.
     document.querySelector(".phone-scroll")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [page]);
 
-  // 화면별 콘텐츠를 계산한 뒤, 마지막에 PhoneFrame 하나로 감싼다(프레임 통일).
+  const getRunCourseLabel = (kind: CourseDetailKind) => {
+    const detail = courseDetailPages[kind];
+    const distance = detail.stats.find((stat) => stat.label === "거리")?.value.replace(/\.0(?=km)/, "") ?? "";
+    return distance ? `${detail.title} (${distance})` : detail.title;
+  };
+
+  const navigateMain = (key: string) => {
+    if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
+    if (key === "record") {
+      setRecordAutoStart(false);
+      setSelectedRunCourseLabel(null);
+      setSelectedRunCourseMap(null);
+      setPage("record");
+    }
+    if (key === "courseDetail:gwanghwamun" || key === "courseDetail:yeouidoGoguma" || key === "courseDetail:namsanHeart" || key === "courseDetail:yeouido" || key === "courseDetail:nodulseom") {
+      const detailKind = key.replace("courseDetail:", "") as CourseDetailKind;
+      setCourseDetailKind(detailKind);
+      setCourseDetailBackPage("record");
+      setPage("courseDetail");
+    }
+  };
+
   const rendered = (() => {
-  if (page === "settings") {
-    return (
-      <div className="phone">
-        <SettingsPage onBack={() => setPage("my")} />
-      </div>
-    );
-  }
+    if (page === "settings") {
+      return (
+        <div className="phone">
+          <SettingsPage onBack={() => setPage("my")} />
+        </div>
+      );
+    }
 
-  if (page === "runners") {
-    return <RunnerExplorePage onBack={() => setPage("home")} />;
-  }
-
-  if (page === "schedule") {
-    return <ScheduleDetailPage onBack={() => setPage("home")} />;
-  }
-
-  if (page === "scheduleList") {
-    return (
-      <ScheduleListPage
-        onBack={() => setPage("home")}
-        onOpenSchedule={() => setPage("schedule")}
-      />
-    );
-  }
-
-  if (page === "race") {
-    return <RaceDetailPage onBack={() => setPage("home")} />;
-  }
-
-  if (page === "challengeDetail") {
-    return <ChallengeDetailPage onBack={() => setPage("home")} />;
-  }
-
-  if (page === "magazineDetail") {
-    return (
-      <MagazineDetailPage onBack={() => setPage("home")} />
-    );
-  }
-
-  if (page === "record") {
-    // 기록하기: 하단바 없이 폰 프레임에 꽉 차는 한 화면(스크롤 잠금).
-    // 지도 등 움직임은 각 화면 내부에서만 일어난다.
-    // 상태바는 PhoneFrame(statusBar="clear")이 프레임 최상단에 한 번만 그린다
-    // — 데스크톱: 가짜 상태바 / 실기기: 노치 안전영역 확보.
-    return (
-      <div className="relative flex h-full w-full max-w-107.5 flex-col overflow-hidden bg-black mx-auto">
-        <RecordFlow
-          autoStart={recordAutoStart}
+    if (page === "runners") return <RunnerExplorePage onBack={() => setPage("home")} />;
+    if (page === "schedule") return <ScheduleDetailPage onBack={() => setPage("home")} />;
+    if (page === "scheduleList") {
+      return (
+        <ScheduleListPage
           onBack={() => setPage("home")}
-          onChatbot={() => setChatbotOpen(true)}
+          onOpenSchedule={() => setPage("schedule")}
         />
-      </div>
-    );
-  }
+      );
+    }
+    if (page === "race") return <RaceDetailPage onBack={() => setPage("home")} />;
+    if (page === "challengeDetail") return <ChallengeDetailPage onBack={() => setPage("home")} />;
+    if (page === "magazineDetail") return <MagazineDetailPage onBack={() => setPage("home")} />;
 
-  if (page === "courses") {
-    return (
-      <div className="phone">
-        <CourseExplorePage
-          kind={courseExploreKind}
-          onBack={() => setPage("home")}
-          onOpenDetail={(detail) => {
-            setCourseDetailKind(detail);
-            setPage("courseDetail");
-          }}
-        />
-      </div>
-    );
-  }
+    if (page === "record") {
+      return (
+        <div className="relative mx-auto flex h-full w-full max-w-107.5 flex-col overflow-hidden bg-black">
+          <RecordFlow
+            autoStart={recordAutoStart}
+            selectedCourseLabel={selectedRunCourseLabel}
+            selectedCourseMap={selectedRunCourseMap}
+            onBack={() => setPage("home")}
+            onChatbot={() => setChatbotOpen(true)}
+            onNavigate={navigateMain}
+          />
+        </div>
+      );
+    }
 
-  if (page === "courseDetail") {
-    return (
-      <div className="phone">
-        <CourseDetailPage kind={courseDetailKind} onBack={() => setPage("courses")} />
-      </div>
-    );
-  }
+    if (page === "courses") {
+      return (
+        <div className="phone">
+          <CourseExplorePage
+            kind={courseExploreKind}
+            onBack={() => setPage("home")}
+            onOpenDetail={(detail) => {
+              setCourseDetailKind(detail);
+              setCourseDetailBackPage("courses");
+              setPage("courseDetail");
+            }}
+          />
+        </div>
+      );
+    }
 
-  return (
-    <div className="phone">
-      <AppHeader
-        variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
-        onSettingsClick={() => setPage("settings")}
-        onChatbotClick={() => setChatbotOpen(true)}
-      />
-
-      {page === "my" ? (
-        <MyPage />
-      ) : page === "feed" ? (
-        <FeedPage />
-      ) : (
-        <main className="home">
-          {/* 오늘 기록 시작하기 → 기록 화면으로 전환해 바로 카운트다운 시작 */}
-          <HeroSection
-            onStartRecord={() => {
+    if (page === "courseDetail") {
+      return (
+        <div className="phone">
+          <CourseDetailPage
+            kind={courseDetailKind}
+            onBack={() => setPage(courseDetailBackPage)}
+            onStartCourse={() => {
+              setSelectedRunCourseLabel(getRunCourseLabel(courseDetailKind));
+              setSelectedRunCourseMap(runCourseMaps[courseDetailKind] ?? null);
               setRecordAutoStart(true);
               setPage("record");
             }}
           />
-          <CourseSection
-            onOpenNearby={() => {
-              setCourseExploreKind("nearby");
-              setPage("courses");
-            }}
-            onOpenPopular={() => {
-              setCourseExploreKind("popular");
-              setPage("courses");
-            }}
-            onOpenChallenge={() => {
-              setCourseExploreKind("challenge");
-              setPage("courses");
-            }}
-          />
-          <RunnerSection onViewAll={() => setPage("runners")} />
-          <ScheduleSection
-            onMore={() => setPage("scheduleList")}
-            onOpen={() => setPage("schedule")}
-          />
-          <RaceSection onOpenRace={() => setPage("race")} />
-          <ChallengeSection onOpenChallenge={() => setPage("challengeDetail")} />
-          <MagazineSection onOpenArticle={() => setPage("magazineDetail")} />
-        </main>
-      )}
+        </div>
+      );
+    }
 
-      <BottomNav
-        active={page === "my" || page === "feed" ? page : "home"}
-        onNavigate={(key) => {
-          if (key === "home" || key === "my" || key === "feed") setPage(key as Page);
-          // 기록 탭도 같은 SPA 안의 화면으로 전환한다(문서 리로드 없음).
-          if (key === "record") {
-            setRecordAutoStart(false);
-            setPage("record");
-          }
-        }}
-      />
-    </div>
-  );
+    return (
+      <div className="phone">
+        <AppHeader
+          variant={page === "my" ? "settings" : page === "feed" ? "feed" : "default"}
+          onSettingsClick={() => setPage("settings")}
+          onChatbotClick={() => setChatbotOpen(true)}
+        />
+
+        {page === "my" ? (
+          <MyPage />
+        ) : page === "feed" ? (
+          <FeedPage />
+        ) : (
+          <main className="home">
+            <HeroSection
+              onStartRecord={() => {
+                setSelectedRunCourseLabel(null);
+                setSelectedRunCourseMap(null);
+                setRecordAutoStart(true);
+                setPage("record");
+              }}
+            />
+            <CourseSection
+              onOpenNearby={() => {
+                setCourseExploreKind("nearby");
+                setPage("courses");
+              }}
+              onOpenPopular={() => {
+                setCourseExploreKind("popular");
+                setPage("courses");
+              }}
+              onOpenChallenge={() => {
+                setCourseExploreKind("challenge");
+                setPage("courses");
+              }}
+            />
+            <RunnerSection onViewAll={() => setPage("runners")} />
+            <ScheduleSection
+              onMore={() => setPage("scheduleList")}
+              onOpen={() => setPage("schedule")}
+            />
+            <RaceSection onOpenRace={() => setPage("race")} />
+            <ChallengeSection onOpenChallenge={() => setPage("challengeDetail")} />
+            <MagazineSection onOpenArticle={() => setPage("magazineDetail")} />
+          </main>
+        )}
+
+        <BottomNav
+          active={page === "my" || page === "feed" ? page : "home"}
+          onNavigate={navigateMain}
+        />
+      </div>
+    );
   })();
 
+  const clearStatusBar = page === "record" || (page === "courseDetail" && Boolean(runCourseMaps[courseDetailKind]));
+
   return (
-    // 기록하기는 몰입 화면(배경 풀블리드) → 상태바 투명. 그 외는 불투명.
-    <PhoneFrame statusBar={page === "record" ? "clear" : "solid"}>
+    <PhoneFrame statusBar={clearStatusBar ? "clear" : "solid"}>
       {rendered}
-      {/* 챗봇(러니) 오버레이 — 페이지 위로 아래에서 스르륵 올라오는 창(App.css .chatbot-overlay).
-          닫아도 언마운트하지 않고 프레임 아래로 밀어두기만 해서 대화·스크롤이 유지되고,
-          답변이 오는 도중 닫아도 뒤에서 계속 도착한다. 새로고침 시에만 초기화. */}
       <div
         className={`chatbot-overlay ${chatbotOpen ? "is-open" : ""}`}
         aria-hidden={!chatbotOpen || undefined}

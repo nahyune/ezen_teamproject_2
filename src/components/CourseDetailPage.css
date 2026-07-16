@@ -12,14 +12,35 @@
   @apply h-[290px] overflow-hidden bg-[#222427];
 }
 
+.course-detail__hero--map {
+  height: calc(290px + var(--statusbar-h));
+  margin-top: calc(var(--statusbar-h) * -1);
+}
+
+.course-detail__map-trigger {
+  @apply block h-full w-full cursor-pointer overflow-hidden text-left;
+}
+
+.course-detail__map-fullscreen {
+  @apply fixed inset-y-0 left-1/2 z-[180] w-[var(--frame-width)] max-w-full -translate-x-1/2 overflow-hidden bg-black;
+}
+
+.course-detail__map-fullscreen-gradient {
+  @apply pointer-events-none absolute inset-x-0 top-0 z-10 h-[170px];
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.92) 3.73%, rgba(122, 122, 122, 0) 100%);
+}
+
+.course-detail__map-fullscreen-back {
+  @apply absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-20 drop-shadow-[0_0_4px_rgba(0,0,0,0.75)];
+}
+
 .course-detail__hero img {
   @apply h-full w-full object-cover;
 }
 
 .course-detail__header-gradient {
-  @apply pointer-events-none fixed left-1/2 z-[95] h-[146px] w-[var(--frame-width)] max-w-full -translate-x-1/2;
-  /* 상태바 높이만큼 아래로 (모바일 --statusbar-h=0 이라 기존과 동일) */
-  top: calc(var(--statusbar-h) - 39px);
+  @apply pointer-events-none fixed left-1/2 z-[95] h-[170px] w-[calc(var(--frame-width)+40px)] max-w-[calc(100%+40px)] -translate-x-1/2;
+  top: 0;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.92) 3.73%, rgba(122, 122, 122, 0) 100%);
 }
 

@@ -32,9 +32,9 @@ const runningTips = [
 // ── 러닝 가이드 화면 (기록 탭 하위 페이지, 하단 네비 없음) ────
 export default function RunningGuidePage({ onBack }: { onBack?: () => void }) {
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex min-h-0 flex-1 flex-col">
       {/* 헤더: 뒤로가기 + 가운데 타이틀 (spacer로 광학 중앙 정렬 유지) */}
-      <header className="mt-3 flex items-center justify-between px-4.5 py-2.5">
+      <header className="mt-[calc(var(--statusbar-h)+12px)] flex items-center justify-between px-4.5 py-2.5">
         <BackButton onClick={onBack} />
         <h1 className="text-[24px] font-semibold leading-[1.3] tracking-[-0.48px]">
           러닝 가이드
@@ -42,7 +42,7 @@ export default function RunningGuidePage({ onBack }: { onBack?: () => void }) {
         <span className="size-6.5" aria-hidden />
       </header>
 
-      <main className="flex flex-col gap-12 px-4.5 pt-6 pb-12">
+      <main className="scrollbar-hidden flex min-h-0 flex-1 flex-col gap-12 overflow-y-auto px-4.5 pt-6 pb-24">
         <section className="flex flex-col gap-3">
           <h2 className="text-[20px] font-medium leading-[1.3] tracking-[-0.6px]">
             가이드 런

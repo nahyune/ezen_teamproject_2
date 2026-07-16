@@ -1,15 +1,36 @@
 import cardPhoto from "../assets/img/300img.png";
 import routeIcon from "../assets/icons/record-card-route.svg";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
+import type { RunSummary } from "./RunningPage";
 
 type Props = {
+  summary?: RunSummary | null;
   onClose?: () => void;
   onShare?: () => void;
 };
 
+const formatTime = (total: number) =>
+  `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+
+const formatCardDate = (date: Date) => {
+  const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+  const period = date.getHours() < 12 ? "오전" : "오후";
+  const hour = date.getHours() % 12 || 12;
+  const minute = String(date.getMinutes()).padStart(2, "0");
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${weekdays[date.getDay()]}요일 · ${period} ${hour}:${minute}`;
+};
+
+const formatShortDate = (date: Date) =>
+  `${String(date.getFullYear()).slice(2)}년 ${date.getMonth() + 1}월 ${date.getDate()}일 · 여의도`;
+
 // ── 기록 — 러닝 완료 (기록 카드) (Figma 767:314) ────────────
 // "기록 카드 만들기"를 누르면 뜨는, 완주 기록을 카드 형태로 보여주는 화면.
-export default function RunRecordCardPage({ onClose, onShare }: Props) {
+export default function RunRecordCardPage({ summary, onClose, onShare }: Props) {
+  const now = new Date();
+  const distance = summary?.distance ?? "8.43";
+  const seconds = summary?.seconds ?? 51 * 60 + 17;
+  const pace = summary?.pace ?? `6'05"`;
+
   return (
     <div className="scrollbar-hidden relative flex flex-1 min-h-0 flex-col overflow-y-auto bg-black pb-8">
       {/* 상태바 자리 불투명 검정 띠 — 스크롤 시 콘텐츠가 뒤로 사라지고, 흰 10:36 이 위에 얹힘.
@@ -22,7 +43,7 @@ export default function RunRecordCardPage({ onClose, onShare }: Props) {
         여의도 고구마런
       </h1>
       <p className="mt-2 px-6 text-[12px] text-white/55">
-        2026년 7월 13일 월요일 · 오전 10:19
+        {formatCardDate(now)}
       </p>
 
       <div className="mt-4.5 flex items-center gap-2.5 px-6">
@@ -46,11 +67,10 @@ export default function RunRecordCardPage({ onClose, onShare }: Props) {
           alt=""
           aria-hidden
         />
-        <div className="absolute inset-x-0 bottom-0 h-22.75 bg-gradient-to-b from-black/0 to-black" />
-
-        <div className="absolute left-8 top-6.5 flex flex-col gap-1 text-white">
+        <div className="absolute inset-x-0 bottom-0 h-22.75 bg-gradient-to-b from-black/0 to-black/45" />
+        <div className="absolute left-8 top-6.5 flex flex-col gap-[1px] text-white">
           <p className="text-[24px] font-semibold tracking-[-0.48px]">오늘 낮 러닝</p>
-          <p className="text-[14px] tracking-[-0.42px]">26년 7월 14일 · 여의도</p>
+          <p className="text-[14px] tracking-[-0.42px]">{formatShortDate(now)}</p>
         </div>
 
         <img
@@ -60,18 +80,18 @@ export default function RunRecordCardPage({ onClose, onShare }: Props) {
           aria-hidden
         />
 
-        <div className="absolute left-7.75 top-38 flex flex-col gap-2.5">
+        <div className="absolute left-8 top-[170px] flex flex-col gap-2.5">
           <div>
-            <p className="text-[12px] text-white">거리</p>
-            <p className="font-display text-[22px] tracking-[-0.44px] text-[#f5f5f7]">8.43 km</p>
+            <p className="text-[12px] leading-[1.25] text-white">거리</p>
+            <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7]">{distance} km</p>
           </div>
           <div>
-            <p className="text-[12px] text-white">시간</p>
-            <p className="font-display text-[22px] tracking-[-0.44px] text-[#f5f5f7]">51:17</p>
+            <p className="text-[12px] leading-[1.25] text-white">시간</p>
+            <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7]">{formatTime(seconds)}</p>
           </div>
           <div>
-            <p className="text-[12px] text-white">평균 페이스</p>
-            <p className="font-display text-[22px] tracking-[-0.44px] text-[#f5f5f7]">6'05"</p>
+            <p className="text-[12px] leading-[1.25] text-white">평균 페이스</p>
+            <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7]">{pace}</p>
           </div>
         </div>
       </div>

@@ -28,12 +28,37 @@
     }
   }
 
+  /* 러닝 완료 화면: 길게 눌러 종료 후 결과 페이지가 부드럽게 나타난다 */
+  --animate-run-complete-fade: run-complete-fade 0.36s ease-out both;
+
+  @keyframes run-complete-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   /* 음악 플레이어 곡명 마퀴: 두 벌 이어붙인 트랙을 -50% 밀어 무한 반복 */
   --animate-music-marquee: music-marquee 9s linear infinite;
 
   @keyframes music-marquee {
     to {
       translate: -50% 0;
+    }
+  }
+
+  /* 말풍선: 위아래로 부드럽게 둥둥 떠다니는 모션 */
+  --animate-bubble-float: bubble-float 2.2s ease-in-out infinite;
+
+  @keyframes bubble-float {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -4px;
     }
   }
 
