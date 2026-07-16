@@ -34,7 +34,8 @@ function InputRow({
   );
 }
 
-/** 라벨+설명 2줄 + 우측 액션(회색 14 + 셰브런) — 레벨/목표/러닝곡 행 */
+/** 라벨+설명 한 줄 + 우측 액션(회색 14 + 셰브런) — 레벨/목표/러닝곡 행.
+ *  설명이 넘치면 …으로 잘림 */
 function ActionRow({
   label,
   desc,
@@ -50,7 +51,7 @@ function ActionRow({
     <div className="flex items-start justify-between">
       <div className="flex min-w-0 flex-col gap-1">
         <span className="btn-text text-[var(--primary-lime)]">{label}</span>
-        <span className="body-1 text-[#8a8a8a]">{desc}</span>
+        <span className="body-1 truncate text-[#8a8a8a]">{desc}</span>
       </div>
       <button
         type="button"
@@ -67,7 +68,14 @@ function ActionRow({
   );
 }
 
-export default function ProfileEditPage({ onBack }: { onBack?: () => void }) {
+export default function ProfileEditPage({
+  onBack,
+  onOpenSong,
+}: {
+  onBack?: () => void;
+  /** "러닝곡 추가" → 나만의 대표 러닝 곡 페이지로 */
+  onOpenSong?: () => void;
+}) {
   const { profile, updateProfile, avatarSrc } = useUserProfile();
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -151,8 +159,14 @@ export default function ProfileEditPage({ onBack }: { onBack?: () => void }) {
             <ActionRow label="목표" desc={profile.goalKeywords.join("  ")} action="키워드 수정" />
             <ActionRow
               label="나만의 대표 러닝 곡"
-              desc={profile.song ? `${profile.song.title} – ${profile.song.artist}` : "대표 러닝곡을 추가해보세요."}
+              desc={
+                profile.songs.length
+                  ? // 상단 3곡을 가로 한 줄로 나열 — 넘치면 …으로 잘림 (ActionRow truncate)
+                    profile.songs.slice(0, 3).map((s) => `${s.title} – ${s.artist}`).join(", ")
+                  : "대표 러닝곡을 추가해보세요."
+              }
               action="러닝곡 추가"
+              onAction={onOpenSong}
             />
           </div>
         </div>

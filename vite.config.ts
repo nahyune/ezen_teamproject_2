@@ -18,21 +18,28 @@ function devApiBridge(): Plugin {
       if (env.ANTHROPIC_MODEL) process.env.ANTHROPIC_MODEL = env.ANTHROPIC_MODEL
       if (env.KAKAO_REST_API_KEY) process.env.KAKAO_REST_API_KEY = env.KAKAO_REST_API_KEY
       if (env.KAKAO_REST_KEY) process.env.KAKAO_REST_KEY = env.KAKAO_REST_KEY
+      if (env.YOUTUBE_API_KEY) process.env.YOUTUBE_API_KEY = env.YOUTUBE_API_KEY
 
-      const mountApi = (path: string, modulePath: string) => {
+      const mountApi = (path: string, modulePath: string, method: 'POST' | 'GET' = 'POST') => {
         server.middlewares.use(path, async (req, res, next) => {
-          if (req.method !== 'POST') return next()
+          if (req.method !== method) return next()
           try {
-            const chunks: Buffer[] = []
-            for await (const c of req) chunks.push(c as Buffer)
-            const body = Buffer.concat(chunks).toString('utf8')
+            // GET(music)은 본문 없이 쿼리스트링 그대로, POST(chat 등)는 JSON 본문 전달
+            let body: string | undefined
+            if (method === 'POST') {
+              const chunks: Buffer[] = []
+              for await (const c of req) chunks.push(c as Buffer)
+              body = Buffer.concat(chunks).toString('utf8')
+            }
 
             // 실제 배포 핸들러(api/*.ts)를 그대로 재사용한다.
             const mod = await server.ssrLoadModule(modulePath)
             const handler = mod.default as (req: Request) => Promise<Response>
 
-            const webReq = new Request(`http://localhost${path}`, {
-              method: 'POST',
+            // originalUrl: 마운트 경로에 잘리기 전 URL (쿼리스트링 포함)
+            const fullUrl = (req as typeof req & { originalUrl?: string }).originalUrl ?? path
+            const webReq = new Request(`http://localhost${fullUrl}`, {
+              method,
               headers: {
                 'content-type': 'application/json',
                 'x-forwarded-for': req.socket.remoteAddress ?? '127.0.0.1',
@@ -53,6 +60,7 @@ function devApiBridge(): Plugin {
 
       mountApi('/api/chat', '/api/chat.ts')
       mountApi('/api/kakao-directions', '/api/kakao-directions.ts')
+      mountApi('/api/music', '/api/music.ts', 'GET')
     },
   }
 }

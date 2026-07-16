@@ -156,3 +156,13 @@
 .feed-heart-float {
   animation: feed-heart-float 850ms ease-out forwards;
 }
+
+/* 대표곡 하이라이트 30초 창 채움 (HighlightPicker) — 재생 시작 시 0%->100%로 차오름 */
+@keyframes hl-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}

@@ -17,6 +17,7 @@ import CreateStoryPage, { type CreateStoryDraft } from "./pages/CreateStoryPage"
 import PhoneFrame from "./components/PhoneFrame";
 import SettingsPage from "./pages/SettingsPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
+import RunningSongPage from "./pages/RunningSongPage";
 import BottomNav from "./components/BottomNav";
 import RunnerExplorePage from "./pages/RunnerExplorePage";
 import ScheduleDetailPage from "./pages/ScheduleDetailPage";
@@ -86,6 +87,7 @@ type Page =
   | "my"
   | "settings"
   | "profileEdit"
+  | "songEdit"
   | "runners"
   | "schedule"
   | "scheduleList"
@@ -211,7 +213,18 @@ export default function App() {
     if (page === "profileEdit") {
       return (
         <div className="phone">
-          <ProfileEditPage onBack={() => setPage("settings")} />
+          <ProfileEditPage
+            onBack={() => setPage("settings")}
+            onOpenSong={() => setPage("songEdit")}
+          />
+        </div>
+      );
+    }
+
+    if (page === "songEdit") {
+      return (
+        <div className="phone">
+          <RunningSongPage onBack={() => setPage("profileEdit")} />
         </div>
       );
     }

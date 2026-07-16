@@ -2,6 +2,7 @@
 // 즉시 반영되고 localStorage 에 자동 저장된다(새로고침해도 유지, 인스타식 즉시 저장).
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { profileData } from "../data";
+import type { Song } from "./musicApi";
 
 export type UserProfile = {
   name: string; // AI 러니가 부르는 이름 · 마이페이지 표시
@@ -13,7 +14,9 @@ export type UserProfile = {
   avatar: string | null;
   levelDesc: string; // 러닝 레벨 설명 (예: "이제 달리기 시작한 런린이")
   goalKeywords: string[]; // 목표 키워드 (예: ["# 목표거리 완주", "# 꾸준히"])
-  song: { title: string; artist: string } | null; // 나만의 대표 러닝 곡 (표시형)
+  /** 나만의 대표 러닝 곡 목록 — 순서대로 표시, 첫 곡이 프로필 대표곡.
+   *  음악 API(유튜브뮤직) 연결 시 videoId 로 실제 재생 가능. */
+  songs: Song[];
 };
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -24,7 +27,7 @@ const DEFAULT_PROFILE: UserProfile = {
   avatar: null,
   levelDesc: "이제 달리기 시작한 런린이",
   goalKeywords: ["# 목표거리 완주", "# 꾸준히"],
-  song: null,
+  songs: [],
 };
 
 const STORAGE_KEY = "wrun-profile";
