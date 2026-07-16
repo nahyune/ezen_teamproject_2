@@ -488,22 +488,41 @@ export type MyRecord = {
   gpsArt?: 1 | 2;
   distanceKm: string;
   date: string;
+  caption: string;
+  cheers: number;
+  reposts: number;
+  comments: Array<{ author: string; text: string }>;
   pb?: boolean;
 };
 
+const myRecordComments = [
+  [
+    { author: "안정은", text: "오늘 페이스 정말 좋았어요!" },
+    { author: "러너_준", text: "다음 러닝도 응원할게요." },
+  ],
+  [
+    { author: "김페이스", text: "코스가 너무 좋아 보여요." },
+    { author: "도쿄원정대", text: "완주 수고했어요!" },
+  ],
+  [
+    { author: "서울원정대", text: "기록이 점점 좋아지네요." },
+    { author: "안정은", text: "다음에는 같이 달려요!" },
+  ],
+];
+
 export const myRecords: MyRecord[] = [
-  { image: record0708, distanceKm: "8.75", date: "7월 8일 · 경복궁" },
-  { image: record0707, distanceKm: "6.2", date: "7월 7일 · 여의도" },
-  { gpsArt: 1, distanceKm: "5.0", date: "7월 5일 · GPS 아트" },
-  { image: record0630, distanceKm: "4.8", date: "6월 30일 · 석촌호수" },
-  { image: record0628, distanceKm: "21.1", date: "6월 28일 · 하프 대회", pb: true },
-  { image: record0627, distanceKm: "5.2", date: "6월 27일 · 한강공원" },
-  { image: record0626, distanceKm: "7.4", date: "6월 26일 · 도심" },
-  { gpsArt: 2, distanceKm: "10.0", date: "6월 21일 · GPS 아트" },
-  { image: record0615, distanceKm: "6.5", date: "6월 15일 · 야간런" },
-  { image: record0612, distanceKm: "10.0", date: "6월 12일 · 10K 대회" },
-  { image: record0611, distanceKm: "3.2", date: "6월 11일 · 리커버리" },
-  { image: record0605, distanceKm: "12.6", date: "6월 5일 · 남산" },
+  { image: record0708, distanceKm: "8.75", date: "7월 8일 · 경복궁", caption: "아침 공기 좋았던 경복궁 러닝. 오늘도 기분 좋게 완주!", cheers: 28, reposts: 4, comments: myRecordComments[0] },
+  { image: record0707, distanceKm: "6.2", date: "7월 7일 · 여의도", caption: "여의도 한강을 따라 가볍게 달린 저녁 러닝.", cheers: 19, reposts: 2, comments: myRecordComments[1] },
+  { gpsArt: 1, distanceKm: "5.0", date: "7월 5일 · GPS 아트", caption: "오늘의 GPS 아트 완성. 코스를 따라 달리는 재미가 쏠쏠해요.", cheers: 34, reposts: 7, comments: myRecordComments[2] },
+  { image: record0630, distanceKm: "4.8", date: "6월 30일 · 석촌호수", caption: "석촌호수 한 바퀴, 가볍게 리듬 찾기.", cheers: 16, reposts: 1, comments: myRecordComments[0] },
+  { image: record0628, distanceKm: "21.1", date: "6월 28일 · 하프 대회", caption: "첫 하프 마라톤에서 새로운 PB 달성!", cheers: 52, reposts: 9, comments: myRecordComments[1], pb: true },
+  { image: record0627, distanceKm: "5.2", date: "6월 27일 · 한강공원", caption: "해 질 무렵 한강 러닝. 바람이 딱 좋았던 날.", cheers: 23, reposts: 3, comments: myRecordComments[2] },
+  { image: record0626, distanceKm: "7.4", date: "6월 26일 · 도심", caption: "익숙한 도심 코스를 새로운 페이스로 달려봤어요.", cheers: 21, reposts: 2, comments: myRecordComments[0] },
+  { gpsArt: 2, distanceKm: "10.0", date: "6월 21일 · GPS 아트", caption: "10km를 채우며 완성한 두 번째 GPS 아트.", cheers: 41, reposts: 8, comments: myRecordComments[1] },
+  { image: record0615, distanceKm: "6.5", date: "6월 15일 · 야간런", caption: "조용한 밤거리에서 집중한 6.5km.", cheers: 14, reposts: 1, comments: myRecordComments[2] },
+  { image: record0612, distanceKm: "10.0", date: "6월 12일 · 10K 대회", caption: "끝까지 페이스를 지키며 10K 완주!", cheers: 37, reposts: 6, comments: myRecordComments[0] },
+  { image: record0611, distanceKm: "3.2", date: "6월 11일 · 리커버리", caption: "몸을 풀어주는 짧고 편안한 리커버리 런.", cheers: 12, reposts: 1, comments: myRecordComments[1] },
+  { image: record0605, distanceKm: "12.6", date: "6월 5일 · 남산", caption: "오르막은 힘들었지만 정상에서 만난 풍경은 최고.", cheers: 31, reposts: 5, comments: myRecordComments[2] },
 ];
 
 export type SettingsRow =
