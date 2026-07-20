@@ -30,6 +30,7 @@ import CourseRecommendListPage from "./pages/CourseRecommendListPage";
 import RecordFlow from "./components/RecordFlow";
 import type { SharedRunCard } from "./components/RunRecordCardPage";
 import ChatbotPage from "./components/ChatbotPage";
+import LocationPermissionDialog from "./components/LocationPermissionDialog";
 import {
   courseDetailPages,
   feedStories,
@@ -110,6 +111,8 @@ export default function App() {
   const [selectedRunCourseLabel, setSelectedRunCourseLabel] = useState<string | null>(null);
   const [selectedRunCourseMap, setSelectedRunCourseMap] = useState<RunCourseMap | null>(null);
   const [chatbotOpen, setChatbotOpen] = useState(false);
+  // 온보딩 완료 후 main 최초 진입 시 한 번만 노출 (App은 이 시점에 처음 마운트됨)
+  const [showLocationPermission, setShowLocationPermission] = useState(true);
   // 기록하기 음악 연결 여부 — 기록 탭을 나갔다 와도 유지, 새로고침 시에만 초기화.
   const [recordMusicConnected, setRecordMusicConnected] = useState(false);
   const [feedStoryOpen, setFeedStoryOpen] = useState(false);
@@ -440,6 +443,9 @@ export default function App() {
       >
         <ChatbotPage onBack={() => setChatbotOpen(false)} />
       </div>
+      {showLocationPermission && (
+        <LocationPermissionDialog onClose={() => setShowLocationPermission(false)} />
+      )}
     </PhoneFrame>
   );
 }
