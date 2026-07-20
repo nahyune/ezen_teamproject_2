@@ -32,6 +32,7 @@ export default function RecordFlow({
   onChatbot,
   onNavigate,
   onShareCard,
+  onSaveCard,
 }: {
   autoStart?: boolean;
   selectedCourseLabel?: string | null;
@@ -43,6 +44,7 @@ export default function RecordFlow({
   onChatbot?: () => void;
   onNavigate?: (key: string) => void;
   onShareCard?: (card: SharedRunCard) => void;
+  onSaveCard?: (card: SharedRunCard) => void;
 }) {
   const [screen, setScreen] = useState<Screen>(() => (autoStart ? "countdown" : "record"));
   const [runSummary, setRunSummary] = useState<RunSummary | null>(null);
@@ -135,11 +137,15 @@ export default function RecordFlow({
         <RunCompletePage
           summary={runSummary}
           onCreateCard={() => setScreen("card")}
+          onBack={() => {
+            setRunSummary(null);
+            setScreen("record");
+          }}
         />
       );
     }
     if (screen === "card") {
-      return <RunRecordCardPage summary={runSummary} onClose={onBack} onShare={onShareCard} />;
+      return <RunRecordCardPage summary={runSummary} onClose={onBack} onShare={onShareCard} onSave={onSaveCard} />;
     }
     return (
       <RecordPage

@@ -722,6 +722,7 @@ export const highlights: Highlight[] = [
 ];
 
 export type MyRecord = {
+  id?: number;
   image?: string;
   gpsArt?: 1 | 2;
   distanceKm: string;

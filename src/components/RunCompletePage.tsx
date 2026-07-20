@@ -1,5 +1,5 @@
-import iconShare from "../assets/icons/share.svg";
 import MapBackdrop from "./MapBackdrop";
+import { BackButton } from "./Icons";
 import { RUNNING_MAP_LOCATION } from "./RunningMapPage";
 import type { RunSummary } from "./RunningPage";
 
@@ -37,19 +37,19 @@ function Stat({ value, label, suffix }: { value: string; label: string; suffix?:
 export default function RunCompletePage({
   summary,
   onCreateCard,
+  onBack,
 }: {
   summary?: RunSummary | null;
   onCreateCard?: () => void;
+  onBack?: () => void;
 }) {
   const result = summary ?? fallbackSummary;
   const cadence = summary ? String(Math.round(result.bpm * 1.06)) : "172";
   return (
     <div className="scrollbar-hidden relative flex flex-1 min-h-0 animate-run-complete-fade flex-col items-center overflow-y-auto bg-black">
       <div className="fixed top-0 left-0 right-0 z-10 h-[var(--statusbar-h)] bg-black" aria-hidden />
-      <header className="mt-[calc(var(--statusbar-h)+12px)] flex h-13 w-full shrink-0 items-center justify-end px-4.5">
-        <button type="button" className="size-6.5" aria-label="공유">
-          <img className="size-full" src={iconShare} alt="" />
-        </button>
+      <header className="mt-[calc(var(--statusbar-h)+12px)] flex h-13 w-full shrink-0 items-center justify-start px-4.5">
+        <BackButton onClick={onBack} />
       </header>
 
       <p className="flex shrink-0 items-baseline gap-1.25 font-display leading-[1.3] whitespace-nowrap">
@@ -57,7 +57,7 @@ export default function RunCompletePage({
         <span className="text-[36px] tracking-[-0.72px] text-[#b1b1b1]">KM</span>
       </p>
 
-      <div className="mt-4 flex w-87.5 shrink-0 flex-col gap-8">
+      <div className="mt-4 flex w-87.5 shrink-0 flex-col gap-4">
         <div className="flex items-start justify-between">
           <Stat value={result.pace} label="평균 페이스" />
           <Stat value={cadence} label="케이던스" />
@@ -70,7 +70,7 @@ export default function RunCompletePage({
         </div>
       </div>
 
-      <div className="relative mt-5 mb-5 h-102.75 w-96.75 shrink-0 overflow-hidden rounded-card bg-white">
+      <div className="relative mt-8 mb-5 h-102.75 w-96.75 shrink-0 overflow-hidden rounded-card bg-white">
         <MapBackdrop
           center={result.mapCenter ?? result.mapPosition ?? RUNNING_MAP_LOCATION}
           level={result.mapLevel ?? 4}

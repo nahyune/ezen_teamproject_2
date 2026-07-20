@@ -48,10 +48,10 @@ const highlightDetails: Record<Exclude<HighlightKey, "streak">, Array<{ title: s
 const julyDays = Array.from({ length: 31 }, (_, index) => index + 1);
 const streakRunDays = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
-export default function MyPage() {
+export default function MyPage({ createdRecords = [] }: { createdRecords?: MyRecord[] }) {
   // 프로필 편집(이름·소개·아바타)이 즉시 반영된다. 레벨·스트릭은 목데이터 유지.
   const { profile, avatarSrc } = useUserProfile();
-  const [records, setRecords] = useState<MyRecord[]>(myRecords);
+  const [records, setRecords] = useState<MyRecord[]>(() => [...createdRecords, ...myRecords]);
   const [selectedRecord, setSelectedRecord] = useState<MyRecord | null>(null);
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -211,8 +211,8 @@ export default function MyPage() {
         </nav>
 
         <ul className="grid grid-cols-3 gap-[2px]">
-          {records.map((r) => (
-            <li key={r.date}>
+          {records.map((r, index) => (
+            <li key={r.id ?? `${r.date}-${index}`}>
               <button
                 type="button"
                 className="relative block aspect-square w-full overflow-hidden bg-[#131315] text-left"

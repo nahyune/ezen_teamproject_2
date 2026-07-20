@@ -289,7 +289,7 @@ export default function RunningPage({
       {/* 진행 중인 코스 칩 */}
       <button
         type="button"
-        className="mt-13.25 flex h-10.25 items-center gap-3.25 rounded-card bg-black px-3 py-1.5 text-[20px] font-medium leading-[1.3] tracking-[-0.6px] text-white"
+        className="mt-13.25 flex h-10.25 items-center gap-3.25 rounded-card bg-black px-3 py-1.5 text-[16px] font-medium leading-[1.3] tracking-[-0.6px] text-white"
         onClick={() => setView("map")}
       >
         <span className="size-1.75 rounded-full bg-primary-lime" />

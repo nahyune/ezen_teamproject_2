@@ -5,7 +5,7 @@ import MapBackdrop from "./MapBackdrop";
 import { BackButton } from "./Icons";
 import type { MapPoint } from "./RunningMapPage";
 
-const HOLD_MS = 800; // "길게 눌러 종료" 판정 시간
+const HOLD_MS = 500; // "길게 눌러 종료" 판정 시간
 const PAUSED_RUN_LOCATION = { lat: 37.5769, lng: 126.9828 }; // 경복궁과 안국역 사이
 const MAP_TOP_GRADIENT_CLASS = "pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/55 to-transparent";
 
@@ -172,7 +172,7 @@ export default function PausedRunPage({
             onPointerCancel={cancelHold}
           >
             <span
-              className={"grid size-24 transform-gpu place-items-center rounded-full bg-black transition-transform ease-out " + (isHoldingEnd ? "scale-[1.12] duration-[1100ms]" : "scale-100 duration-0")}
+              className={"grid size-24 transform-gpu place-items-center rounded-full bg-black transition-transform ease-out " + (isHoldingEnd ? "scale-[1.12] duration-500" : "scale-100 duration-0")}
             >
               <span className="size-5.75 rounded-xs bg-white" />
             </span>
