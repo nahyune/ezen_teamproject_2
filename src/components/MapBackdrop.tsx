@@ -181,6 +181,9 @@ export default function MapBackdrop({
         if (markerFollowsCenter) {
           if (markerAnimated && path.length > 1) {
             const startedAt = performance.now();
+            // 추적 모드: 지도가 내 위치(화면 중앙 고정 점)를 따라 계속 흐른다.
+            // 러닝 중엔 드래그·줌을 잠가서(아래 setDraggable/Zoomable=false)
+            // 자동 추적과 충돌하지 않게 한다 — 실제 러닝앱과 동일한 UX.
             const moveCenter = () => {
               if (cancelled) return;
               const progress =
@@ -234,6 +237,9 @@ export default function MapBackdrop({
           }
         }
 
+        // ⚠️ 추적 모드에서 map.setDraggable(false) 를 주면 카카오에선 프로그램 이동
+        //    (panTo) 까지 멈춰 "자동 달리기"가 죽는다. 그래서 드래그는 켜 두고,
+        //    사용자 조작만 아래 투명 오버레이(return)로 차단한다.
         map.setDraggable(interactive);
         map.setZoomable(interactive);
       })
@@ -266,6 +272,12 @@ export default function MapBackdrop({
         className="absolute inset-0"
         style={{ maskImage: "linear-gradient(#000,#000)", WebkitMaskImage: "linear-gradient(#000,#000)" }}
       />
+      {/* 러닝 추적 지도: 사용자 드래그·줌만 차단하는 투명 막.
+          (map.setDraggable(false) 대신 이걸 써야 자동 달리기 panTo 가 살아있다.
+           상단 UI 버튼들은 MapBackdrop 밖 상위 요소라 이 막에 안 가려진다.) */}
+      {markerFollowsCenter && interactive ? (
+        <div className="absolute inset-0" aria-hidden />
+      ) : null}
       {markerFollowsCenter && markerVariant === "orange" ? (
         <span className="pointer-events-none absolute top-1/2 left-1/2 z-10 block size-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#d9d9d9]/70 shadow-[0_2px_8px_rgba(0,0,0,0.25)]">
           <span className="absolute inset-[3px] rounded-full bg-primary-orange" />

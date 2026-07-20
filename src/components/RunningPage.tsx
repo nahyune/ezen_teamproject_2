@@ -26,6 +26,15 @@ const formatPace = (secPerKm: number) => {
 // 시뮬레이션 기준 페이스 ≈ 5'30"/km (약 3.03 m/s)
 const BASE_SPEED_MPS = 1000 / 330;
 
+// 경로 API(카카오 도로) 실패 시 쓸 폴백 경로 — 출발·경유·도착점을 잇는다.
+// KAKAO_REST_API_KEY 가 없어도(로컬 .env 미설정) 자동 달리기가 돌게 하는 안전망.
+// (도로를 정확히 따라가진 않고 직선 구간으로 이어짐)
+const FALLBACK_RUN_PATH: MapPoint[] = [
+  RUNNING_MAP_LOCATION,
+  ...RUNNING_MAP_WAYPOINTS,
+  RUNNING_MAP_DESTINATION,
+];
+
 const getRouteLength = (path: MapPoint[]) =>
   path.slice(1).reduce((total, point, index) => {
     const prev = path[index];
@@ -137,8 +146,14 @@ export default function RunningPage({
         const data = (await res.json()) as { path?: MapPoint[]; error?: string };
         if (!res.ok) throw new Error(data.error ?? "카카오 도로 경로를 불러오지 못했습니다");
         if (!cancelled && data.path && data.path.length > 1) setRoadPath(data.path);
+        else if (!cancelled) setRoadPath(FALLBACK_RUN_PATH);
       })
-      .catch((err) => console.warn(err));
+      .catch((err) => {
+        // REST 키가 없거나(로컬 .env 미설정) 요청 실패 시에도 데모가 되도록
+        // 출발·경유·도착점을 잇는 폴백 경로로 자동 달리기를 돌린다(도로 추종은 안 됨).
+        console.warn(err);
+        if (!cancelled) setRoadPath(FALLBACK_RUN_PATH);
+      });
 
     return () => {
       cancelled = true;
