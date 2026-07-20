@@ -39,6 +39,7 @@ import {
   type CourseExploreKind,
   type FeedPost,
   type FeedStory,
+  type MyRecord,
 } from "./data";
 import { GWANGHWAMUN_DOG_RUN_CENTER, GWANGHWAMUN_DOG_RUN_PATH } from "./data/gwanghwamunDogRoute";
 import { YEOUIDO_SWEET_POTATO_CENTER, YEOUIDO_SWEET_POTATO_PATH } from "./data/yeouidoSweetPotatoRoute";
@@ -117,6 +118,7 @@ export default function App() {
   const [recordMusicConnected, setRecordMusicConnected] = useState(false);
   const [feedStoryOpen, setFeedStoryOpen] = useState(false);
   const [createdFeedPosts, setCreatedFeedPosts] = useState<FeedPost[]>([]);
+  const [createdMyRecords, setCreatedMyRecords] = useState<MyRecord[]>([]);
   const [createdStory, setCreatedStory] = useState<FeedStory | null>(null);
   const [sharedHeroImage, setSharedHeroImage] = useState<string>();
 
@@ -152,8 +154,9 @@ export default function App() {
   };
 
   const shareRunCard = (card: SharedRunCard) => {
+    const createdAt = Date.now();
     const post: FeedPost = {
-      id: Date.now(),
+      id: createdAt,
       author: profileData.name,
       avatar: feedStories[0].image,
       meta: "방금 전 · 러닝 기록",
@@ -167,9 +170,26 @@ export default function App() {
       commentPreview: "첫 댓글을 남겨보세요",
     };
 
+    const myRecord: MyRecord = {
+      id: createdAt,
+      image: card.image,
+      distanceKm: card.distance,
+      date: card.subtitle,
+      caption: `${card.title} · ${card.distance}km 러닝을 완료했어요.`,
+      cheers: 0,
+      reposts: 0,
+      comments: [],
+    };
+
     setCreatedFeedPosts((posts) => [post, ...posts]);
+    setCreatedMyRecords((records) => [myRecord, ...records]);
     setSharedHeroImage(card.image);
     setPage("feed");
+  };
+
+  const saveRunCard = (card: SharedRunCard) => {
+    setSharedHeroImage(card.image);
+    setPage("home");
   };
 
   const rendered = (() => {
@@ -295,6 +315,7 @@ export default function App() {
             onChatbot={() => setChatbotOpen(true)}
             onNavigate={navigateMain}
             onShareCard={shareRunCard}
+            onSaveCard={saveRunCard}
           />
         </div>
       );
@@ -365,7 +386,7 @@ export default function App() {
         />
 
         {page === "my" ? (
-          <MyPage />
+          <MyPage createdRecords={createdMyRecords} />
         ) : page === "feed" ? (
           <FeedPage
             onStoryOpenChange={setFeedStoryOpen}

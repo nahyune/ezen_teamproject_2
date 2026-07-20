@@ -11,6 +11,7 @@ type Props = {
   summary?: RunSummary | null;
   onClose?: () => void;
   onShare?: (card: SharedRunCard) => void;
+  onSave?: (card: SharedRunCard) => void;
 };
 
 export type SharedRunCard = {
@@ -52,7 +53,7 @@ const loadCanvasImage = (src: string) =>
     image.src = src;
   });
 
-export default function RunRecordCardPage({ summary, onClose, onShare }: Props) {
+export default function RunRecordCardPage({ summary, onClose, onShare, onSave }: Props) {
   const now = new Date();
   const distance = summary?.distance ?? "8.43";
   const seconds = summary?.seconds ?? 51 * 60 + 17;
@@ -70,6 +71,7 @@ export default function RunRecordCardPage({ summary, onClose, onShare }: Props) 
   const [textSectionOpen, setTextSectionOpen] = useState(true);
   const [elementsSectionOpen, setElementsSectionOpen] = useState(true);
   const [sharing, setSharing] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [positions, setPositions] = useState<Record<DragKey, Position>>({
     title: { x: 22, y: 14 },
     route: { x: 22, y: 33 },
@@ -207,21 +209,32 @@ export default function RunRecordCardPage({ summary, onClose, onShare }: Props) 
       });
     }
 
-    context.shadowBlur = 0;
-    context.strokeStyle = "#d6ff1e";
-    context.lineWidth = 4;
-    context.strokeRect(2, 2, size - 4, size - 4);
     return canvas.toDataURL("image/jpeg", 0.92);
   };
 
   const shareCard = async () => {
-    if (!onShare || sharing) return;
+    if (!onShare || sharing || saving) return;
     setSharing(true);
     try {
       const image = await createSharedCardImage();
       onShare({ image, title, subtitle, distance });
     } finally {
       setSharing(false);
+    }
+  };
+
+  const saveCard = async () => {
+    if (sharing || saving) return;
+    if (!onSave) {
+      onClose?.();
+      return;
+    }
+    setSaving(true);
+    try {
+      const image = await createSharedCardImage();
+      onSave({ image, title, subtitle, distance });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -439,17 +452,18 @@ export default function RunRecordCardPage({ summary, onClose, onShare }: Props) 
       <button
         type="button"
         onClick={shareCard}
-        disabled={sharing}
+        disabled={sharing || saving}
         className="mx-6 mt-4 flex h-14 shrink-0 items-center justify-center rounded-full bg-primary-lime text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-[#0f120c]"
       >
         {sharing ? "공유 중..." : "피드에 공유하기"}
       </button>
       <button
         type="button"
-        onClick={onClose}
+        onClick={saveCard}
+        disabled={sharing || saving}
         className="mx-6 mt-2.5 flex h-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-white"
       >
-        기록만 저장하고 닫기
+        {saving ? "저장 중..." : "기록만 저장하고 닫기"}
       </button>
     </div>
   );
