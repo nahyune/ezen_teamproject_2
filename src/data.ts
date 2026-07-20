@@ -141,7 +141,7 @@ export const courseRecommendations: CourseRecommendation[] = [
     nearby: "내 위치에서 2.1km",
   },
   {
-    image: course2,
+    image: race1,
     name: "반포 한강공원 코스",
     level: "초급자",
     distance: "3.8km",
