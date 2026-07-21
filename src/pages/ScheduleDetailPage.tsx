@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronRight, BackButton } from "../components/Icons";
 import SharePopup from "../components/SharePopup";
+import MapBackdrop from "../components/MapBackdrop";
 import scheduleImage from "../assets/img/schedule-hero.webp";
 import runner1 from "../assets/img/runner1.webp";
 import runner2 from "../assets/img/runner2.webp";
@@ -23,6 +24,8 @@ const attendees = [
   { image: course1, position: "50% 55%" },
   { image: runner5, position: "50% 49%" },
 ];
+
+const SCHEDULE_LOCATION = { lat: 37.5316, lng: 127.0667 };
 
 function ShareIcon() {
   return (
@@ -79,6 +82,7 @@ export default function ScheduleDetailPage({ onBack }: Props) {
   const [showAttendConfirm, setShowAttendConfirm] = useState(false);
   const [attending, setAttending] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   return (
     <div className="phone bg-[#0a0a0a] text-white">
@@ -94,13 +98,37 @@ export default function ScheduleDetailPage({ onBack }: Props) {
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 px-[var(--gutter)] pb-[126px] pt-[10px]">
+      {isMapOpen && (
+        <div className="fixed inset-y-0 left-1/2 z-[180] w-[var(--frame-width)] max-w-full -translate-x-1/2 overflow-hidden bg-black">
+          <MapBackdrop
+            center={SCHEDULE_LOCATION}
+            interactive
+            level={3}
+            markerPosition={SCHEDULE_LOCATION}
+            markerVariant="orange"
+          />
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-black/60 to-transparent"
+            aria-hidden
+          />
+          <BackButton
+            onClick={() => setIsMapOpen(false)}
+            label="지도 닫기"
+            className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-20 drop-shadow-[0_0_4px_rgba(0,0,0,0.75)]"
+          />
+        </div>
+      )}
+
+      <main className="detail-section-stack flex flex-col px-[var(--gutter)] pb-[126px] pt-[10px]">
         <section className="relative h-[250px] w-full overflow-hidden rounded-[20px] bg-[#111]">
           <img className="h-full w-full object-cover object-bottom" src={scheduleImage} alt="" />
           <div className="absolute inset-0 bg-black/20" />
         </section>
 
-        <section className="-mt-[34px] flex flex-col gap-[10px]">
+        <section
+          className="flex flex-col gap-[10px]"
+          style={{ marginTop: "calc(14px - (var(--spacing, 2.25rem) * 18))" }}
+        >
           <div className="flex gap-[6px]">
             <span className="inline-flex min-h-[27px] items-center justify-center rounded-[12px] border border-[var(--primary-lime)] px-[10px] py-1 text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[var(--primary-lime)]">
               크루
@@ -123,6 +151,7 @@ export default function ScheduleDetailPage({ onBack }: Props) {
               <button
                 className="inline-flex items-center justify-end whitespace-nowrap text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[var(--primary-lime)]"
                 type="button"
+                onClick={() => setIsMapOpen(true)}
               >
                 지도 보기
                 <ChevronRight size={14} />

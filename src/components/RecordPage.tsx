@@ -2,16 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { attachDragScroll } from "../dragScroll";
 import logoW from "../assets/icons/logo-w.svg";
 import logoRun from "../assets/icons/logo-run.svg";
-import iconBell from "../assets/icons/header-bell.svg";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
 import iconBulb from "../assets/icons/bulb.svg";
 import iconSparkle from "../assets/icons/sparkle.svg";
 import dogCourseImg from "../assets/img/dog_course.webp";
 import recordCourseImg from "../assets/img/record-course.png";
 import namsanHeartImg from "../assets/img/namsan_heart.avif";
-import runningShoeImg from "../assets/img/shoe-nike-pegasus41.webp";
 import MapBackdrop from "./MapBackdrop";
 import BottomNav from "./BottomNav";
+import RunNotifications from "./RunNotifications";
 
 const recommendedCourses = [
   {
@@ -41,7 +40,7 @@ const recommendedCourses = [
 ];
 
 const fabClass =
-  "grid size-13 place-items-center rounded-full bg-surface shadow-[0_4px_12px_rgba(0,0,0,0.35)]";
+  "grid size-13 place-items-center rounded-full bg-white/90 text-black shadow-[0_0_12px_rgba(0,0,0,0.15)]";
 
 function MusicIcon({ className = "" }: { className?: string }) {
   return (
@@ -95,21 +94,7 @@ export default function RecordPage({
   musicConnected?: boolean;
 }) {
   const rowRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
-
-  useEffect(() => {
-    if (!notificationsOpen) return;
-
-    const closeNotifications = (event: PointerEvent) => {
-      if (!headerRef.current?.contains(event.target as Node)) setNotificationsOpen(false);
-    };
-
-    document.addEventListener("pointerdown", closeNotifications);
-    return () => document.removeEventListener("pointerdown", closeNotifications);
-  }, [notificationsOpen]);
 
   useEffect(() => {
     const row = rowRef.current;
@@ -145,14 +130,14 @@ export default function RecordPage({
   }, []);
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden">
+    <div className="record-page relative flex flex-1 flex-col overflow-hidden bg-white text-black">
       <div className="pointer-events-none absolute inset-x-0 top-52.5 bottom-0 z-0 overflow-hidden [transform:translateZ(0)] md:rounded-b-[42px]">
         <MapBackdrop />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_center,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.7)_60%,rgba(0,0,0,0.85)_100%)]" />
-        <div className="absolute inset-x-0 top-0 h-35 bg-linear-to-b from-black from-19% to-black/0" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_center,rgba(255,255,255,0)_0%,rgba(255,255,255,0.44)_60%,rgba(255,255,255,1)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-35 bg-linear-to-b from-white from-19% to-white/0" />
       </div>
 
-      <header ref={headerRef} className="relative z-10 mb-3 mt-[calc(var(--statusbar-h)+12px)] flex h-13 items-center justify-between px-4.5">
+      <header className="relative z-10 mb-3 mt-[calc(var(--statusbar-h)+12px)] flex h-13 items-center justify-between bg-white px-4.5">
         <div className="flex items-center">
           <button
             type="button"
@@ -169,76 +154,19 @@ export default function RecordPage({
             <img className="h-[21.64px] w-[34.23px]" src={logoRun} alt="" />
           </button>
         </div>
-        <button
-          type="button"
-          className="relative"
-          aria-label="알림"
-          aria-expanded={notificationsOpen}
-          onClick={() => {
-            setNotificationsOpen((open) => !open);
-            setHasUnreadNotifications(false);
-          }}
-        >
-          <img className="size-6" src={iconBell} alt="" />
-          {hasUnreadNotifications && (
-            <span className="absolute -right-0.5 -top-0.5 size-2 rounded-full border border-black bg-[var(--primary-orange)]" />
-          )}
-        </button>
-        {notificationsOpen && (
-          <section className="absolute right-4.5 top-[48px] z-20 w-[360px] max-w-[calc(100vw-36px)] overflow-hidden rounded-[8px] border border-white/10 bg-[#151517] shadow-[0_16px_42px_rgba(0,0,0,0.6)]">
-            <div className="flex h-12 items-center justify-between border-b border-white/8 px-4">
-              <h2 className="text-[17px] font-semibold text-white">알림</h2>
-              <span className="text-[12px] font-medium text-primary-lime">알림 2개</span>
-            </div>
-            <ul className="py-1.5">
-              <li className="flex gap-3 px-4 py-3">
-                <span className="grid size-11 flex-none place-items-center rounded-full bg-[#242426] text-primary-lime">
-                  <svg className="size-6" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.64 5.64l1.56 1.56M16.8 16.8l1.56 1.56M18.36 5.64 16.8 7.2M7.2 16.8l-1.56 1.56" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                    <circle cx="12" cy="12" r="4.1" stroke="currentColor" strokeWidth="1.6" />
-                  </svg>
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-[14px] font-semibold text-white">오늘 러닝 날씨</h3>
-                    <span className="size-1.5 flex-none rounded-full bg-[var(--primary-orange)]" />
-                  </div>
-                  <p className="mt-1 text-[13px] leading-[1.45] text-white/65">
-                    19°C · 미세먼지 좋음<br />오후 8시부터 약한 비가 예상돼요.
-                  </p>
-                  <p className="mt-1.5 text-[11px] text-white/35">방금 전</p>
-                </div>
-              </li>
-              <li className="flex gap-3 border-t border-white/7 px-4 py-3">
-                <span className="grid size-11 flex-none place-items-center overflow-hidden rounded-full bg-white/90">
-                  <img src={runningShoeImg} alt="" className="h-9 w-9 object-contain" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-[14px] font-semibold text-white">러닝화 교체 시기</h3>
-                    <span className="size-1.5 flex-none rounded-full bg-[var(--primary-orange)]" />
-                  </div>
-                  <p className="mt-1 text-[13px] leading-[1.45] text-white/65">
-                    페가수스 41의 누적 거리가 452km예요. 교체 시기를 확인해보세요.
-                  </p>
-                  <p className="mt-1.5 text-[11px] text-white/35">오늘</p>
-                </div>
-              </li>
-            </ul>
-          </section>
-        )}
+        <RunNotifications iconClassName="size-6 brightness-0" unreadBorderClassName="border-white" />
       </header>
 
-      <section className="relative z-1 mt-7 flex flex-col gap-3.75">
-        <header className="flex flex-col gap-1 px-4.5">
-          <h2 className="text-[24px] font-semibold tracking-[-0.48px]">러닝</h2>
-          <p className="text-[14px] leading-[1.3] tracking-[-0.42px]">
+      <section className="relative z-1 mt-4 flex flex-col gap-3.75">
+        <header className="mx-auto flex w-[389px] max-w-[calc(100%-36px)] flex-col gap-1">
+          <h2 className="text-[24px] font-semibold leading-[1.3] tracking-[-0.48px]">러닝</h2>
+          <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px]">
             AI 맞춤 추천 코스
           </p>
         </header>
 
         <div
-          className="no-scrollbar flex snap-x snap-mandatory gap-3.75 overflow-x-auto px-12.5 [&.dragging]:snap-none"
+          className="no-scrollbar -my-16.5 flex snap-x snap-mandatory gap-3.75 overflow-x-auto px-12.5 py-16.5 [&.dragging]:snap-none"
           ref={rowRef}
         >
           {recommendedCourses.map((c, i) => {
@@ -260,8 +188,8 @@ export default function RecordPage({
                   openDetail();
                 }
               }}
-              className={`relative flex h-35 w-82.5 flex-none snap-center flex-col items-center justify-center overflow-hidden rounded-card border border-white/15 bg-elevated/35 px-[18px] py-[22px] shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-md backdrop-saturate-140 transition-[filter,scale] duration-250 ease-[ease] before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-linear-to-br before:from-white/10 before:via-white/2 before:to-transparent ${
-                i === activeIdx ? (c.detailKey ? "cursor-pointer" : "") : "scale-93 blur-[2px]"
+              className={`relative flex h-35 w-82.5 flex-none snap-center flex-col items-center justify-center rounded-card bg-white pt-[22px] pr-[18px] pb-[23px] pl-[17px] shadow-[0_0_66px_rgba(139,139,139,0.18)] transition-[filter] duration-250 ease-[ease] ${
+                i === activeIdx ? (c.detailKey ? "cursor-pointer" : "") : "blur-[2px]"
               }`}
             >
               <div className="flex items-end justify-center gap-[50px]">
@@ -274,7 +202,7 @@ export default function RecordPage({
                       <button
                         type="button"
                         onClick={openDetail}
-                        className={`absolute left-[222.5px] top-1/2 flex -translate-y-1/2 items-center justify-center text-[14px] leading-[1.3] tracking-[-0.42px] whitespace-nowrap text-white/70 ${
+                        className={`absolute left-[222.5px] top-1/2 flex -translate-y-1/2 items-center justify-center text-[14px] font-normal leading-[1.3] tracking-[-0.42px] whitespace-nowrap text-black/70 ${
                           i === activeIdx ? "visible" : "invisible"
                         }`}
                       >
@@ -290,11 +218,11 @@ export default function RecordPage({
                         </svg>
                       </button>
                     </div>
-                    <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] whitespace-pre-line text-white/70">
+                    <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] whitespace-pre-line text-black/70">
                       {c.desc}
                     </p>
                   </div>
-                  <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-white/50">
+                  <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-black/50">
                     {c.duration}
                   </p>
                 </div>
@@ -315,13 +243,13 @@ export default function RecordPage({
       </section>
 
       <div className="absolute bottom-37.5 left-1/2 z-2 flex -translate-x-1/2 flex-col items-center">
-        <p className="relative mb-6.25 w-66.75 animate-bubble-float rounded-[15px] bg-elevated/70 px-2.5 py-3.25 text-center text-[14px] font-medium tracking-[-0.42px] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-b-0 after:border-transparent after:border-t-15 after:border-t-elevated/70">
+        <p className="relative mb-6.25 w-66.75 animate-bubble-float rounded-[15px] border border-[#eeeeee] bg-white/90 px-2.5 py-3.25 text-center text-[14px] font-medium tracking-[-0.42px] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-8 after:border-b-0 after:border-transparent after:border-t-15 after:border-t-white/90">
           러닝하기 딱 좋은 날이에요!
           <br />
           다른 코스를 원하시면 저에게 알려주세요.
         </p>
 
-        <button type="button" className={`${fabClass} mb-7.5`} aria-label="AI 챗봇" onClick={onChatbot}>
+        <button type="button" className={`${fabClass} mb-7.5 !bg-black`} aria-label="AI 챗봇" onClick={onChatbot}>
           <img className="size-6" src={iconChatbot} alt="" />
         </button>
 
@@ -329,11 +257,11 @@ export default function RecordPage({
 
         <div className="flex items-center gap-10">
           <button type="button" className={fabClass} aria-label="러닝 가이드" onClick={onGuideOpen}>
-            <img className="size-6" src={iconBulb} alt="" />
+            <img className="size-6 brightness-0" src={iconBulb} alt="" />
           </button>
           <button
             type="button"
-            className="size-30 rounded-full bg-primary-lime text-[24px] font-semibold tracking-[-0.48px] text-black"
+            className="size-30 rounded-full bg-primary-lime text-[24px] font-semibold tracking-[-0.48px] text-black shadow-[0_0_12px_rgba(0,0,0,0.15)]"
             onClick={onStart}
           >
             시작
@@ -345,7 +273,7 @@ export default function RecordPage({
             aria-pressed={musicConnected}
             onClick={onMusicOpen}
           >
-            <MusicIcon className={musicConnected ? "text-primary-lime" : "text-white"} />
+            <MusicIcon className={musicConnected ? "text-primary-orange" : "text-black"} />
           </button>
         </div>
       </div>

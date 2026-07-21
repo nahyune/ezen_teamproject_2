@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import logoW from "../assets/icons/logo-w.svg";
 import logoRun from "../assets/icons/logo-run.svg";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
-import iconBell from "../assets/icons/header-bell.svg";
 import iconSettings from "../assets/icons/header-settings.svg";
 import { myRecords } from "../data";
+import RunNotifications from "./RunNotifications";
 import "./TopBars.css";
 
 /**
@@ -240,9 +240,7 @@ export function AppHeader({
           <button type="button" aria-label="챗봇" onClick={onChatbotClick}>
             <img className="appheader__icon" src={iconChatbot} alt="" />
           </button>
-          <button type="button" aria-label="알림">
-            <img className="appheader__icon" src={iconBell} alt="" />
-          </button>
+          <RunNotifications iconClassName="appheader__icon" />
         </div>
       )}
     </header>
