@@ -1,9 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
-  <rect width="48" height="48" rx="12" fill="#0d0d0f"/>
-  <!-- 실제 로고 W (src/assets/icons/logo-w.svg) 를 그대로 사용 -->
-  <path transform="translate(9 14) scale(0.933)" d="M2.30243 21.4406L0 0H4.19067L5.37234 13.5344L6.57837 0H10.5741L11.7192 13.5344L12.8644 0H17.1038L14.7648 21.4406H9.62391L8.55188 11.1223L7.52858 21.4406H2.30243Z" fill="#D4FF3F"/>
-  <!-- 로고 점 3개 (세로 배열) -->
-  <rect x="29" y="16.5" width="5" height="4" rx="0.6" fill="#D4FF3F"/>
-  <rect x="29" y="23" width="5" height="4" rx="0.6" fill="#D4FF3F"/>
-  <rect x="29" y="29.5" width="5" height="4" rx="0.6" fill="#D4FF3F"/>
+<svg width="382" height="347" viewBox="0 0 382 347" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="381.711" height="346.257" rx="50" fill="black"/>
+<path d="M100.002 266.257L80 80H116.405L126.67 197.575L137.147 80H171.859L181.807 197.575L191.754 80H228.583L208.264 266.257H163.604L154.291 176.621L145.402 266.257H100.002Z" fill="#D4FF3F"/>
+<rect x="263.331" y="81.6924" width="38.3803" height="31.6073" fill="#D4FF3F"/>
+<rect x="263.331" y="158.456" width="38.3803" height="31.6073" fill="#D4FF3F"/>
+<rect x="263.331" y="232.958" width="38.3803" height="31.6073" fill="#D4FF3F"/>
 </svg>
