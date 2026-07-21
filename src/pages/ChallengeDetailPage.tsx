@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { BackButton } from "../components/Icons";
+import SharePopup from "../components/SharePopup";
 import challengeHero from "../assets/img/challenge1.webp";
 
 type Props = {
   onBack: () => void;
+  onStartChallenge: () => void;
 };
 
 const infoCards = [
@@ -66,7 +69,9 @@ function ShareIcon() {
   );
 }
 
-export default function ChallengeDetailPage({ onBack }: Props) {
+export default function ChallengeDetailPage({ onBack, onStartChallenge }: Props) {
+  const [shareOpen, setShareOpen] = useState(false);
+
   return (
     <div className="phone bg-[#040405] text-[#f6f6ed]">
       <header className="subheader justify-between">
@@ -74,12 +79,17 @@ export default function ChallengeDetailPage({ onBack }: Props) {
         <h1 className="text-center text-[20px] font-medium leading-[1.3] tracking-[-0.6px] text-[#f6f6ed]">
           챌린지
         </h1>
-        <button className="grid h-6 w-6 shrink-0 place-items-center text-[#f6f6ed]" type="button" aria-label="공유하기">
+        <button
+          className="grid h-6 w-6 shrink-0 place-items-center text-[#f6f6ed]"
+          type="button"
+          aria-label="공유하기"
+          onClick={() => setShareOpen(true)}
+        >
           <ShareIcon />
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 px-[var(--gutter)] pb-10">
+      <main className="detail-section-stack flex flex-col px-[var(--gutter)] pb-10">
         <section className="relative h-[420px] overflow-hidden rounded-[20px]">
           <img className="h-full w-full object-cover" src={challengeHero} alt="경복궁 댕댕런 GPS 아트런 경로 지도" />
           <div className="absolute inset-x-0 bottom-0 flex flex-col gap-[15px] pt-[65px] pr-[40px] pb-[26px] pl-[15px] bg-[linear-gradient(to_top,rgba(0,0,0,0.62)_30%,rgba(0,0,0,0.33)_70%,rgba(0,0,0,0)_100%)]">
@@ -93,7 +103,7 @@ export default function ChallengeDetailPage({ onBack }: Props) {
           </div>
         </section>
 
-        <section className="flex gap-[14px]">
+        <section className="flex gap-[14px]" style={{ marginTop: "calc(24px - (var(--spacing, 2.25rem) * 18))" }}>
           {infoCards.map((card) => (
             <article className={glassCardClass} key={card.label}>
               <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]">{card.label}</p>
@@ -204,11 +214,14 @@ export default function ChallengeDetailPage({ onBack }: Props) {
           <button
             className="h-12 w-full rounded-full bg-[var(--primary-lime)] text-center text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-black"
             type="button"
+            onClick={onStartChallenge}
           >
             챌린지 참여하기
           </button>
         </section>
       </main>
+
+      <SharePopup open={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   );
 }

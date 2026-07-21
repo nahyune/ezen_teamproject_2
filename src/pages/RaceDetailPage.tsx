@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BackButton } from "../components/Icons";
+import SharePopup from "../components/SharePopup";
 import raceHero from "../assets/img/race1.webp";
 
 type Props = {
@@ -73,6 +74,7 @@ function RouteMiniMap() {
 export default function RaceDetailPage({ onBack }: Props) {
   const [showJoinConfirm, setShowJoinConfirm] = useState(false);
   const [joined, setJoined] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
 
   return (
     <div className="phone bg-black text-[#f6f6ed]">
@@ -81,12 +83,17 @@ export default function RaceDetailPage({ onBack }: Props) {
         <h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[24px] font-semibold leading-[1.3] tracking-[-0.48px]">
           대회 소식
         </h1>
-        <button className="grid h-6 w-6 place-items-center text-[#f6f6ed]" type="button" aria-label="공유하기">
+        <button
+          className="grid h-6 w-6 place-items-center text-[#f6f6ed]"
+          type="button"
+          aria-label="공유하기"
+          onClick={() => setShareOpen(true)}
+        >
           <ShareIcon />
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 pb-12">
+      <main className="detail-section-stack flex flex-col pb-12">
         <section className="relative h-[581px] overflow-hidden after:absolute after:inset-0 after:bg-[linear-gradient(to_bottom,rgba(0,0,0,0.03),rgba(0,0,0,0.42))]">
           <img className="absolute inset-0 h-full w-full object-cover object-[48%_center]" src={raceHero} alt="" />
           <div className="relative z-[1] flex h-full flex-col justify-between px-[19px] py-4">
@@ -106,7 +113,10 @@ export default function RaceDetailPage({ onBack }: Props) {
           </div>
         </section>
 
-        <section className="grid grid-cols-2 gap-x-[18px] gap-y-4 px-[var(--gutter)] max-[380px]:gap-3">
+        <section
+          className="grid grid-cols-2 gap-x-[18px] gap-y-4 px-[var(--gutter)] max-[380px]:gap-3"
+          style={{ marginTop: "calc(24px - (var(--spacing, 2.25rem) * 18))" }}
+        >
           {infoCards.map((card) => (
             <article className={glassCardClass} key={card.label}>
               <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-white/70">{card.label}</p>
@@ -205,6 +215,8 @@ export default function RaceDetailPage({ onBack }: Props) {
           </div>
         </div>
       )}
+
+      <SharePopup open={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   );
 }

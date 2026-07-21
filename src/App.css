@@ -8,8 +8,13 @@
 }
 
 .home {
-  @apply flex flex-1 flex-col gap-12 px-[var(--gutter)] pt-3 pb-[130px];
+  @apply flex flex-1 flex-col px-[var(--gutter)] pt-3 pb-[130px];
+  gap: calc(var(--spacing, 2.25rem) * 18);
   /* extra bottom padding leaves room for the floating nav dock */
+}
+
+.detail-section-stack {
+  gap: calc(var(--spacing, 2.25rem) * 18);
 }
 
 /* 서브/연계 페이지 공통 헤더 "영역" — 메인 헤더(.appheader) 기준으로 통일.
@@ -64,7 +69,8 @@
   max-width: 100%;
   /* 높이를 확정값으로 — 안의 화면들이 h-full/min-h-full(%)로 키를 잴 수 있게.
      (min-height 였을 땐 % 기준이 없어 화면들이 브라우저 창 높이에 의존했음) */
-  height: 100svh;
+  height: 100vh;
+  height: 100dvh;
   background: var(--bg-app);
 }
 .phone-scroll {
@@ -77,6 +83,27 @@
 }
 .phone-scroll::-webkit-scrollbar {
   display: none;
+}
+
+/* 모바일(실기기) — 프레임을 일반 흐름으로 둔다.
+   (position:fixed 면 뷰포트에 갇혀 넘치는 영역이 화면 밖으로 밀려 접근 불가) */
+@media (max-width: 767px) {
+  .phone-frame {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+  }
+}
+/* iOS 홈 화면 앱(standalone) + black-translucent 조합에서만 100dvh 가 상태바
+   높이(약 47px)만큼 짧게 잡혀 화면 아래에 빈 띠가 남는다.
+   실측(iPhone): screen 844 / 100vh 844 / 100dvh 797 → 100vh 가 화면과 일치.
+   ⚠️ 일반 사파리에서 100vh 는 주소창이 보일 때 화면보다 커져 하단이 잘리므로,
+      이 교체는 반드시 standalone 일 때만 적용한다. */
+@media (max-width: 767px) and (display-mode: standalone) {
+  .phone-frame {
+    height: 100vh;
+  }
 }
 
 /* 상태바(10:36) 목업 오버레이 — PhoneFrame 이 딱 한 번 그린다(각 페이지는 안 그림).
@@ -179,22 +206,22 @@
   background: rgba(255, 255, 255, 0.4);
 }
 
-/* 챗봇이 열리면 뒤에 기록 페이지가 남아 있어도 공통 상태바 색상을 사용한다. */
+/* 챗봇(라이트 테마)이 열리면 상태바도 피그마대로 흰 배경 + 검정 시계/아이콘. */
 .phone-frame.chatbot-is-open .frame-statusbar {
-  background: var(--bg-app);
-  color: var(--text-primary);
+  background: #ffffff;
+  color: #000000;
 }
 
 .phone-frame.chatbot-is-open .frame-statusbar .statusbar {
-  color: var(--text-primary);
+  color: #000000;
 }
 
 .phone-frame.chatbot-is-open .frame-statusbar .statusbar__battery {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(0, 0, 0, 0.4);
 }
 
 .phone-frame.chatbot-is-open .frame-statusbar .statusbar__battery::after {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 @media (min-width: 768px) {

@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { BackButton } from "../components/Icons";
 import SectionHeader from "../components/SectionHeader";
+import SharePopup from "../components/SharePopup";
 import mag1 from "../assets/img/mag1.webp";
 import mag2 from "../assets/img/mag2.webp";
 import mag3 from "../assets/img/mag3.webp";
@@ -113,17 +115,24 @@ function ArrowUpRightIcon() {
 }
 
 export default function MagazineDetailPage({ onBack }: Props) {
+  const [shareOpen, setShareOpen] = useState(false);
+
   return (
     <div className="phone bg-black text-[#f6f6ed]">
       <header className="subheader justify-between">
         <BackButton onClick={onBack} />
         <h1 className="text-center text-[24px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">매거진</h1>
-        <button className="grid h-6 w-6 shrink-0 place-items-center text-white" type="button" aria-label="공유하기">
+        <button
+          className="grid h-6 w-6 shrink-0 place-items-center text-white"
+          type="button"
+          aria-label="공유하기"
+          onClick={() => setShareOpen(true)}
+        >
           <ShareIcon />
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 pb-10">
+      <main className="detail-section-stack flex flex-col pb-10">
         <section className="relative h-[400px] overflow-hidden">
           <img className="h-full w-full object-cover" src={mag1} alt="러닝화와 러닝 기어가 놓인 사진" />
           <div
@@ -164,7 +173,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
               <span className="shrink-0">
                 <LightbulbIcon />
               </span>
-              <p className="flex flex-col text-[20px] font-semibold leading-[1.3] tracking-[-0.6px] text-[#f6f6ed]">
+              <p className="flex flex-col text-[17px] font-semibold leading-[1.3] tracking-[-0.6px] text-[#f6f6ed]">
                 <span>첫 러닝화의 기준,</span>
                 <span>10km를 신고도 발이 편안한가.</span>
               </p>
@@ -269,6 +278,8 @@ export default function MagazineDetailPage({ onBack }: Props) {
           </div>
         </section>
       </main>
+
+      <SharePopup open={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   );
 }

@@ -18,7 +18,7 @@ type Props = {
 
 export default function BottomNav({ active = "home", onNavigate }: Props) {
   return (
-    <div className="fixed left-1/2 bottom-0 -translate-x-1/2 w-[430px] max-w-full z-[100] flex flex-col items-center gap-2 px-4 pb-[18px] pointer-events-none">
+    <div className="fixed left-1/2 bottom-0 -translate-x-1/2 w-[430px] max-w-full z-[100] flex flex-col items-center gap-2 px-4 pb-[max(18px,env(safe-area-inset-bottom,0px))] pointer-events-none">
       <nav
         className="bottom-nav pointer-events-auto w-[398px] max-w-full p-4 rounded-[100px] bg-black/8 border border-white/8 backdrop-blur-[8px] backdrop-saturate-[140%] [-webkit-backdrop-filter:blur(8px)_saturate(140%)]"
       >

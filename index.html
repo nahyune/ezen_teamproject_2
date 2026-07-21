@@ -9,6 +9,9 @@
     <meta name="theme-color" content="#0d0d0f" />
     <meta name="apple-mobile-web-app-title" content="W:RUN" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- 지도·러닝 등 몰입 화면이 상태바 아래까지 꽉 차야 하므로 translucent 유지.
+         (이때 iOS standalone 은 하단에 상태바 높이만큼 빈 띠를 남기는 버그가 있어
+          App.css 의 .phone-frame 모바일 규칙에서 그만큼 보정한다) -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />

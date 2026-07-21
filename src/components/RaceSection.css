@@ -54,7 +54,7 @@
   @apply text-xl font-medium tracking-[-0.6px];
 }
 .race-card__meta {
-  @apply flex items-center justify-between text-sm tracking-[-0.42px];
+  @apply flex items-center justify-between text-sm tracking-[-0.42px] text-[var(--text-muted)];
 }
 .race-card__arrow {
   @apply h-6 w-6 shrink-0;

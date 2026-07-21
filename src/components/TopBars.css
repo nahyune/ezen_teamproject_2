@@ -50,8 +50,18 @@
   margin-top: calc(var(--statusbar-h) + 12px);
   top: calc(var(--statusbar-h) + 12px);
   box-shadow:
-    0 -12px 0 var(--bg-app),
     0 12px 0 var(--bg-app);
+}
+
+.appheader::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: calc(var(--statusbar-h) + 12px);
+  background: var(--bg-app);
+  pointer-events: none;
 }
 
 .appheader__logo {

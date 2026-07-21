@@ -24,6 +24,6 @@
   @apply text-xl font-medium tracking-[-0.6px];
 }
 .schedule__meta {
-  @apply mt-[3px] flex gap-[5px] text-base tracking-[-0.48px];
+  @apply mt-[3px] flex gap-[5px] text-base tracking-[-0.48px] text-[var(--text-muted)];
 }
 }

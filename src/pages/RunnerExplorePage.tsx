@@ -272,6 +272,14 @@ export default function RunnerExplorePage({ onBack }: Props) {
   const [followingNames, setFollowingNames] = useState<Set<string>>(new Set());
   const [cheeredNames, setCheeredNames] = useState<Set<string>>(new Set());
   const [celebratingBursts, setCelebratingBursts] = useState<Record<string, CheerBurstItem[]>>({});
+  const [query, setQuery] = useState("");
+
+  const trimmedQuery = query.trim().toLowerCase();
+  const isSearching = trimmedQuery.length > 0;
+  const matches = (item: ProfileItem) =>
+    item.name.toLowerCase().includes(trimmedQuery) || item.meta.toLowerCase().includes(trimmedQuery);
+  const filteredRunners = isSearching ? runners.filter(matches) : runners;
+  const filteredCrews = isSearching ? crewList.filter(matches) : crewList;
 
   const cheer = (name: string) => {
     setCheeredNames((prev) => new Set(prev).add(name));
@@ -307,58 +315,105 @@ export default function RunnerExplorePage({ onBack }: Props) {
 
       <main className="flex-1 px-[var(--gutter)] pb-12 pt-[14px] [&>section+section]:mt-[45px]">
         <input
-          className="block h-[47px] w-full rounded-[11px] border-0 bg-[#1d1d20] px-4 text-[15px] font-medium tracking-[0] text-white outline-0 placeholder:text-white/48"
+          className="block h-[47px] w-full rounded-[11px] border-0 bg-[#1d1d20] px-4 text-[15px] font-medium tracking-normal text-white outline-0 placeholder:text-white/48"
           aria-label="러너·크루 검색"
           placeholder="러너·크루 검색"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
         />
 
-        <div className="flex gap-[27px] pb-[46px] pt-12">
-          {quickLinks.map((item) => (
-            <button className="flex w-[73px] flex-col items-center gap-[9px]" type="button" key={item.label}>
-              <Avatar className="h-[72px] w-[72px] rounded-full object-cover" item={item} />
-              <span className="whitespace-nowrap text-[14px] font-medium leading-none tracking-[0]">{item.label}</span>
-            </button>
-          ))}
-        </div>
+        {isSearching ? (
+          <div className="flex flex-col gap-12 pt-12">
+            <PageSection title="인기 러너">
+              {filteredRunners.length ? (
+                <ul className="flex flex-col gap-6">
+                  {filteredRunners.map((item) => (
+                    <ProfileRow
+                      key={item.name}
+                      item={item}
+                      following={followingNames.has(item.name)}
+                      onToggleFollow={() => toggleFollow(item.name)}
+                      onRemove={() => setRunners((prev) => prev.filter((r) => r.name !== item.name))}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <p className="py-4 text-center text-[13px] text-[rgba(255,255,255,0.48)]">검색 결과가 없어요</p>
+              )}
+            </PageSection>
 
-        <PageSection title="최근 응원한 러너" action="전체 보기">
-          <div className="grid min-h-[58px] grid-cols-[58px_minmax(0,1fr)] items-center gap-x-[10px]">
-            <Avatar className={profileAvatarClass} item={recentRunner} />
-            <div className={profileTextClass}>
-              <strong className={profileNameClass}>{recentRunner.name}</strong>
-              <span className={profileMetaClass}>{recentRunner.meta}</span>
-            </div>
+            <PageSection title="팔로우할 만한 크루">
+              {filteredCrews.length ? (
+                <ul className="flex flex-col gap-6">
+                  {filteredCrews.map((item) => (
+                    <ProfileRow
+                      key={item.name}
+                      item={item}
+                      cheered={cheeredNames.has(item.name)}
+                      burst={celebratingBursts[item.name]}
+                      onCheer={() => cheer(item.name)}
+                      onRemove={() => setCrewList((prev) => prev.filter((c) => c.name !== item.name))}
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <p className="py-4 text-center text-[13px] text-[rgba(255,255,255,0.48)]">검색 결과가 없어요</p>
+              )}
+            </PageSection>
           </div>
-        </PageSection>
+        ) : (
+          <>
+            <div className="flex gap-[27px] pb-[46px] pt-12">
+              {quickLinks.map((item) => (
+                <button className="flex w-[73px] flex-col items-center gap-[9px]" type="button" key={item.label}>
+                  <Avatar className="h-[72px] w-[72px] rounded-full object-cover" item={item} />
+                  <span className="whitespace-nowrap text-[14px] font-medium leading-none tracking-normal">
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </div>
 
-        <PageSection title="인기 러너" action="모두 보기">
-          <ul className="flex flex-col gap-6">
-            {runners.map((item) => (
-              <ProfileRow
-                key={item.name}
-                item={item}
-                following={followingNames.has(item.name)}
-                onToggleFollow={() => toggleFollow(item.name)}
-                onRemove={() => setRunners((prev) => prev.filter((r) => r.name !== item.name))}
-              />
-            ))}
-          </ul>
-        </PageSection>
+            <PageSection title="최근 응원한 러너" action="전체 보기">
+              <div className="grid min-h-[58px] grid-cols-[58px_minmax(0,1fr)] items-center gap-x-[10px]">
+                <Avatar className={profileAvatarClass} item={recentRunner} />
+                <div className={profileTextClass}>
+                  <strong className={profileNameClass}>{recentRunner.name}</strong>
+                  <span className={profileMetaClass}>{recentRunner.meta}</span>
+                </div>
+              </div>
+            </PageSection>
 
-        <PageSection title="팔로우할 만한 크루" action="모두 보기">
-          <ul className="flex flex-col gap-6">
-            {crewList.map((item) => (
-              <ProfileRow
-                key={item.name}
-                item={item}
-                cheered={cheeredNames.has(item.name)}
-                burst={celebratingBursts[item.name]}
-                onCheer={() => cheer(item.name)}
-                onRemove={() => setCrewList((prev) => prev.filter((c) => c.name !== item.name))}
-              />
-            ))}
-          </ul>
-        </PageSection>
+            <PageSection title="인기 러너" action="모두 보기">
+              <ul className="flex flex-col gap-6">
+                {runners.map((item) => (
+                  <ProfileRow
+                    key={item.name}
+                    item={item}
+                    following={followingNames.has(item.name)}
+                    onToggleFollow={() => toggleFollow(item.name)}
+                    onRemove={() => setRunners((prev) => prev.filter((r) => r.name !== item.name))}
+                  />
+                ))}
+              </ul>
+            </PageSection>
+
+            <PageSection title="팔로우할 만한 크루" action="모두 보기">
+              <ul className="flex flex-col gap-6">
+                {crewList.map((item) => (
+                  <ProfileRow
+                    key={item.name}
+                    item={item}
+                    cheered={cheeredNames.has(item.name)}
+                    burst={celebratingBursts[item.name]}
+                    onCheer={() => cheer(item.name)}
+                    onRemove={() => setCrewList((prev) => prev.filter((c) => c.name !== item.name))}
+                  />
+                ))}
+              </ul>
+            </PageSection>
+          </>
+        )}
       </main>
     </div>
   );
