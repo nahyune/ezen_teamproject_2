@@ -26,15 +26,6 @@ const formatPace = (secPerKm: number) => {
 // 시뮬레이션 기준 페이스 ≈ 5'30"/km (약 3.03 m/s)
 const BASE_SPEED_MPS = 1000 / 330;
 
-// 경로 API(카카오 도로) 실패 시 쓸 폴백 경로 — 출발·경유·도착점을 잇는다.
-// KAKAO_REST_API_KEY 가 없어도(로컬 .env 미설정) 자동 달리기가 돌게 하는 안전망.
-// (도로를 정확히 따라가진 않고 직선 구간으로 이어짐)
-const FALLBACK_RUN_PATH: MapPoint[] = [
-  RUNNING_MAP_LOCATION,
-  ...RUNNING_MAP_WAYPOINTS,
-  RUNNING_MAP_DESTINATION,
-];
-
 const getRouteLength = (path: MapPoint[]) =>
   path.slice(1).reduce((total, point, index) => {
     const prev = path[index];
@@ -133,14 +124,22 @@ export default function RunningPage({
   const [confirmExit, setConfirmExit] = useState(false);
   const [roadPath, setRoadPath] = useState<MapPoint[]>([]);
 
+  // 자유 러닝(코스 미지정)의 시뮬레이션 출발점 — 실제 위치가 있으면 그걸, 없으면 기존 하드코딩 지점.
+  // (코스 지정 시엔 이 경로 자체가 화면에 안 쓰이므로 무관하다.)
+  const runOrigin = currentLocation ?? RUNNING_MAP_LOCATION;
+
   useEffect(() => {
     let cancelled = false;
+    // 경로 API(카카오 도로) 실패 시 쓸 폴백 경로 — 출발·경유·도착점을 잇는다.
+    // KAKAO_REST_API_KEY 가 없어도(로컬 .env 미설정) 자동 달리기가 돌게 하는 안전망.
+    // (도로를 정확히 따라가진 않고 직선 구간으로 이어짐)
+    const fallbackRunPath: MapPoint[] = [runOrigin, ...RUNNING_MAP_WAYPOINTS, RUNNING_MAP_DESTINATION];
 
     fetch("/api/kakao-directions", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        origin: RUNNING_MAP_LOCATION,
+        origin: runOrigin,
         destination: RUNNING_MAP_DESTINATION,
         waypoints: RUNNING_MAP_WAYPOINTS,
       }),
@@ -149,18 +148,19 @@ export default function RunningPage({
         const data = (await res.json()) as { path?: MapPoint[]; error?: string };
         if (!res.ok) throw new Error(data.error ?? "카카오 도로 경로를 불러오지 못했습니다");
         if (!cancelled && data.path && data.path.length > 1) setRoadPath(data.path);
-        else if (!cancelled) setRoadPath(FALLBACK_RUN_PATH);
+        else if (!cancelled) setRoadPath(fallbackRunPath);
       })
       .catch((err) => {
         // REST 키가 없거나(로컬 .env 미설정) 요청 실패 시에도 데모가 되도록
         // 출발·경유·도착점을 잇는 폴백 경로로 자동 달리기를 돌린다(도로 추종은 안 됨).
         console.warn(err);
-        if (!cancelled) setRoadPath(FALLBACK_RUN_PATH);
+        if (!cancelled) setRoadPath(fallbackRunPath);
       });
 
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 최초 진입 시 1회만 조회(그 시점 위치 기준)
   }, []);
 
   useEffect(() => {
@@ -184,10 +184,10 @@ export default function RunningPage({
   const selectedPath = selectedCourseMap?.path && selectedCourseMap.path.length > 1 ? selectedCourseMap.path : null;
   const activeMapPath = selectedPath ?? (roadPath.length > 1 ? roadPath : []);
   const activeRoutePosition =
-    activeMapPath.length > 1 ? getPointOnRoute(activeMapPath, routeProgress * getRouteLength(activeMapPath)) : RUNNING_MAP_LOCATION;
+    activeMapPath.length > 1 ? getPointOnRoute(activeMapPath, routeProgress * getRouteLength(activeMapPath)) : runOrigin;
   // 코스 지정 시엔 항상 코스 center 사용(추천코스는 실제 위치를 쓰지 않음).
   // 자유 러닝(selectedCourseMap 없음)일 때만 실제 위치로, 없으면 기존 하드코딩 위치로 폴백.
-  const activeMapCenter = selectedCourseMap?.center ?? currentLocation ?? RUNNING_MAP_LOCATION;
+  const activeMapCenter = selectedCourseMap?.center ?? runOrigin;
   const activeMapLevel = selectedCourseMap?.level ?? 4;
   const showRoutePreview = Boolean(selectedPath);
   const routeChipLabel = `${selectedCourseLabel ?? "자유 러닝"} · 지도 보기`;
