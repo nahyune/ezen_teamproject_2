@@ -103,6 +103,109 @@
   background: var(--bg-app);
 }
 
+/* 기록 탭의 밝은 Figma 팔레트. 상태바 구조는 유지하고 색상만 화면에 맞춘다. */
+.phone-frame:has(.record-page) {
+  background: #ffffff;
+}
+
+.phone-frame:has(.record-page) .frame-statusbar {
+  background: #ffffff;
+  color: #000000;
+}
+
+.phone-frame:has(.record-page) .frame-statusbar .statusbar {
+  color: #000000;
+}
+
+.phone-frame:has(.record-page) .frame-statusbar .statusbar__battery {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.phone-frame:has(.record-page) .frame-statusbar .statusbar__battery::after {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.phone-frame:has(.running-stats-page) {
+  background: #ffffff;
+}
+
+.phone-frame:has(.running-stats-page) .frame-statusbar {
+  background: #ffffff;
+  color: #000000;
+}
+
+.phone-frame:has(.running-stats-page) .frame-statusbar .statusbar {
+  color: #000000;
+}
+
+.phone-frame:has(.running-stats-page) .frame-statusbar .statusbar__battery {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.phone-frame:has(.running-stats-page) .frame-statusbar .statusbar__battery::after {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.phone-frame:has(.paused-run-page) {
+  background: #ffffff;
+}
+
+.phone-frame:has(.paused-run-page) .frame-statusbar,
+.phone-frame:has(.paused-run-page) .frame-statusbar .statusbar {
+  color: #000000;
+}
+
+.phone-frame:has(.paused-run-page) .frame-statusbar .statusbar__battery {
+  border-color: rgba(0, 0, 0, 0.25);
+}
+
+.phone-frame:has(.paused-run-page) .frame-statusbar .statusbar__battery::after {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.phone-frame:has(.run-complete-page) {
+  background: #ffffff;
+}
+
+.phone-frame:has(.run-complete-page) .frame-statusbar,
+.phone-frame:has(.run-complete-page) .frame-statusbar .statusbar {
+  color: #606060;
+}
+
+.phone-frame:has(.run-complete-page) .frame-statusbar {
+  background: #ffffff;
+}
+
+.phone-frame:has(.run-complete-page) .frame-statusbar .statusbar__battery {
+  border-color: rgba(96, 96, 96, 0.4);
+}
+
+.phone-frame:has(.run-complete-page) .frame-statusbar .statusbar__battery::after {
+  background: rgba(96, 96, 96, 0.4);
+}
+
+.phone-frame:has(.record-page) .bottom-nav {
+  background-color: rgba(0, 0, 0, 0.18);
+}
+
+/* 챗봇이 열리면 뒤에 기록 페이지가 남아 있어도 공통 상태바 색상을 사용한다. */
+.phone-frame.chatbot-is-open .frame-statusbar {
+  background: var(--bg-app);
+  color: var(--text-primary);
+}
+
+.phone-frame.chatbot-is-open .frame-statusbar .statusbar {
+  color: var(--text-primary);
+}
+
+.phone-frame.chatbot-is-open .frame-statusbar .statusbar__battery {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.phone-frame.chatbot-is-open .frame-statusbar .statusbar__battery::after {
+  background: rgba(255, 255, 255, 0.4);
+}
+
 @media (min-width: 768px) {
   .phone-frame {
     min-height: 0;

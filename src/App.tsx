@@ -475,7 +475,10 @@ export default function App() {
   const clearStatusBar = page === "record" || (page === "courseDetail" && Boolean(runCourseMaps[courseDetailKind])) || ((page === "feed" || page === "home") && feedStoryOpen);
 
   return (
-    <PhoneFrame statusBar={clearStatusBar ? "clear" : "solid"}>
+    <PhoneFrame
+      statusBar={!chatbotOpen && clearStatusBar ? "clear" : "solid"}
+      className={chatbotOpen ? "chatbot-is-open" : ""}
+    >
       {rendered}
       <div
         className={`chatbot-overlay ${chatbotOpen ? "is-open" : ""}`}

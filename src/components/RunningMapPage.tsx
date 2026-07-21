@@ -114,10 +114,10 @@ export default function RunningMapPage({
         <Stat value={String(bpm)} label="BPM" />
       </div>
 
-      <div className="absolute bottom-43 left-1/2 flex -translate-x-1/2 flex-col items-center gap-5">
+      <div className="absolute bottom-43.75 left-1/2 h-[186px] w-30 -translate-x-1/2">
         <button
           type="button"
-          className="grid size-13 place-items-center rounded-full bg-black shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
+          className="absolute top-0 left-1/2 grid size-14 -translate-x-1/2 place-items-center rounded-full bg-black shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
           aria-label="AI 챗봇"
           onClick={onChatbot}
         >
@@ -125,18 +125,18 @@ export default function RunningMapPage({
         </button>
         <button
           type="button"
-          className="grid size-30 place-items-center rounded-full border-2 border-primary-lime bg-black active:scale-[0.97]"
+          className="absolute top-19 left-1/2 grid size-27.5 -translate-x-1/2 place-items-center rounded-full bg-primary-lime active:scale-[0.97]"
           aria-label={paused ? "재개" : "일시정지"}
           onClick={onTogglePause}
         >
           {paused ? (
             <svg width={22} height={26} viewBox="0 0 22 26" fill="none" aria-hidden>
-              <path d="M1 1v24l20-12L1 1z" fill="#fff" />
+              <path d="M1 1v24l20-12L1 1z" fill="#000" />
             </svg>
           ) : (
             <svg width={19} height={26} viewBox="0 0 19 26" fill="none" aria-hidden>
-              <rect x="0" y="0" width="7" height="26" rx="2" fill="#fff" />
-              <rect x="12" y="0" width="7" height="26" rx="2" fill="#fff" />
+              <rect x="0" y="0" width="7" height="26" rx="2" fill="#000" />
+              <rect x="12" y="0" width="7" height="26" rx="2" fill="#000" />
             </svg>
           )}
         </button>
