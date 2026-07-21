@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUserProfile } from "../lib/userProfile";
 import { HIGHLIGHT_SEC, durationToSec, getDefaultHighlight } from "../lib/musicApi";
+import { playSong, pauseSong, stopSong, warmUpPlayer } from "../lib/youtubePlayer";
 import iconNote from "../assets/icons/player-note.svg";
 import iconPlay from "../assets/icons/player-play.svg";
 import iconNext from "../assets/icons/player-next.svg";
@@ -18,33 +19,41 @@ export default function ProfileMusicBar({ className = "" }: { className?: string
 
   const [index, setIndex] = useState(0); // 현재 곡 인덱스
   const [playing, setPlaying] = useState(false);
-  const [playKey, setPlayKey] = useState(0); // 바뀌면 임베드 리로드(처음부터 재생)
 
   const song = count ? songs[Math.min(index, count - 1)] : undefined;
 
-  // 30초 하이라이트가 끝나면 다음 곡으로, 마지막 곡이 끝나면 처음으로 되감고 정지
+  // 마운트 시 플레이어를 미리 준비하고, 벗어나면 정지.
+  // (미리 준비돼 있어야 ▶ 탭 순간 즉시 재생돼 모바일에서 소리가 난다)
   useEffect(() => {
-    if (!playing || !song) return;
-    const t = setTimeout(() => {
-      if (index + 1 < count) {
-        setIndex(index + 1);
-        setPlayKey((k) => k + 1);
-      } else {
-        setPlaying(false);
-        setIndex(0);
-      }
-    }, HIGHLIGHT_SEC * 1000);
-    return () => clearTimeout(t);
-  }, [playing, index, count, song]);
+    warmUpPlayer();
+    return () => stopSong();
+  }, []);
+
+  /** 해당 곡의 하이라이트 30초 재생 — 끝나면 다음 곡으로 이어지고,
+   *  마지막 곡이 끝나면 처음으로 되감고 정지. 반드시 탭 핸들러 안에서 호출. */
+  const playAt = (i: number) => {
+    const target = songs[i];
+    if (!target?.videoId) return;
+    const start = target.highlightStart ?? getDefaultHighlight(durationToSec(target.duration));
+    setIndex(i);
+    setPlaying(true);
+    playSong({
+      videoId: target.videoId,
+      startSeconds: start,
+      endSeconds: start + HIGHLIGHT_SEC,
+      onEnded: () => {
+        if (i + 1 < count) playAt(i + 1);
+        else {
+          setPlaying(false);
+          setIndex(0);
+        }
+      },
+    });
+  };
 
   if (!song) return null;
 
-  const nextSong = () => {
-    setIndex((index + 1) % count);
-    setPlayKey((k) => k + 1);
-  };
-
-  const hs = song.highlightStart ?? getDefaultHighlight(durationToSec(song.duration));
+  const nextSong = () => playAt((index + 1) % count);
   const title = `${song.artist} – ${song.title}`;
 
   return (
@@ -76,8 +85,12 @@ export default function ProfileMusicBar({ className = "" }: { className?: string
           type="button"
           aria-label={playing ? "일시정지" : "재생"}
           onClick={() => {
-            setPlaying((p) => !p);
-            setPlayKey((k) => k + 1); // 다시 재생하면 하이라이트 처음부터
+            if (playing) {
+              pauseSong();
+              setPlaying(false);
+            } else {
+              playAt(index); // 탭 안에서 직접 호출 → 모바일 소리 확보
+            }
           }}
         >
           {playing ? (
@@ -94,17 +107,8 @@ export default function ProfileMusicBar({ className = "" }: { className?: string
         </button>
       </div>
 
-      {/* 소리 재생 — 유튜브 임베드(숨김), 현재 곡 하이라이트 30초 */}
-      {playing && song.videoId && (
-        <div className="pointer-events-none fixed bottom-0 left-0 h-px w-px overflow-hidden opacity-0" aria-hidden>
-          <iframe
-            key={`${song.id}-${playKey}`}
-            src={`https://www.youtube.com/embed/${song.videoId}?autoplay=1&start=${hs}&end=${hs + HIGHLIGHT_SEC}`}
-            title={song.title}
-            allow="autoplay; encrypted-media"
-          />
-        </div>
-      )}
+      {/* 소리 재생은 공용 유튜브 플레이어(lib/youtubePlayer)가 담당 —
+          ▶ 탭 핸들러 안에서 직접 호출해야 모바일에서 음소거되지 않는다. */}
     </div>
   );
 }
