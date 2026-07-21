@@ -193,7 +193,7 @@ export default function HighlightPicker({
             {playing && !dragging && (
               <div
                 key={playKey}
-                className="h-full bg-[#d4ff3f]/30"
+                className="h-full bg-[var(--primary-lime)]"
                 style={{ animation: `hl-fill ${winSec}s linear forwards` }}
               />
             )}
