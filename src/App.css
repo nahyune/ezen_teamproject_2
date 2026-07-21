@@ -39,8 +39,11 @@
   background-color: inherit;
   pointer-events: none;
 }
+/* 위쪽 커버는 12px 틈뿐 아니라 상태바 영역(--statusbar-h)까지 덮는다.
+   모바일 PWA에서 OS 상태바가 투명이라, 스크롤 시 콘텐츠가 상태바로 비치던 문제 해결. */
 .subheader::before {
   bottom: 100%;
+  height: calc(var(--statusbar-h) + 12px);
 }
 .subheader::after {
   top: 100%;
