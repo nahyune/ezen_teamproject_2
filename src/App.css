@@ -69,7 +69,8 @@
   max-width: 100%;
   /* 높이를 확정값으로 — 안의 화면들이 h-full/min-h-full(%)로 키를 잴 수 있게.
      (min-height 였을 땐 % 기준이 없어 화면들이 브라우저 창 높이에 의존했음) */
-  height: 100svh;
+  height: 100vh;
+  height: 100dvh;
   background: var(--bg-app);
 }
 .phone-scroll {
