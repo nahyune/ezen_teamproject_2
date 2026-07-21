@@ -74,8 +74,8 @@ export type RunSummary = {
 function Stat({ value, label }: { value: string; label: string }) {
   const paceValueOffset = label === "평균 페이스" ? " translate-x-[3px]" : "";
   const paceLabelOffset = label === "평균 페이스" ? " -translate-x-[4px]" : "";
-  const valueColor = label === "BPM" ? " text-[#0d0d0f]" : " text-[#3e3e3e]";
-  const labelColor = label === "BPM" ? " text-[#b1b1b1]" : " text-[#a7a7a7]";
+  const valueColor = " text-[#3E3E3E]";
+  const labelColor = " text-black/26";
 
   return (
     <div className="flex w-22 flex-col items-center gap-1 text-center">
@@ -283,7 +283,7 @@ export default function RunningPage({
 
   return (
     // 상단 콘텐츠(코스칩~스탯)를 상태바 높이만큼 내림 (모바일 0 / 웹 52px)
-    <div className="running-stats-page relative flex flex-1 flex-col items-center bg-white pt-[var(--statusbar-h)] pb-17.25">
+    <div className="running-stats-page relative flex flex-1 flex-col items-center bg-[#fafafa] pt-[var(--statusbar-h)] pb-17.25">
       <BackButton
         onClick={() => setConfirmExit(true)}
         className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-10"
@@ -292,7 +292,7 @@ export default function RunningPage({
 
       {/* 뒤로가기 → 러닝 중단 확인 (카운트다운 화면과 동일 패턴) */}
       {confirmExit && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70">
+        <div className="absolute inset-0 z-[220] flex items-center justify-center bg-black/70">
           <div className="w-85 rounded-3xl border border-pill-border bg-elevated px-6 pt-[67.5px] pb-8.5">
             <p className="text-center text-[20px] font-bold leading-[1.3] text-[var(--text-strong)]">
               벌써 그만 두시게요?
@@ -323,7 +323,7 @@ export default function RunningPage({
       {/* 진행 중인 코스 칩 */}
       <button
         type="button"
-        className="mt-13.25 flex h-10.25 items-center gap-3.25 rounded-card bg-black/26 px-3 py-1.5 text-[16px] font-medium leading-[1.3] tracking-[-0.6px] text-white"
+        className="mt-13.25 flex h-10.25 items-center gap-3.25 rounded-card bg-[rgba(0,0,0,0.26)] px-3 py-1.5 text-[16px] font-medium leading-[1.3] tracking-[-0.6px] text-white"
         onClick={() => setView("map")}
       >
         <span className="size-1.75 rounded-full bg-primary-orange" />
@@ -342,10 +342,10 @@ export default function RunningPage({
       {/* 누적 거리 */}
       <p className="mt-15.25 flex w-full items-baseline justify-center font-display leading-[1.3] whitespace-nowrap">
         <span className="inline-flex min-w-[296px] items-baseline justify-center gap-1.25">
-          <span className="text-[128px] tracking-[-2.56px] text-[#3b3b3b] tabular-nums">
+          <span className="text-[128px] tracking-[-2.56px] text-[#0D0D0F] tabular-nums">
             {distance}
           </span>
-          <span className="text-[36px] tracking-[-0.72px] text-[#b1b1b1]">KM</span>
+          <span className="text-[36px] tracking-[-0.72px] text-[rgba(0,0,0,0.26)]">KM</span>
         </span>
       </p>
 
@@ -359,7 +359,7 @@ export default function RunningPage({
       <div className="mt-auto flex flex-col items-center gap-5">
         <button
           type="button"
-          className="grid size-14 place-items-center rounded-full bg-[#3b3b3b]"
+          className="grid size-14 place-items-center rounded-full bg-[#232323]"
           aria-label="AI 챗봇"
           onClick={onChatbot}
         >
@@ -385,7 +385,7 @@ export default function RunningPage({
       ) : (
         <button
           type="button"
-          className="mt-9.75 h-16.75 w-87.5 max-w-[calc(100%-36px)] rounded-lg bg-[#0d0d0f] text-[18px] leading-[1.3] tracking-[-0.54px] text-white"
+          className="mt-9.75 h-16.75 w-87.5 max-w-[calc(100%-36px)] rounded-lg bg-[#232323] text-[18px] leading-[1.3] tracking-[-0.54px] text-white"
           onClick={() => setMusicOpen(true)}
         >
           음악 연결하기

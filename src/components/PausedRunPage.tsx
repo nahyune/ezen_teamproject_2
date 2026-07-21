@@ -17,10 +17,10 @@ function Stat({ value, label }: { value: string; label: string }) {
 
   return (
     <div className="flex w-27.5 flex-col items-center gap-1">
-      <span className={"font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-[#0d0d0f]" + paceValueOffset}>
+      <span className={"font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-[#3E3E3E]" + paceValueOffset}>
         {value}
       </span>
-      <span className="text-[16px] leading-[1.3] tracking-[-0.48px] text-[#9a9a9a]">
+      <span className="text-[16px] leading-[1.3] tracking-[-0.48px] text-[rgba(0,0,0,0.26)]">
         {label}
       </span>
     </div>
@@ -58,7 +58,6 @@ export default function PausedRunPage({
   mapPath = [],
   mapProgress = 0,
   mapPosition,
-  mapCenter,
   mapLevel = 4,
   showRoutePreview = true,
   onResume,
@@ -72,7 +71,7 @@ export default function PausedRunPage({
   const [isHoldingEnd, setIsHoldingEnd] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const pausedMapPosition = mapPosition ?? PAUSED_RUN_LOCATION;
-  const pausedMapCenter = mapCenter ?? pausedMapPosition;
+  const pausedMapCenter = pausedMapPosition;
   const pausedMapPath = mapPath.length > 1 ? mapPath : undefined;
 
   const startHold = () => {
@@ -155,7 +154,7 @@ export default function PausedRunPage({
 
       <button
         type="button"
-        className="absolute bottom-76.25 left-1/2 grid size-14 -translate-x-1/2 place-items-center rounded-full bg-[#3b3b3b]"
+        className="absolute bottom-76.25 left-1/2 grid size-14 -translate-x-1/2 place-items-center rounded-full bg-[#232323]"
         aria-label="AI 챗봇"
         onClick={onChatbot}
       >
@@ -174,7 +173,7 @@ export default function PausedRunPage({
             onPointerCancel={cancelHold}
           >
             <span
-              className={"grid size-24 transform-gpu place-items-center rounded-full bg-[#3b3b3b] transition-transform ease-out " + (isHoldingEnd ? "scale-[1.12] duration-500" : "scale-100 duration-0")}
+              className={"grid size-24 transform-gpu place-items-center rounded-full bg-[#232323] transition-transform ease-out " + (isHoldingEnd ? "scale-[1.12] duration-500" : "scale-100 duration-0")}
             >
               <span className="size-5.75 rounded-xs bg-white" />
             </span>
@@ -205,7 +204,7 @@ export default function PausedRunPage({
       ) : (
         <button
           type="button"
-          className="absolute bottom-17.25 left-1/2 h-16.75 w-87.5 max-w-[calc(100%-36px)] -translate-x-1/2 rounded-lg bg-[#0d0d0f] text-[18px] leading-[1.3] tracking-[-0.54px] text-white"
+          className="absolute bottom-17.25 left-1/2 h-16.75 w-87.5 max-w-[calc(100%-36px)] -translate-x-1/2 rounded-lg bg-[#232323] text-[18px] leading-[1.3] tracking-[-0.54px] text-white"
           onClick={onMusicConnect}
         >
           음악 연결하기

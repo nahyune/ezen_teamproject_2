@@ -5,10 +5,13 @@ import cardPhoto from "../assets/img/300img.png";
 import exampleSelfie from "../assets/img/feed-running-selfie.webp";
 import exampleCrew from "../assets/img/feed-story-ahn-hangang-crew.webp";
 import exampleShoes from "../assets/img/feed-running-shoes.webp";
+import shareIcon from "../assets/icons/share.svg";
+import { BackButton } from "./Icons";
 import type { RunSummary } from "./RunningPage";
 
 type Props = {
   summary?: RunSummary | null;
+  onBack?: () => void;
   onClose?: () => void;
   onShare?: (card: SharedRunCard) => void;
   onSave?: (card: SharedRunCard) => void;
@@ -81,7 +84,39 @@ const normalizeRoute = (path: RoutePoint[], padding = 0.14): { x: number; y: num
   }));
 };
 
-export default function RunRecordCardPage({ summary, onClose, onShare, onSave }: Props) {
+const getTraveledRoute = (path: RoutePoint[], progress: number) => {
+  if (path.length < 2) return path;
+
+  const clampedProgress = Math.max(0, Math.min(1, progress));
+  const segmentLengths = path.slice(1).map((point, index) => {
+    const previous = path[index];
+    return Math.hypot(point.lat - previous.lat, point.lng - previous.lng);
+  });
+  const totalLength = segmentLengths.reduce((total, length) => total + length, 0);
+  const targetLength = totalLength * clampedProgress;
+  const traveledPath = [path[0]];
+  let traveledLength = 0;
+
+  for (let index = 0; index < segmentLengths.length; index += 1) {
+    const segmentLength = segmentLengths[index];
+    const start = path[index];
+    const end = path[index + 1];
+    if (traveledLength + segmentLength >= targetLength) {
+      const ratio = segmentLength === 0 ? 0 : (targetLength - traveledLength) / segmentLength;
+      traveledPath.push({
+        lat: start.lat + (end.lat - start.lat) * ratio,
+        lng: start.lng + (end.lng - start.lng) * ratio,
+      });
+      break;
+    }
+    traveledPath.push(end);
+    traveledLength += segmentLength;
+  }
+
+  return traveledPath;
+};
+
+export default function RunRecordCardPage({ summary, onBack, onClose, onShare, onSave }: Props) {
   const now = new Date();
   const distance = summary?.distance ?? "8.43";
   const seconds = summary?.seconds ?? 51 * 60 + 17;
@@ -89,7 +124,10 @@ export default function RunRecordCardPage({ summary, onClose, onShare, onSave }:
 
   // 실제 달린 경로를 카드 좌표(0~1)로 정규화. 경로가 없으면(코스 미선택·API 실패 등)
   // 빈 배열 → 기존 고정 GPS 아트 아이콘으로 폴백한다.
-  const routePoints = useMemo(() => normalizeRoute(summary?.mapPath ?? []), [summary?.mapPath]);
+  const routePoints = useMemo(
+    () => normalizeRoute(getTraveledRoute(summary?.mapPath ?? [], summary?.mapProgress ?? 1)),
+    [summary?.mapPath, summary?.mapProgress],
+  );
   const hasRoutePath = routePoints.length > 1;
   const routePolyline = routePoints
     .map((point) => `${(point.x * 100).toFixed(2)},${(point.y * 100).toFixed(2)}`)
@@ -294,8 +332,20 @@ export default function RunRecordCardPage({ summary, onClose, onShare, onSave }:
   };
 
   return (
-    <div className="scrollbar-hidden relative flex flex-1 min-h-0 flex-col overflow-y-auto bg-black pb-8">
-      <div className="sticky top-0 z-[1] h-[var(--statusbar-h)] shrink-0 bg-black" aria-hidden />
+    <div className="run-record-card-page scrollbar-hidden relative flex flex-1 min-h-0 flex-col overflow-y-auto bg-[#232323] pb-8">
+      <div className="fixed top-0 left-0 right-0 z-10 h-[var(--statusbar-h)] bg-[#232323]" aria-hidden />
+      <header className="sticky top-[var(--statusbar-h)] z-20 mt-[var(--statusbar-h)] flex h-13 w-full shrink-0 items-center justify-between bg-[#232323] px-4.5">
+        <BackButton onClick={onBack} color="text-white" />
+        <button
+          type="button"
+          className="grid size-[26px] place-items-center"
+          aria-label="공유하기"
+          onClick={shareCard}
+          disabled={sharing || saving}
+        >
+          <img className="size-[26px] brightness-0 invert" src={shareIcon} alt="" />
+        </button>
+      </header>
       <p className="mt-4 px-6 font-display text-[13px] tracking-[1px] text-primary-lime">
         RUN COMPLETE
       </p>
@@ -397,7 +447,7 @@ export default function RunRecordCardPage({ summary, onClose, onShare, onSave }:
         )}
       </div>
 
-      <section className="mx-6 mt-5 rounded-[12px] border border-white/10 bg-[#151517] p-4">
+      <section className="mx-6 mt-5 rounded-[12px] border border-white/10 bg-[#404040] p-4">
         <button
           type="button"
           className="flex w-full items-center justify-between text-left"
@@ -447,7 +497,7 @@ export default function RunRecordCardPage({ summary, onClose, onShare, onSave }:
         )}
       </section>
 
-      <section className="mx-6 mt-3 rounded-[12px] border border-white/10 bg-[#151517] p-4">
+      <section className="mx-6 mt-3 rounded-[12px] border border-white/10 bg-[#404040] p-4">
         <button
           type="button"
           className="flex w-full items-center justify-between text-left"
@@ -486,7 +536,7 @@ export default function RunRecordCardPage({ summary, onClose, onShare, onSave }:
         )}
       </section>
 
-      <section className="mx-6 mt-3 rounded-[12px] border border-white/10 bg-[#151517] p-4">
+      <section className="mx-6 mt-3 rounded-[12px] border border-white/10 bg-[#404040] p-4">
         <button
           type="button"
           className="flex w-full items-center justify-between text-left"
@@ -535,7 +585,7 @@ export default function RunRecordCardPage({ summary, onClose, onShare, onSave }:
         type="button"
         onClick={saveCard}
         disabled={sharing || saving}
-        className="mx-6 mt-2.5 flex h-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-white"
+        className="mx-6 mt-2.5 flex h-14 shrink-0 items-center justify-center rounded-full bg-[#404040] text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-white"
       >
         {saving ? "저장 중..." : "기록만 저장하고 닫기"}
       </button>

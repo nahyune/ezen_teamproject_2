@@ -103,34 +103,12 @@
   background: var(--bg-app);
 }
 
-/* 기록 탭의 밝은 Figma 팔레트. 상태바 구조는 유지하고 색상만 화면에 맞춘다. */
-.phone-frame:has(.record-page) {
-  background: #ffffff;
-}
-
-.phone-frame:has(.record-page) .frame-statusbar {
-  background: #ffffff;
-  color: #000000;
-}
-
-.phone-frame:has(.record-page) .frame-statusbar .statusbar {
-  color: #000000;
-}
-
-.phone-frame:has(.record-page) .frame-statusbar .statusbar__battery {
-  border-color: rgba(0, 0, 0, 0.25);
-}
-
-.phone-frame:has(.record-page) .frame-statusbar .statusbar__battery::after {
-  background: rgba(0, 0, 0, 0.25);
-}
-
 .phone-frame:has(.running-stats-page) {
-  background: #ffffff;
+  background: #fafafa;
 }
 
 .phone-frame:has(.running-stats-page) .frame-statusbar {
-  background: #ffffff;
+  background: #fafafa;
   color: #000000;
 }
 
@@ -164,12 +142,12 @@
 }
 
 .phone-frame:has(.run-complete-page) {
-  background: #ffffff;
+  background: #fafafa;
 }
 
 .phone-frame:has(.run-complete-page) .frame-statusbar,
 .phone-frame:has(.run-complete-page) .frame-statusbar .statusbar {
-  color: #606060;
+  color: #0d0d0f;
 }
 
 .phone-frame:has(.run-complete-page) .frame-statusbar {
@@ -177,15 +155,28 @@
 }
 
 .phone-frame:has(.run-complete-page) .frame-statusbar .statusbar__battery {
-  border-color: rgba(96, 96, 96, 0.4);
+  border-color: #0d0d0f;
 }
 
 .phone-frame:has(.run-complete-page) .frame-statusbar .statusbar__battery::after {
-  background: rgba(96, 96, 96, 0.4);
+  background: #0d0d0f;
 }
 
-.phone-frame:has(.record-page) .bottom-nav {
-  background-color: rgba(0, 0, 0, 0.18);
+.phone-frame:has(.run-record-card-page) .frame-statusbar,
+.phone-frame:has(.run-record-card-page) .frame-statusbar .statusbar {
+  color: #ffffff;
+}
+
+.phone-frame:has(.run-record-card-page) .frame-statusbar {
+  background: #232323;
+}
+
+.phone-frame:has(.run-record-card-page) .frame-statusbar .statusbar__battery {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.phone-frame:has(.run-record-card-page) .frame-statusbar .statusbar__battery::after {
+  background: rgba(255, 255, 255, 0.4);
 }
 
 /* 챗봇이 열리면 뒤에 기록 페이지가 남아 있어도 공통 상태바 색상을 사용한다. */

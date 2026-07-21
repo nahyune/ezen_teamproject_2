@@ -19,7 +19,7 @@ const fallbackSummary: RunSummary = {
 function Stat({ value, label, suffix }: { value: string; label: string; suffix?: string }) {
   return (
     <div className="flex w-27.5 flex-col items-center gap-1">
-      <span className="flex items-center gap-1.25 font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-[#0d0d0f]">
+      <span className="flex items-center gap-1.25 font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-[#3E3E3E]">
         {value}
         {suffix && (
           <span className="font-sans text-[24px] tracking-[-0.48px] text-[#ff4e16]">
@@ -27,7 +27,7 @@ function Stat({ value, label, suffix }: { value: string; label: string; suffix?:
           </span>
         )}
       </span>
-      <span className="text-[16px] leading-[1.3] tracking-[-0.48px] text-[#b1b1b1]">
+      <span className="text-[16px] leading-[1.3] tracking-[-0.48px] text-[rgba(0,0,0,0.26)]">
         {label}
       </span>
     </div>
@@ -47,18 +47,18 @@ export default function RunCompletePage({
   const result = summary ?? fallbackSummary;
   const cadence = summary ? String(Math.round(result.bpm * 1.06)) : "172";
   return (
-    <div className="run-complete-page scrollbar-hidden relative flex flex-1 min-h-0 animate-run-complete-fade flex-col items-center overflow-y-auto bg-white">
+    <div className="run-complete-page scrollbar-hidden relative flex flex-1 min-h-0 animate-run-complete-fade flex-col items-center overflow-y-auto bg-[#fafafa]">
       <div className="fixed top-0 left-0 right-0 z-10 h-[var(--statusbar-h)] bg-white" aria-hidden />
       <header className="sticky top-[var(--statusbar-h)] z-10 mt-[var(--statusbar-h)] flex h-13 w-full shrink-0 items-center justify-between border-b border-[#eeeeee] bg-white px-4.5">
-        <BackButton onClick={onBack} color="text-[#606060]" />
+        <BackButton onClick={onBack} color="text-[#0D0D0F]" />
         <button type="button" className="grid size-[26px] place-items-center" aria-label="공유하기">
-          <img className="size-[26px] brightness-0 opacity-[0.62]" src={shareIcon} alt="" />
+          <img className="size-[26px]" src={shareIcon} alt="" />
         </button>
       </header>
 
-      <p className="flex w-87.5 shrink-0 items-baseline justify-start gap-1.25 pl-3 font-display leading-[1.3] whitespace-nowrap">
-        <span className="text-[128px] tracking-[-2.56px] text-[#3b3b3b] tabular-nums">{result.distance}</span>
-        <span className="text-[36px] tracking-[-0.72px] text-[#b1b1b1]">KM</span>
+      <p className="mt-3 flex w-87.5 shrink-0 items-baseline justify-start gap-1.25 pl-3 font-display leading-[1.3] whitespace-nowrap">
+        <span className="text-[128px] tracking-[-2.56px] text-[#0D0D0F] tabular-nums">{result.distance}</span>
+        <span className="text-[36px] tracking-[-0.72px] text-[rgba(0,0,0,0.26)]">KM</span>
       </p>
 
       <div className="mt-4 flex w-87.5 shrink-0 flex-col gap-4">
@@ -84,6 +84,7 @@ export default function RunCompletePage({
           showTraveledPath
           showRoutePreview={result.mapShowRoutePreview ?? false}
           traveledPathProgress={result.mapProgress ?? 1}
+          fitPathBounds
         />
 
         <span className="absolute top-4.5 left-3.75 z-10 flex h-8.25 w-33.25 items-center justify-center rounded-[5px] bg-white text-[14px] leading-[1.3] tracking-[-0.42px] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)]">

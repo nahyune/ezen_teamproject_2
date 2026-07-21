@@ -185,7 +185,15 @@ export default function RecordFlow({
       );
     }
     if (screen === "card") {
-      return <RunRecordCardPage summary={runSummary} onClose={onBack} onShare={onShareCard} onSave={onSaveCard} />;
+      return (
+        <RunRecordCardPage
+          summary={runSummary}
+          onBack={() => setScreen("finished")}
+          onClose={onBack}
+          onShare={onShareCard}
+          onSave={onSaveCard}
+        />
+      );
     }
     return (
       <RecordPage

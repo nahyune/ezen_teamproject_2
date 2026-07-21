@@ -114,6 +114,7 @@ export default function MapBackdrop({
   showTraveledPath = false,
   showRoutePreview = true,
   traveledPathProgress,
+  fitPathBounds = false,
 }: {
   center?: MapPoint;
   level?: number;
@@ -127,6 +128,7 @@ export default function MapBackdrop({
   showTraveledPath?: boolean;
   showRoutePreview?: boolean;
   traveledPathProgress?: number;
+  fitPathBounds?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -155,6 +157,20 @@ export default function MapBackdrop({
           center: new kakao.maps.LatLng(initialMapPoint.lat, initialMapPoint.lng),
           level,
         });
+        if (fitPathBounds && path.length > 0) {
+          const visiblePath =
+            staticProgress !== null && path.length > 1
+              ? getPathUntil(path, staticDistance)
+              : path;
+          if (visiblePath.length > 1) {
+            const bounds = new kakao.maps.LatLngBounds();
+            visiblePath.forEach((point) => bounds.extend(new kakao.maps.LatLng(point.lat, point.lng)));
+            map.setBounds(bounds, 42, 42, 42, 42);
+          } else {
+            const point = visiblePath[0];
+            map.setCenter(new kakao.maps.LatLng(point.lat, point.lng));
+          }
+        }
         if (showTraveledPath && showRoutePreview && path.length > 1) {
           new kakao.maps.Polyline({
             map,
@@ -263,6 +279,7 @@ export default function MapBackdrop({
     showTraveledPath,
     showRoutePreview,
     traveledPathProgress,
+    fitPathBounds,
   ]);
 
   return (
