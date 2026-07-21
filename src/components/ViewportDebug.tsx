@@ -39,6 +39,34 @@ export default function ViewportDebug() {
   }, []);
 
   return (
+    <>
+      {/* 판별용 마커 — 화면 맨 아래 47px(=844-797) 영역에 핑크를 칠해본다.
+          핑크가 보이면 그 영역을 웹뷰가 칠할 수 있다는 뜻(=프레임을 100vh로 늘리면 해결),
+          안 보이고 검은 채로면 시스템 영역이라 translucent 로는 못 덮는다. */}
+      <div
+        style={{
+          position: "fixed",
+          left: 0,
+          right: 0,
+          top: "100dvh", // 797 지점부터
+          height: "60px",
+          background: "magenta",
+          zIndex: 99998,
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "fixed",
+          left: 0,
+          right: 0,
+          bottom: 0, // 화면 맨 아래 기준
+          height: "12px",
+          background: "cyan",
+          zIndex: 99998,
+          pointerEvents: "none",
+        }}
+      />
     <div
       style={{
         position: "fixed",
@@ -60,5 +88,6 @@ export default function ViewportDebug() {
         .map(([k, v]) => `${k}: ${v}`)
         .join("\n")}
     </div>
+    </>
   );
 }
