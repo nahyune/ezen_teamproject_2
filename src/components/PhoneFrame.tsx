@@ -17,14 +17,16 @@ import { StatusBar } from "./TopBars";
 export default function PhoneFrame({
   children,
   statusBar = "solid",
+  className = "",
 }: {
   children: ReactNode;
   /** solid = 불투명 배경(메인·연결 페이지, 스크롤 시 콘텐츠 가려짐)
    *  clear = 투명(기록·온보딩 몰입 화면, 배경이 상단까지 꽉 참) */
   statusBar?: "solid" | "clear";
+  className?: string;
 }) {
   return (
-    <div className="phone-frame">
+    <div className={`phone-frame ${className}`}>
       <div
         className={`frame-statusbar${statusBar === "solid" ? " frame-statusbar--solid" : ""}`}
         aria-hidden

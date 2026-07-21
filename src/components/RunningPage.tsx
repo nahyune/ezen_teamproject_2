@@ -74,13 +74,26 @@ export type RunSummary = {
 function Stat({ value, label }: { value: string; label: string }) {
   const paceValueOffset = label === "평균 페이스" ? " translate-x-[3px]" : "";
   const paceLabelOffset = label === "평균 페이스" ? " -translate-x-[4px]" : "";
+  const valueColor = label === "BPM" ? " text-[#0d0d0f]" : " text-[#3e3e3e]";
+  const labelColor = label === "BPM" ? " text-[#b1b1b1]" : " text-[#a7a7a7]";
 
   return (
     <div className="flex w-22 flex-col items-center gap-1 text-center">
-      <span className={"w-full text-center font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-white tabular-nums" + paceValueOffset}>
+      <span className={"flex w-full items-center justify-center gap-1.25 text-center font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap tabular-nums" + valueColor + paceValueOffset}>
         {value}
+        {label === "BPM" && (
+          <svg className="size-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"
+              stroke="#FF4E16"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
       </span>
-      <span className={"w-full text-center text-[16px] leading-[1.3] tracking-[-0.48px] text-[#b1b1b1]" + paceLabelOffset}>
+      <span className={"w-full text-center text-[16px] leading-[1.3] tracking-[-0.48px]" + labelColor + paceLabelOffset}>
         {label}
       </span>
     </div>
@@ -270,10 +283,11 @@ export default function RunningPage({
 
   return (
     // 상단 콘텐츠(코스칩~스탯)를 상태바 높이만큼 내림 (모바일 0 / 웹 52px)
-    <div className="relative flex flex-1 flex-col items-center bg-[#1b1b1b] pt-[var(--statusbar-h)] pb-17.25">
+    <div className="running-stats-page relative flex flex-1 flex-col items-center bg-white pt-[var(--statusbar-h)] pb-17.25">
       <BackButton
         onClick={() => setConfirmExit(true)}
         className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-10"
+        color="text-black"
       />
 
       {/* 뒤로가기 → 러닝 중단 확인 (카운트다운 화면과 동일 패턴) */}
@@ -309,10 +323,10 @@ export default function RunningPage({
       {/* 진행 중인 코스 칩 */}
       <button
         type="button"
-        className="mt-13.25 flex h-10.25 items-center gap-3.25 rounded-card bg-black px-3 py-1.5 text-[16px] font-medium leading-[1.3] tracking-[-0.6px] text-white"
+        className="mt-13.25 flex h-10.25 items-center gap-3.25 rounded-card bg-black/26 px-3 py-1.5 text-[16px] font-medium leading-[1.3] tracking-[-0.6px] text-white"
         onClick={() => setView("map")}
       >
-        <span className="size-1.75 rounded-full bg-primary-lime" />
+        <span className="size-1.75 rounded-full bg-primary-orange" />
         <span>{routeChipLabel}</span>
         <svg width={7} height={12} viewBox="0 0 7 12" fill="none" aria-hidden>
           <path
@@ -328,7 +342,7 @@ export default function RunningPage({
       {/* 누적 거리 */}
       <p className="mt-15.25 flex w-full items-baseline justify-center font-display leading-[1.3] whitespace-nowrap">
         <span className="inline-flex min-w-[296px] items-baseline justify-center gap-1.25">
-          <span className="text-[128px] tracking-[-2.56px] text-primary-lime tabular-nums">
+          <span className="text-[128px] tracking-[-2.56px] text-[#3b3b3b] tabular-nums">
             {distance}
           </span>
           <span className="text-[36px] tracking-[-0.72px] text-[#b1b1b1]">KM</span>
@@ -345,7 +359,7 @@ export default function RunningPage({
       <div className="mt-auto flex flex-col items-center gap-5">
         <button
           type="button"
-          className="grid size-14 place-items-center rounded-full bg-black"
+          className="grid size-14 place-items-center rounded-full bg-[#3b3b3b]"
           aria-label="AI 챗봇"
           onClick={onChatbot}
         >
@@ -371,7 +385,7 @@ export default function RunningPage({
       ) : (
         <button
           type="button"
-          className="mt-9.75 h-16.75 w-87.5 max-w-[calc(100%-36px)] rounded-lg bg-black text-[18px] leading-[1.3] tracking-[-0.54px] text-white"
+          className="mt-9.75 h-16.75 w-87.5 max-w-[calc(100%-36px)] rounded-lg bg-[#0d0d0f] text-[18px] leading-[1.3] tracking-[-0.54px] text-white"
           onClick={() => setMusicOpen(true)}
         >
           음악 연결하기
