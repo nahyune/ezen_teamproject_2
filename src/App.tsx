@@ -31,8 +31,6 @@ import RecordFlow from "./components/RecordFlow";
 import type { SharedRunCard } from "./components/RunRecordCardPage";
 import ChatbotPage from "./components/ChatbotPage";
 import LocationPermissionDialog from "./components/LocationPermissionDialog";
-// ⚠️ 임시 진단용 — 원인 파악 후 이 import 와 아래 <ViewportDebug /> 삭제
-import ViewportDebug from "./components/ViewportDebug";
 import {
   courseDetailPages,
   feedStories,
@@ -516,8 +514,6 @@ export default function App() {
           onDeny={() => setShowLocationPermission(false)}
         />
       )}
-      {/* ⚠️ 임시 진단용 — 하단 검은 띠 원인 파악 후 이 줄과 import, ViewportDebug.tsx 삭제 */}
-      <ViewportDebug />
     </PhoneFrame>
   );
 }

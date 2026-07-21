@@ -85,15 +85,24 @@
   display: none;
 }
 
+/* 모바일(실기기) — 프레임을 일반 흐름으로 둔다.
+   (position:fixed 면 뷰포트에 갇혀 넘치는 영역이 화면 밖으로 밀려 접근 불가) */
 @media (max-width: 767px) {
   .phone-frame {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     width: 100%;
     max-width: none;
     height: 100dvh;
+  }
+}
+/* iOS 홈 화면 앱(standalone) + black-translucent 조합에서만 100dvh 가 상태바
+   높이(약 47px)만큼 짧게 잡혀 화면 아래에 빈 띠가 남는다.
+   실측(iPhone): screen 844 / 100vh 844 / 100dvh 797 → 100vh 가 화면과 일치.
+   ⚠️ 일반 사파리에서 100vh 는 주소창이 보일 때 화면보다 커져 하단이 잘리므로,
+      이 교체는 반드시 standalone 일 때만 적용한다. */
+@media (max-width: 767px) and (display-mode: standalone) {
+  .phone-frame {
+    height: 100vh;
   }
 }
 
