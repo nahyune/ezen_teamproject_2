@@ -9,7 +9,10 @@
     <meta name="theme-color" content="#0d0d0f" />
     <meta name="apple-mobile-web-app-title" content="W:RUN" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- black-translucent 는 iOS standalone(홈 화면 앱)에서 콘텐츠를 상태바 밑까지
+         끌어올리지만, 화면 하단에 상태바 높이만큼 빈 띠가 남는 iOS 버그가 있다.
+         black 으로 두면 웹뷰가 상태바 아래에서 시작해 화면 계산이 정확해진다. -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link
