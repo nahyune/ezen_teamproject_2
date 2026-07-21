@@ -123,7 +123,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 pb-10">
+      <main className="detail-section-stack flex flex-col pb-10">
         <section className="relative h-[400px] overflow-hidden">
           <img className="h-full w-full object-cover" src={mag1} alt="러닝화와 러닝 기어가 놓인 사진" />
           <div
@@ -164,7 +164,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
               <span className="shrink-0">
                 <LightbulbIcon />
               </span>
-              <p className="flex flex-col text-[20px] font-semibold leading-[1.3] tracking-[-0.6px] text-[#f6f6ed]">
+              <p className="flex flex-col text-[17px] font-semibold leading-[1.3] tracking-[-0.6px] text-[#f6f6ed]">
                 <span>첫 러닝화의 기준,</span>
                 <span>10km를 신고도 발이 편안한가.</span>
               </p>

@@ -87,13 +87,16 @@ export default function ScheduleDetailPage({ onBack }: Props) {
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 px-[var(--gutter)] pb-[126px] pt-[10px]">
+      <main className="detail-section-stack flex flex-col px-[var(--gutter)] pb-[126px] pt-[10px]">
         <section className="relative h-[250px] w-full overflow-hidden rounded-[20px] bg-[#111]">
           <img className="h-full w-full object-cover object-bottom" src={scheduleImage} alt="" />
           <div className="absolute inset-0 bg-black/20" />
         </section>
 
-        <section className="-mt-[34px] flex flex-col gap-[10px]">
+        <section
+          className="flex flex-col gap-[10px]"
+          style={{ marginTop: "calc(14px - (var(--spacing, 2.25rem) * 18))" }}
+        >
           <div className="flex gap-[6px]">
             <span className="inline-flex min-h-[27px] items-center justify-center rounded-[12px] border border-[var(--primary-lime)] px-[10px] py-1 text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[var(--primary-lime)]">
               크루

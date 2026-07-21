@@ -86,7 +86,7 @@ export default function RaceDetailPage({ onBack }: Props) {
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 pb-12">
+      <main className="detail-section-stack flex flex-col pb-12">
         <section className="relative h-[581px] overflow-hidden after:absolute after:inset-0 after:bg-[linear-gradient(to_bottom,rgba(0,0,0,0.03),rgba(0,0,0,0.42))]">
           <img className="absolute inset-0 h-full w-full object-cover object-[48%_center]" src={raceHero} alt="" />
           <div className="relative z-[1] flex h-full flex-col justify-between px-[19px] py-4">
@@ -106,7 +106,10 @@ export default function RaceDetailPage({ onBack }: Props) {
           </div>
         </section>
 
-        <section className="grid grid-cols-2 gap-x-[18px] gap-y-4 px-[var(--gutter)] max-[380px]:gap-3">
+        <section
+          className="grid grid-cols-2 gap-x-[18px] gap-y-4 px-[var(--gutter)] max-[380px]:gap-3"
+          style={{ marginTop: "calc(24px - (var(--spacing, 2.25rem) * 18))" }}
+        >
           {infoCards.map((card) => (
             <article className={glassCardClass} key={card.label}>
               <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-white/70">{card.label}</p>

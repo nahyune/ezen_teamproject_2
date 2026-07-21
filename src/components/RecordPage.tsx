@@ -2,16 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { attachDragScroll } from "../dragScroll";
 import logoW from "../assets/icons/logo-w.svg";
 import logoRun from "../assets/icons/logo-run.svg";
-import iconBell from "../assets/icons/header-bell.svg";
 import iconChatbot from "../assets/icons/header-chatbot.svg";
 import iconBulb from "../assets/icons/bulb.svg";
 import iconSparkle from "../assets/icons/sparkle.svg";
 import dogCourseImg from "../assets/img/dog_course.webp";
 import recordCourseImg from "../assets/img/record-course.png";
 import namsanHeartImg from "../assets/img/namsan_heart.avif";
-import runningShoeImg from "../assets/img/shoe-nike-pegasus41.webp";
 import MapBackdrop from "./MapBackdrop";
 import BottomNav from "./BottomNav";
+import RunNotifications from "./RunNotifications";
 
 const recommendedCourses = [
   {
@@ -95,21 +94,7 @@ export default function RecordPage({
   musicConnected?: boolean;
 }) {
   const rowRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [hasUnreadNotifications, setHasUnreadNotifications] = useState(true);
-
-  useEffect(() => {
-    if (!notificationsOpen) return;
-
-    const closeNotifications = (event: PointerEvent) => {
-      if (!headerRef.current?.contains(event.target as Node)) setNotificationsOpen(false);
-    };
-
-    document.addEventListener("pointerdown", closeNotifications);
-    return () => document.removeEventListener("pointerdown", closeNotifications);
-  }, [notificationsOpen]);
 
   useEffect(() => {
     const row = rowRef.current;
@@ -152,7 +137,7 @@ export default function RecordPage({
         <div className="absolute inset-x-0 top-0 h-35 bg-linear-to-b from-white from-19% to-white/0" />
       </div>
 
-      <header ref={headerRef} className="relative z-10 mb-3 mt-[calc(var(--statusbar-h)+12px)] flex h-13 items-center justify-between bg-white px-4.5">
+      <header className="relative z-10 mb-3 mt-[calc(var(--statusbar-h)+12px)] flex h-13 items-center justify-between bg-white px-4.5">
         <div className="flex items-center">
           <button
             type="button"
@@ -169,64 +154,7 @@ export default function RecordPage({
             <img className="h-[21.64px] w-[34.23px]" src={logoRun} alt="" />
           </button>
         </div>
-        <button
-          type="button"
-          className="relative"
-          aria-label="알림"
-          aria-expanded={notificationsOpen}
-          onClick={() => {
-            setNotificationsOpen((open) => !open);
-            setHasUnreadNotifications(false);
-          }}
-        >
-          <img className="size-6 brightness-0" src={iconBell} alt="" />
-          {hasUnreadNotifications && (
-            <span className="absolute -right-0.5 -top-0.5 size-2 rounded-full border border-white bg-[var(--primary-orange)]" />
-          )}
-        </button>
-        {notificationsOpen && (
-          <section className="absolute right-4.5 top-[48px] z-20 w-[360px] max-w-[calc(100vw-36px)] overflow-hidden rounded-[8px] border border-black/8 bg-white shadow-[0_16px_42px_rgba(0,0,0,0.15)]">
-            <div className="flex h-12 items-center justify-between border-b border-black/8 px-4">
-              <h2 className="text-[17px] font-semibold text-black">알림</h2>
-              <span className="text-[12px] font-medium text-primary-lime">알림 2개</span>
-            </div>
-            <ul className="py-1.5">
-              <li className="flex gap-3 px-4 py-3">
-                <span className="grid size-11 flex-none place-items-center rounded-full bg-black text-primary-lime">
-                  <svg className="size-6" viewBox="0 0 24 24" fill="none" aria-hidden>
-                    <path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.64 5.64l1.56 1.56M16.8 16.8l1.56 1.56M18.36 5.64 16.8 7.2M7.2 16.8l-1.56 1.56" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                    <circle cx="12" cy="12" r="4.1" stroke="currentColor" strokeWidth="1.6" />
-                  </svg>
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-[14px] font-semibold text-black">오늘 러닝 날씨</h3>
-                    <span className="size-1.5 flex-none rounded-full bg-[var(--primary-orange)]" />
-                  </div>
-                  <p className="mt-1 text-[13px] leading-[1.45] text-black/65">
-                    19°C · 미세먼지 좋음<br />오후 8시부터 약한 비가 예상돼요.
-                  </p>
-                  <p className="mt-1.5 text-[11px] text-black/35">방금 전</p>
-                </div>
-              </li>
-              <li className="flex gap-3 border-t border-black/7 px-4 py-3">
-                <span className="grid size-11 flex-none place-items-center overflow-hidden rounded-full bg-white/90">
-                  <img src={runningShoeImg} alt="" className="h-9 w-9 object-contain" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-[14px] font-semibold text-black">러닝화 교체 시기</h3>
-                    <span className="size-1.5 flex-none rounded-full bg-[var(--primary-orange)]" />
-                  </div>
-                  <p className="mt-1 text-[13px] leading-[1.45] text-black/65">
-                    페가수스 41의 누적 거리가 452km예요. 교체 시기를 확인해보세요.
-                  </p>
-                  <p className="mt-1.5 text-[11px] text-black/35">오늘</p>
-                </div>
-              </li>
-            </ul>
-          </section>
-        )}
+        <RunNotifications iconClassName="size-6 brightness-0" unreadBorderClassName="border-white" />
       </header>
 
       <section className="relative z-1 mt-4 flex flex-col gap-3.75">

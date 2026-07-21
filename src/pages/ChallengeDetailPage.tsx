@@ -79,7 +79,7 @@ export default function ChallengeDetailPage({ onBack }: Props) {
         </button>
       </header>
 
-      <main className="flex flex-col gap-12 px-[var(--gutter)] pb-10">
+      <main className="detail-section-stack flex flex-col px-[var(--gutter)] pb-10">
         <section className="relative h-[420px] overflow-hidden rounded-[20px]">
           <img className="h-full w-full object-cover" src={challengeHero} alt="경복궁 댕댕런 GPS 아트런 경로 지도" />
           <div className="absolute inset-x-0 bottom-0 flex flex-col gap-[15px] pt-[65px] pr-[40px] pb-[26px] pl-[15px] bg-[linear-gradient(to_top,rgba(0,0,0,0.62)_30%,rgba(0,0,0,0.33)_70%,rgba(0,0,0,0)_100%)]">
@@ -93,7 +93,7 @@ export default function ChallengeDetailPage({ onBack }: Props) {
           </div>
         </section>
 
-        <section className="flex gap-[14px]">
+        <section className="flex gap-[14px]" style={{ marginTop: "calc(24px - (var(--spacing, 2.25rem) * 18))" }}>
           {infoCards.map((card) => (
             <article className={glassCardClass} key={card.label}>
               <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]">{card.label}</p>

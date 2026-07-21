@@ -54,7 +54,8 @@
 }
 
 .course-detail__content {
-  @apply flex flex-col gap-5 pt-1.5;
+  @apply flex flex-col pt-1.5;
+  gap: calc(var(--spacing, 2.25rem) * 18);
 }
 
 .course-detail__summary {
