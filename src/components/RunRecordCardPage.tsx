@@ -219,6 +219,8 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
   });
 
   const createSharedCardImage = async () => {
+    await document.fonts.load('400 54px "Anton"');
+
     const size = 1080;
     const canvas = document.createElement("canvas");
     canvas.width = size;
@@ -283,7 +285,9 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
 
     if (showStats) {
       const x = size * positions.stats.x / 100;
-      const startY = size * positions.stats.y / 100 - 128;
+      const startY = size * positions.stats.y / 100 - 178;
+      const statGap = 148;
+      const valueOffset = 60;
       const stats = [
         ["거리", `${distance} km`],
         ["시간", formatTime(seconds)],
@@ -292,13 +296,13 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
       context.shadowColor = "rgba(0,0,0,0.7)";
       context.shadowBlur = 16;
       stats.forEach(([label, value], index) => {
-        const y = startY + index * 112;
+        const y = startY + index * statGap;
         context.fillStyle = "#ffffff";
         context.font = '400 30px "Pretendard", sans-serif';
         context.fillText(label, x, y);
         context.fillStyle = "#f5f5f7";
-        context.font = '600 54px "Pretendard", sans-serif';
-        context.fillText(value, x, y + 48);
+        context.font = '400 54px "Anton", sans-serif';
+        context.fillText(value, x, y + valueOffset);
       });
     }
 
