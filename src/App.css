@@ -85,6 +85,16 @@
   display: none;
 }
 
+@media (max-width: 767px) {
+  .phone-frame {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: auto;
+  }
+}
+
 /* 상태바(10:36) 목업 오버레이 — PhoneFrame 이 딱 한 번 그린다(각 페이지는 안 그림).
    자리를 차지하지 않는 오버레이라, 각 화면은 "배경은 상단까지 꽉, UI는 상태바
    높이만큼 여백" 원칙으로 배치한다. */
