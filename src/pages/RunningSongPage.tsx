@@ -6,6 +6,7 @@ import {
   getDefaultHighlight,
   type Song,
 } from "../lib/musicApi";
+import { playSong, pauseSong, stopSong } from "../lib/youtubePlayer";
 import { BackButton } from "../components/Icons";
 import MusicSearchSheet from "../components/MusicSearchSheet";
 import HighlightPicker from "../components/HighlightPicker";
@@ -49,20 +50,41 @@ export default function RunningSongPage({
   // ▶ 재생 중인 곡 id
   const [playingId, setPlayingId] = useState<string | null>(null);
 
-  // 순차 재생 — 하이라이트 30초가 끝나면 다음 곡으로, 마지막 곡이면 정지.
-  // (iframe 로드 지연이 1초쯤 있어 타이머 기준으로 넘긴다 — MVP 허용 오차)
-  useEffect(() => {
-    if (!playingId) return;
-    const idx = songs.findIndex((s) => s.id === playingId);
-    if (idx === -1) {
-      setPlayingId(null);
+  // 화면을 벗어나면 재생 정지 (플레이어는 앱 전체 공용이라 명시적으로 꺼줘야 한다)
+  useEffect(() => () => stopSong(), []);
+
+  /** ▶ 탭 핸들러 — 모바일에서 소리가 나려면 반드시 "사용자 탭" 안에서 재생을 호출해야 한다.
+   *  하이라이트 구간(30초)이 끝나면 onEnded 로 다음 곡을 이어서 재생한다. */
+  const playFrom = (song: Song) => {
+    if (!song.videoId) {
+      // 재생할 소스가 없으면 표시만 (목데이터 등)
+      setPlayingId(song.id);
       return;
     }
-    const t = setTimeout(() => {
-      setPlayingId(songs[idx + 1]?.id ?? null);
-    }, HIGHLIGHT_SEC * 1000);
-    return () => clearTimeout(t);
-  }, [playingId, songs]);
+    const start = song.highlightStart ?? getDefaultHighlight(durationToSec(song.duration));
+    setPlayingId(song.id);
+    void playSong({
+      videoId: song.videoId,
+      startSeconds: enableHighlight ? start : undefined,
+      endSeconds: enableHighlight ? start + HIGHLIGHT_SEC : undefined,
+      onEnded: () => {
+        // 다음 곡으로 순차 재생 (마지막 곡이면 정지)
+        const idx = songs.findIndex((s) => s.id === song.id);
+        const next = songs[idx + 1];
+        if (next?.videoId) playFrom(next);
+        else setPlayingId(null);
+      },
+    });
+  };
+
+  const togglePlay = (song: Song) => {
+    if (playingId === song.id) {
+      pauseSong();
+      setPlayingId(null);
+    } else {
+      playFrom(song);
+    }
+  };
 
   // 시트에서 → 로 확정 — 목록에 추가. 하이라이트 사용 시에만 구간 설정 오버레이를 연다.
   const pickSong = (song: Song) => {
@@ -85,11 +107,6 @@ export default function RunningSongPage({
     setSongs(songs.filter((s) => s.id !== id));
     if (playingId === id) setPlayingId(null);
   };
-
-  const playing = songs.find((s) => s.id === playingId);
-  const playingStart = playing
-    ? (playing.highlightStart ?? getDefaultHighlight(durationToSec(playing.duration)))
-    : 0;
 
   return (
     <div className="flex flex-col bg-[var(--bg-app)] pb-10 text-white">
@@ -121,7 +138,7 @@ export default function RunningSongPage({
                 <button
                   type="button"
                   aria-label={playingId === song.id ? "정지" : "재생"}
-                  onClick={() => setPlayingId(playingId === song.id ? null : song.id)}
+                  onClick={() => togglePlay(song)}
                   className="shrink-0"
                 >
                   <img src={playIcon} alt="" className="h-4 w-3.5" />
@@ -155,18 +172,9 @@ export default function RunningSongPage({
         </div>
       )}
 
-      {/* ▶ 하이라이트 구간(30초) 소리만 재생 — 유튜브 임베드를 화면 밖 1px 로 숨김.
-          재생 중 표시는 곡명 형광색, 다시 누르면 언마운트=정지 */}
-      {playing?.videoId && (
-        <div className="pointer-events-none fixed bottom-0 left-0 h-px w-px overflow-hidden opacity-0" aria-hidden>
-          <iframe
-            key={playing.id} // 다음 곡으로 넘어갈 때 확실히 새로 로드
-            src={`https://www.youtube.com/embed/${playing.videoId}?autoplay=1&start=${playingStart}&end=${playingStart + HIGHLIGHT_SEC}`}
-            title={playing.title}
-            allow="autoplay; encrypted-media"
-          />
-        </div>
-      )}
+      {/* 재생은 공용 유튜브 플레이어(lib/youtubePlayer)가 담당한다 — 화면 밖 1px
+          플레이어 하나를 재사용해, 사용자 탭 안에서 unMute+play 를 호출하므로
+          모바일에서도 소리가 난다. 재생 중 표시는 곡명 형광색. */}
 
       {/* 음악 찾기 바텀시트 (149:220) — 미리듣기 후 → 로 확정 */}
       <MusicSearchSheet open={sheetOpen} onClose={() => setSheetOpen(false)} onPick={pickSong} />
