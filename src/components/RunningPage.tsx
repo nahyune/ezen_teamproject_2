@@ -107,6 +107,7 @@ export default function RunningPage({
   onChatbot,
   selectedCourseLabel,
   selectedCourseMap,
+  currentLocation,
   musicConnected = false,
   onMusicConnected,
 }: {
@@ -116,6 +117,8 @@ export default function RunningPage({
   onChatbot?: () => void;
   selectedCourseLabel?: string | null;
   selectedCourseMap?: RunCourseMap | null;
+  /** 실제 geolocation 좌표 — 코스 미지정 자유 러닝에서만 지도 중심으로 쓰인다 */
+  currentLocation?: { lat: number; lng: number } | null;
   /** 음악 연결 여부 — App 이 보관 (RecordFlow 경유, 새로고침 전까지 유지) */
   musicConnected?: boolean;
   onMusicConnected?: () => void;
@@ -182,7 +185,9 @@ export default function RunningPage({
   const activeMapPath = selectedPath ?? (roadPath.length > 1 ? roadPath : []);
   const activeRoutePosition =
     activeMapPath.length > 1 ? getPointOnRoute(activeMapPath, routeProgress * getRouteLength(activeMapPath)) : RUNNING_MAP_LOCATION;
-  const activeMapCenter = selectedCourseMap?.center ?? RUNNING_MAP_LOCATION;
+  // 코스 지정 시엔 항상 코스 center 사용(추천코스는 실제 위치를 쓰지 않음).
+  // 자유 러닝(selectedCourseMap 없음)일 때만 실제 위치로, 없으면 기존 하드코딩 위치로 폴백.
+  const activeMapCenter = selectedCourseMap?.center ?? currentLocation ?? RUNNING_MAP_LOCATION;
   const activeMapLevel = selectedCourseMap?.level ?? 4;
   const showRoutePreview = Boolean(selectedPath);
   const routeChipLabel = `${selectedCourseLabel ?? "자유 러닝"} · 지도 보기`;

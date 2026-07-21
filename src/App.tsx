@@ -114,6 +114,8 @@ export default function App() {
   const [chatbotOpen, setChatbotOpen] = useState(false);
   // 온보딩 완료 후 main 최초 진입 시 한 번만 노출 (App은 이 시점에 처음 마운트됨)
   const [showLocationPermission, setShowLocationPermission] = useState(true);
+  // "허용" 계열 클릭 시 채워짐 — 코스 미지정 자유 러닝에서만 사용(추천코스는 항상 자체 center 사용)
+  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
   // 기록하기 음악 연결 여부 — 기록 탭을 나갔다 와도 유지, 새로고침 시에만 초기화.
   const [recordMusicConnected, setRecordMusicConnected] = useState(false);
   const [feedStoryOpen, setFeedStoryOpen] = useState(false);
@@ -128,6 +130,22 @@ export default function App() {
     document.querySelector(".phone-scroll")?.scrollTo({ top: 0, left: 0, behavior: "auto" });
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [page]);
+
+  // "허용" 계열 클릭 시에만 실제 브라우저 geolocation을 호출한다(허용 안 함은 API 자체를 안 부름).
+  // 거부/에러/미지원 시에도 currentLocation 은 null 로 남아 자유 러닝은 기존 하드코딩 위치로 폴백된다.
+  const requestCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setShowLocationPermission(false);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCurrentLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+        setShowLocationPermission(false);
+      },
+      () => setShowLocationPermission(false),
+    );
+  };
 
   const getRunCourseLabel = (kind: CourseDetailKind) => {
     const detail = courseDetailPages[kind];
@@ -309,6 +327,7 @@ export default function App() {
             autoStart={recordAutoStart}
             selectedCourseLabel={selectedRunCourseLabel}
             selectedCourseMap={selectedRunCourseMap}
+            currentLocation={currentLocation}
             musicConnected={recordMusicConnected}
             onMusicConnected={() => setRecordMusicConnected(true)}
             onBack={() => setPage("home")}
@@ -465,7 +484,10 @@ export default function App() {
         <ChatbotPage onBack={() => setChatbotOpen(false)} />
       </div>
       {showLocationPermission && (
-        <LocationPermissionDialog onClose={() => setShowLocationPermission(false)} />
+        <LocationPermissionDialog
+          onAllow={requestCurrentLocation}
+          onDeny={() => setShowLocationPermission(false)}
+        />
       )}
     </PhoneFrame>
   );

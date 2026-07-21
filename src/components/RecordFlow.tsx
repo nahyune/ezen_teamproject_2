@@ -26,6 +26,7 @@ export default function RecordFlow({
   autoStart = false,
   selectedCourseLabel,
   selectedCourseMap,
+  currentLocation,
   musicConnected = false,
   onMusicConnected,
   onBack,
@@ -37,6 +38,8 @@ export default function RecordFlow({
   autoStart?: boolean;
   selectedCourseLabel?: string | null;
   selectedCourseMap?: RunCourseMap | null;
+  /** 실제 geolocation 좌표 — 코스 미지정 자유 러닝에서만 지도 중심으로 쓰인다 */
+  currentLocation?: { lat: number; lng: number } | null;
   /** 음악 연결 여부 — App 이 보관 (새로고침 전까지 유지) */
   musicConnected?: boolean;
   onMusicConnected?: () => void;
@@ -127,6 +130,7 @@ export default function RecordFlow({
           onChatbot={onChatbot}
           selectedCourseLabel={selectedCourseLabel}
           selectedCourseMap={selectedCourseMap}
+          currentLocation={currentLocation}
           musicConnected={musicConnected}
           onMusicConnected={connectMusic}
         />

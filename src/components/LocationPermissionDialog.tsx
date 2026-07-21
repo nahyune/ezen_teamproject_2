@@ -1,8 +1,15 @@
 import locationMapPreview from "../assets/img/location-permission-map.png";
 
 // 온보딩 완료 직후 최초 진입 시 뜨는 iOS 스타일 위치 권한 안내 모달 (Figma 1187:528)
-// 실제 브라우저 geolocation API는 아직 붙지 않은 디자인 목업 — 버튼은 모달을 닫기만 한다.
-export default function LocationPermissionDialog({ onClose }: { onClose: () => void }) {
+// "허용" 계열은 실제 geolocation 요청으로 이어지고(브라우저 네이티브 프롬프트가 뒤이어 뜬다),
+// "허용 안 함"은 실제 API를 아예 호출하지 않는다.
+export default function LocationPermissionDialog({
+  onAllow,
+  onDeny,
+}: {
+  onAllow: () => void;
+  onDeny: () => void;
+}) {
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/40 px-[var(--gutter)]">
       <div className="w-[270px] overflow-hidden rounded-[14px] bg-[rgba(37,37,37,0.96)] text-center shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
@@ -26,7 +33,7 @@ export default function LocationPermissionDialog({ onClose }: { onClose: () => v
         <button
           type="button"
           className="flex h-11 w-full items-center justify-center bg-white/80 text-[15px] font-bold text-[#3487ff] backdrop-blur-xl active:bg-white/60"
-          onClick={onClose}
+          onClick={onAllow}
         >
           앱 사용 중에만 허용
         </button>
@@ -35,7 +42,7 @@ export default function LocationPermissionDialog({ onClose }: { onClose: () => v
         <button
           type="button"
           className="flex h-11 w-full items-center justify-center bg-white/80 text-[15px] text-[#3487ff] backdrop-blur-xl active:bg-white/60"
-          onClick={onClose}
+          onClick={onAllow}
         >
           한 번만 허용
         </button>
@@ -44,7 +51,7 @@ export default function LocationPermissionDialog({ onClose }: { onClose: () => v
         <button
           type="button"
           className="flex h-11 w-full items-center justify-center bg-white/80 text-[15px] text-[#3487ff] backdrop-blur-xl active:bg-white/60"
-          onClick={onClose}
+          onClick={onDeny}
         >
           허용 안 함
         </button>
