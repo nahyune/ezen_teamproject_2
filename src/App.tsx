@@ -133,6 +133,11 @@ export default function App() {
 
   // "허용" 계열 클릭 시에만 실제 브라우저 geolocation을 호출한다(허용 안 함은 API 자체를 안 부름).
   // 거부/에러/미지원 시에도 currentLocation 은 null 로 남아 자유 러닝은 기존 하드코딩 위치로 폴백된다.
+  //
+  // 정확도(accuracy) 필터: 데스크톱 웹은 GPS가 없어 IP 기반으로 "도시 중심점"을 반경 수 km
+  // 오차로 찍어준다(예: 서울시청 ±5000m). 이 부정확한 좌표를 하드코딩 러닝 경로에 쓰면 지도가
+  // 튀므로, 오차가 큰 위치는 버리고 고정 위치로 폴백한다. 모바일 GPS(수십 m)만 실제 위치로 채택.
+  const LOCATION_ACCURACY_LIMIT_M = 1000;
   const requestCurrentLocation = () => {
     if (!navigator.geolocation) {
       setShowLocationPermission(false);
@@ -140,10 +145,15 @@ export default function App() {
     }
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setCurrentLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+        if (position.coords.accuracy <= LOCATION_ACCURACY_LIMIT_M) {
+          setCurrentLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+        }
+        // 오차가 크면 currentLocation 을 채우지 않아 고정 위치로 폴백된다.
         setShowLocationPermission(false);
       },
+      // 더 정확한 위치를 시도하고, 10초 안에 못 잡으면 폴백.
       () => setShowLocationPermission(false),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
     );
   };
 

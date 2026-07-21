@@ -1,8 +1,8 @@
-import locationMapPreview from "../assets/img/location-permission-map.png";
-
-// 온보딩 완료 직후 최초 진입 시 뜨는 iOS 스타일 위치 권한 안내 모달 (Figma 1187:528)
-// "허용" 계열은 실제 geolocation 요청으로 이어지고(브라우저 네이티브 프롬프트가 뒤이어 뜬다),
-// "허용 안 함"은 실제 API를 아예 호출하지 않는다.
+// 온보딩 완료 직후 최초 진입 시 뜨는 위치 "프리퍼미션" 안내 카드 (패턴 C · 가운데 카드).
+// OS 권한 팝업(허용/거부)은 iOS·안드로이드가 직접 그리는 영역이라 우리가 디자인하지 않는다.
+// 대신 "왜 위치가 필요한지" 우리 브랜드 톤으로 먼저 안내하고, [허용하기]를 누르면
+// 그때 실제 geolocation 요청 → OS 네이티브 프롬프트가 딱 한 번 뜬다.
+// [건너뛰기]는 실제 API를 아예 호출하지 않는다.
 export default function LocationPermissionDialog({
   onAllow,
   onDeny,
@@ -11,50 +11,40 @@ export default function LocationPermissionDialog({
   onDeny: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/40 px-[var(--gutter)]">
-      <div className="w-[270px] overflow-hidden rounded-[14px] bg-[rgba(37,37,37,0.96)] text-center shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-        <div className="flex flex-col items-center gap-[10px] bg-white/80 pt-[19px] backdrop-blur-xl">
-          <p className="px-3 text-[13px] font-bold leading-[1.3] text-[#111]">
-            "W:RUN"이(가) 위치 정보 접근을
+    <div className="fixed inset-0 z-[300] flex items-center justify-center bg-black/60 px-[var(--gutter)]">
+      <div className="w-full max-w-[300px] rounded-[18px] bg-[var(--bg-elevated)] px-5 pb-5 pt-6 text-center">
+        <div className="flex flex-col items-center gap-3">
+          {/* 위치 아이콘 */}
+          <span className="grid h-14 w-14 place-items-center rounded-full bg-[var(--bg-app)]">
+            <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7 text-[var(--primary-lime)]" aria-hidden>
+              <path
+                d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11Z"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinejoin="round"
+              />
+              <circle cx="12" cy="10" r="2.6" stroke="currentColor" strokeWidth="1.8" />
+            </svg>
+          </span>
+
+          <p className="subtitle-1 text-white">위치 접근이 필요해요</p>
+          <p className="body-2 text-[#8a8a8a]">
+            러닝 코스 추천과 기록 저장을 위해
             <br />
-            요청합니다
+            위치 정보를 사용해요
           </p>
-          <p className="px-3 text-[12px] leading-[1.3] text-[#202020]">
-            위치 정보는 러닝 코스 추천과
-            <br />
-            기록 저장에 사용돼요
-          </p>
-          <div className="h-[268px] w-[286px]">
-            <img src={locationMapPreview} alt="" className="h-full w-full object-cover" />
-          </div>
+
+          <button
+            type="button"
+            onClick={onAllow}
+            className="btn-text mt-2 w-full rounded-[13px] bg-[var(--primary-lime)] py-3 text-[var(--bg-app)]"
+          >
+            허용하기
+          </button>
+          <button type="button" onClick={onDeny} className="body-2 py-1 text-[#8a8a8a]">
+            건너뛰기
+          </button>
         </div>
-
-        <div className="h-px bg-white/15" />
-        <button
-          type="button"
-          className="flex h-11 w-full items-center justify-center bg-white/80 text-[15px] font-bold text-[#3487ff] backdrop-blur-xl active:bg-white/60"
-          onClick={onAllow}
-        >
-          앱 사용 중에만 허용
-        </button>
-
-        <div className="h-px bg-white/15" />
-        <button
-          type="button"
-          className="flex h-11 w-full items-center justify-center bg-white/80 text-[15px] text-[#3487ff] backdrop-blur-xl active:bg-white/60"
-          onClick={onAllow}
-        >
-          한 번만 허용
-        </button>
-
-        <div className="h-px bg-white/15" />
-        <button
-          type="button"
-          className="flex h-11 w-full items-center justify-center bg-white/80 text-[15px] text-[#3487ff] backdrop-blur-xl active:bg-white/60"
-          onClick={onDeny}
-        >
-          허용 안 함
-        </button>
       </div>
     </div>
   );
