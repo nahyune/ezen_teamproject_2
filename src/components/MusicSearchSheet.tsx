@@ -11,6 +11,7 @@ import {
   type Song,
   type ChartEntry,
 } from "../lib/musicApi";
+import { playSong, pauseSong, stopSong, warmUpPlayer } from "../lib/youtubePlayer";
 
 // ── 음악 찾기 바텀시트 (Figma 149:220) ─────────────────────────────
 // 아래에서 스르륵 올라오는 오버레이. 상단 핸들 바(디자인 보완)를 탭하면 닫힌다.
@@ -132,13 +133,14 @@ export default function MusicSearchSheet({
   // 미리듣기 — 곡 행을 탭하면 하단 바에서 인기 파트 30초 재생 (인스타식)
   const [preview, setPreview] = useState<Song | null>(null);
   const [previewPlaying, setPreviewPlaying] = useState(false);
-  const [previewKey, setPreviewKey] = useState(0);
 
   // 열릴 때 추천(첫 50개)·차트 로드 + 검색·미리듣기 초기화 (닫힐 때도 재생 정지)
   useEffect(() => {
     setPreview(null);
     setPreviewPlaying(false);
+    stopSong(); // 시트를 열고 닫을 때 이전 미리듣기 소리를 끊는다
     if (!open) return;
+    warmUpPlayer(); // 곡 행 탭 순간 즉시 재생되도록 미리 준비
     setQuery("");
     setTab("recommend");
     getRecommendedSongs(0).then(({ songs, hasMore }) => {
@@ -148,10 +150,19 @@ export default function MusicSearchSheet({
     getTrendingSongs().then(setTrending);
   }, [open]);
 
+  /** 인기 파트(30초) 미리듣기 — 곡 행 탭 핸들러 안에서 바로 재생을 호출해야
+   *  모바일에서 음소거되지 않는다. */
   const startPreview = (song: Song) => {
     setPreview(song);
     setPreviewPlaying(true);
-    setPreviewKey((k) => k + 1); // 같은 곡 재탭도 처음부터 다시
+    if (!song.videoId) return;
+    const hs = song.highlightStart ?? getDefaultHighlight(durationToSec(song.duration));
+    playSong({
+      videoId: song.videoId,
+      startSeconds: hs,
+      endSeconds: hs + HIGHLIGHT_SEC,
+      onEnded: () => setPreviewPlaying(false),
+    });
   };
 
   // 더 보기 — 현재 개수를 offset 으로 다음 50개 요청 (API 연결 후에도 동일)
@@ -342,8 +353,12 @@ export default function MusicSearchSheet({
               <button
                 type="button"
                 onClick={() => {
-                  setPreviewPlaying((p) => !p);
-                  setPreviewKey((k) => k + 1); // 다시 재생 시 인기 파트 처음부터
+                  if (previewPlaying) {
+                    pauseSong();
+                    setPreviewPlaying(false);
+                  } else {
+                    startPreview(preview); // 탭 안에서 직접 재생 → 모바일 소리 확보
+                  }
                 }}
                 aria-label={previewPlaying ? "일시정지" : "재생"}
                 className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white text-black"
@@ -375,20 +390,8 @@ export default function MusicSearchSheet({
         )}
       </div>
 
-      {/* 미리듣기 소리 — 유튜브 임베드(숨김), 인기 파트부터 30초 */}
-      {preview?.videoId && previewPlaying && (
-        <div className="pointer-events-none fixed bottom-0 left-0 h-px w-px overflow-hidden opacity-0" aria-hidden>
-          <iframe
-            key={previewKey}
-            src={(() => {
-              const hs = preview.highlightStart ?? getDefaultHighlight(durationToSec(preview.duration));
-              return `https://www.youtube.com/embed/${preview.videoId}?autoplay=1&start=${hs}&end=${hs + HIGHLIGHT_SEC}`;
-            })()}
-            title={preview.title}
-            allow="autoplay; encrypted-media"
-          />
-        </div>
-      )}
+      {/* 미리듣기 소리는 공용 유튜브 플레이어(lib/youtubePlayer)가 담당 —
+          곡 행·▶ 탭 핸들러 안에서 직접 호출해야 모바일에서 음소거되지 않는다. */}
     </>
   );
 }

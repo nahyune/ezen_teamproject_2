@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   HIGHLIGHT_SEC,
   durationToSec,
@@ -6,6 +6,7 @@ import {
   getPopularPoints,
   type Song,
 } from "../lib/musicApi";
+import { playSong, pauseSong, stopSong, warmUpPlayer } from "../lib/youtubePlayer";
 
 // ── 대표곡 하이라이트 30초 설정 오버레이 (Figma 149:344) ──────────────
 // 인스타식: 형광 30초 창은 "중앙 고정·크기 고정"이고, 그 밑으로 음파 스트립을
@@ -72,15 +73,43 @@ export default function HighlightPicker({
     const next = dragFrom.current.start - (dx / stripW) * durationSec;
     setStart(Math.round(Math.max(0, Math.min(maxStart, next))));
   };
+  // 열릴 때 자동 미리듣기 시도 (데스크톱은 소리가 나고, 모바일은 자동재생이 막혀
+  // 무음일 수 있다 — 그땐 ▶ 를 탭하면 소리가 난다). 닫을 때는 반드시 정지.
+  useEffect(() => {
+    warmUpPlayer();
+    playRange(start);
+    return () => stopSong();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- 열릴 때 1회만
+  }, []);
+
+  /** 선택 구간(30초)을 공용 플레이어로 재생 — 반드시 사용자 제스처 안에서 호출해야
+   *  모바일에서 소리가 난다(자동 음소거 정책). */
+  const playRange = (from: number) => {
+    if (!song.videoId) return;
+    playSong({
+      videoId: song.videoId,
+      startSeconds: from,
+      endSeconds: from + winSec,
+      onEnded: () => setPlaying(false),
+    });
+  };
+
   const endDrag = () => {
     if (!dragging) return;
     setDragging(false);
-    setPlayKey((k) => k + 1); // 구간 이동 → 채움·재생 초기화(새 구간부터)
+    setPlayKey((k) => k + 1); // 구간 이동 → 채움 초기화(새 구간부터)
+    if (playing) playRange(start); // 손 뗀 시점(제스처) 에 새 구간부터 재생
   };
 
   const togglePlay = () => {
-    setPlaying((p) => !p);
     setPlayKey((k) => k + 1); // 다시 재생 시 선택 시작점부터
+    if (playing) {
+      pauseSong();
+      setPlaying(false);
+    } else {
+      playRange(start); // 탭 핸들러 안에서 직접 호출 → 모바일 소리 확보
+      setPlaying(true);
+    }
   };
 
   // 타임라인 바 위 현재 창 위치(%)
@@ -201,17 +230,8 @@ export default function HighlightPicker({
         </div>
       </div>
 
-      {/* 소리 재생 — 유튜브 임베드(숨김), 선택 구간 30초만. 드래그 중엔 정지 */}
-      {playing && !dragging && song.videoId && (
-        <div className="pointer-events-none fixed bottom-0 left-0 h-px w-px overflow-hidden opacity-0" aria-hidden>
-          <iframe
-            key={playKey}
-            src={`https://www.youtube.com/embed/${song.videoId}?autoplay=1&start=${start}&end=${start + winSec}`}
-            title={song.title}
-            allow="autoplay; encrypted-media"
-          />
-        </div>
-      )}
+      {/* 소리 재생은 공용 유튜브 플레이어(lib/youtubePlayer)가 담당 —
+          ▶ 탭 핸들러 안에서 직접 호출해야 모바일에서 음소거되지 않는다. */}
     </div>
   );
 }

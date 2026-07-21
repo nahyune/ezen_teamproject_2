@@ -6,7 +6,7 @@ import {
   getDefaultHighlight,
   type Song,
 } from "../lib/musicApi";
-import { playSong, pauseSong, stopSong } from "../lib/youtubePlayer";
+import { playSong, pauseSong, stopSong, warmUpPlayer } from "../lib/youtubePlayer";
 import { BackButton } from "../components/Icons";
 import MusicSearchSheet from "../components/MusicSearchSheet";
 import HighlightPicker from "../components/HighlightPicker";
@@ -50,8 +50,12 @@ export default function RunningSongPage({
   // ▶ 재생 중인 곡 id
   const [playingId, setPlayingId] = useState<string | null>(null);
 
-  // 화면을 벗어나면 재생 정지 (플레이어는 앱 전체 공용이라 명시적으로 꺼줘야 한다)
-  useEffect(() => () => stopSong(), []);
+  // 화면 진입 시 플레이어를 미리 준비하고, 벗어나면 정지.
+  // (미리 준비돼 있어야 ▶ 탭 순간 즉시 재생돼 모바일에서 소리가 난다)
+  useEffect(() => {
+    warmUpPlayer();
+    return () => stopSong();
+  }, []);
 
   /** ▶ 탭 핸들러 — 모바일에서 소리가 나려면 반드시 "사용자 탭" 안에서 재생을 호출해야 한다.
    *  하이라이트 구간(30초)이 끝나면 onEnded 로 다음 곡을 이어서 재생한다. */
@@ -63,7 +67,7 @@ export default function RunningSongPage({
     }
     const start = song.highlightStart ?? getDefaultHighlight(durationToSec(song.duration));
     setPlayingId(song.id);
-    void playSong({
+    playSong({
       videoId: song.videoId,
       startSeconds: enableHighlight ? start : undefined,
       endSeconds: enableHighlight ? start + HIGHLIGHT_SEC : undefined,

@@ -8,7 +8,8 @@ import RunRecordCardPage, { type SharedRunCard } from "./RunRecordCardPage";
 import MusicConnectPage from "./MusicConnectPage";
 import RunningSongPage from "../pages/RunningSongPage";
 import { RecordMusicContext, type RecordMusic } from "../lib/recordMusic";
-import { durationToSec, DEMO_RUN_SONGS, type Song } from "../lib/musicApi";
+import { DEMO_RUN_SONGS, type Song } from "../lib/musicApi";
+import { playSong, pauseSong, stopSong, warmUpPlayer } from "../lib/youtubePlayer";
 
 // 기록 흐름 전용 러닝곡 목록 저장 키 — 마이페이지(wrun-profile.songs)와 분리.
 const RECORD_SONGS_KEY = "wrun-record-songs";
@@ -73,50 +74,54 @@ export default function RecordFlow({
   }, [recordSongs]);
   const songs = recordSongs;
   const [musicIndex, setMusicIndex] = useState(0);
-  const [musicPlaying, setMusicPlaying] = useState(musicConnected); // 재진입 시 자동 이어 시작
-  const [musicKey, setMusicKey] = useState(0); // 바뀌면 임베드 리로드(곡 처음부터)
+  const [musicPlaying, setMusicPlaying] = useState(false);
 
   const song = songs.length ? songs[musicIndex % songs.length] : null;
-  // 소리는 기록 흐름 안(기록 대기·카운트다운·러닝/지도/일시정지)에서만 낸다.
-  // 연결 직후 기록 화면에서 바로 소리가 나야 하므로 record·countdown 도 포함한다.
-  // (음악 선택·가이드·완료·카드 화면에선 조용 — 연결 상태만 유지)
-  const musicActive =
-    musicConnected &&
-    musicPlaying &&
-    (screen === "running" || screen === "record" || screen === "countdown");
+  const musicActive = musicConnected && musicPlaying;
 
-  // 풀재생: 곡 길이만큼 지나면 다음 곡, 마지막 곡 다음은 처음(반복)
+  // 기록 탭 진입 시 플레이어를 미리 준비하고, 벗어나면 정지.
+  // (미리 준비돼 있어야 탭 순간 즉시 재생돼 모바일에서 소리가 난다)
   useEffect(() => {
-    if (!musicActive || !song) return;
-    const t = setTimeout(() => {
-      setMusicIndex((i) => (i + 1) % songs.length);
-      setMusicKey((k) => k + 1);
-    }, durationToSec(song.duration) * 1000);
-    return () => clearTimeout(t);
-  }, [musicActive, musicIndex, songs.length, song]);
+    warmUpPlayer();
+    return () => stopSong();
+  }, []);
 
-  // 연결(서비스 선택) 완료 → 연결 저장 + 첫 곡부터 바로 재생.
-  // 대표곡이 비어 있으면(실 음악 API 미연동 데모) 검증된 러닝곡으로 채워 실제 소리가 나게 한다.
+  /** 곡을 처음부터 풀재생 — 끝나면 다음 곡, 마지막 곡 다음은 처음(반복).
+   *  ⚠️ 모바일에서 소리가 나려면 반드시 사용자 탭 핸들러 안에서 호출해야 한다. */
+  const playAt = (i: number, list = songs) => {
+    if (!list.length) return;
+    const target = list[i % list.length];
+    if (!target?.videoId) return;
+    setMusicIndex(i % list.length);
+    setMusicPlaying(true);
+    playSong({
+      videoId: target.videoId,
+      onEnded: () => playAt(i + 1, list), // 순차·반복
+    });
+  };
+
+  // 연결(서비스 선택) 완료 → 연결 저장 + 첫 곡부터 재생.
+  // 대표곡이 비어 있으면(실 음악 API 미연동 데모) 검증된 러닝곡으로 채운다.
+  // 서비스 선택 버튼 탭에서 이어지는 호출이라 모바일에서도 소리가 난다.
   const connectMusic = () => {
+    const list = songs.length ? songs : DEMO_RUN_SONGS;
     if (!songs.length) setRecordSongs(DEMO_RUN_SONGS);
     onMusicConnected?.();
-    setMusicIndex(0);
-    setMusicPlaying(true);
-    setMusicKey((k) => k + 1);
+    playAt(0, list);
   };
 
   const music: RecordMusic = {
     song,
     playing: musicActive,
     toggle: () => {
-      setMusicPlaying((p) => !p);
-      setMusicKey((k) => k + 1); // 다시 재생 시 현재 곡 처음부터
+      if (musicActive) {
+        pauseSong();
+        setMusicPlaying(false);
+      } else {
+        playAt(musicIndex); // 탭 안에서 직접 호출 → 모바일 소리 확보
+      }
     },
-    next: () => {
-      if (!songs.length) return;
-      setMusicIndex((i) => (i + 1) % songs.length);
-      setMusicKey((k) => k + 1);
-    },
+    next: () => playAt(musicIndex + 1),
   };
 
   const content = (() => {
@@ -213,18 +218,8 @@ export default function RecordFlow({
   return (
     <RecordMusicContext.Provider value={music}>
       {content}
-      {/* 풀재생 — 유튜브 임베드(숨김·소리만). 러닝 중에만 소리,
-          러닝 종료·기록 탭 이탈 시 언마운트=정지 */}
-      {musicActive && song?.videoId && (
-        <div className="pointer-events-none fixed bottom-0 left-0 h-px w-px overflow-hidden opacity-0" aria-hidden>
-          <iframe
-            key={`${song.id}-${musicKey}`}
-            src={`https://www.youtube.com/embed/${song.videoId}?autoplay=1`}
-            title={song.title}
-            allow="autoplay; encrypted-media"
-          />
-        </div>
-      )}
+      {/* 풀재생은 공용 유튜브 플레이어(lib/youtubePlayer)가 담당 —
+          사용자 탭 안에서 재생을 호출해야 모바일에서 음소거되지 않는다. */}
     </RecordMusicContext.Provider>
   );
 }
