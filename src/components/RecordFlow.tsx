@@ -209,7 +209,9 @@ export default function RecordFlow({
         }}
         onChatbot={onChatbot}
         onNavigate={onNavigate}
-        onMusicOpen={() => setScreen("music")}
+        // 이미 연결돼 있으면 서비스 선택을 건너뛰고 바로 곡 목록으로.
+        // (연결 상태는 App 이 보관 — 새로고침 전까지 유지되므로 한 번만 고르면 된다)
+        onMusicOpen={() => setScreen(musicConnected ? "songs" : "music")}
         musicConnected={musicConnected}
       />
     );
