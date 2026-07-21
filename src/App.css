@@ -204,22 +204,22 @@
   background-color: rgba(0, 0, 0, 0.18);
 }
 
-/* 챗봇이 열리면 뒤에 기록 페이지가 남아 있어도 공통 상태바 색상을 사용한다. */
+/* 챗봇(라이트 테마)이 열리면 상태바도 피그마대로 흰 배경 + 검정 시계/아이콘. */
 .phone-frame.chatbot-is-open .frame-statusbar {
-  background: var(--bg-app);
-  color: var(--text-primary);
+  background: #ffffff;
+  color: #000000;
 }
 
 .phone-frame.chatbot-is-open .frame-statusbar .statusbar {
-  color: var(--text-primary);
+  color: #000000;
 }
 
 .phone-frame.chatbot-is-open .frame-statusbar .statusbar__battery {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(0, 0, 0, 0.4);
 }
 
 .phone-frame.chatbot-is-open .frame-statusbar .statusbar__battery::after {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 @media (min-width: 768px) {

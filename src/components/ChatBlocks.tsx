@@ -7,7 +7,7 @@ import runiIcon from "../assets/icons/icon-chatbot.svg";
 function RuniAvatar({ size = 30 }: { size?: number }) {
   return (
     <span
-      className="grid shrink-0 place-items-center rounded-full bg-[var(--bg-elevated)]"
+      className="grid shrink-0 place-items-center rounded-full border-[0.75px] border-[#d4ff3f] bg-[#232323]"
       style={{ width: size, height: size }}
     >
       <img src={runiIcon} alt="" style={{ width: size * 0.56, height: size * 0.56 }} />
@@ -20,7 +20,7 @@ function TextBubble({ text, role }: { text: string; role: "user" | "assistant" }
   if (role === "user") {
     return (
       <div className="flex justify-end">
-        <p className="chat-body max-w-[80%] rounded-2xl bg-[var(--primary-lime)] px-4 py-2.5 text-black">
+        <p className="chat-body max-w-[80%] rounded-2xl bg-[#d4ff3f] px-4 py-2.5 text-[#0f120c]">
           {text}
         </p>
       </div>
@@ -29,7 +29,7 @@ function TextBubble({ text, role }: { text: string; role: "user" | "assistant" }
   return (
     <div className="flex items-start gap-2">
       <RuniAvatar />
-      <p className="chat-body max-w-[80%] rounded-2xl bg-[var(--bg-elevated)] px-4 py-2.5 text-[var(--text-strong)]">
+      <p className="chat-body max-w-[80%] rounded-2xl bg-[#e6e6e6] px-4 py-2.5 text-[#232323]">
         {text}
       </p>
     </div>
@@ -57,7 +57,7 @@ function CardRow({
           key={c.title}
           type="button"
           onClick={() => onChip?.(`${c.title} 자세히 알려줘`)}
-          className="w-full overflow-hidden rounded-[18px] bg-[var(--bg-elevated)] text-left"
+          className="w-full overflow-hidden rounded-[18px] bg-[#232323] text-left"
         >
           <div className="relative h-[88px] bg-[#2c2c30]">
             {c.image && (
@@ -68,19 +68,19 @@ function CardRow({
             {c.badge &&
               (variant === "race" ? (
                 // 대회: 큰 D-day 뱃지 (하단 좌측)
-                <span className="font-display absolute bottom-2.5 left-3 text-[30px] leading-none text-[var(--primary-lime)]">
+                <span className="font-display absolute bottom-2.5 left-3 text-[30px] leading-none text-[#d4ff3f]">
                   {c.badge}
                 </span>
               ) : (
                 // 크루: 작은 "모집중" 태그 (상단 좌측)
-                <span className="absolute left-2.5 top-2.5 rounded-full bg-black/45 px-2 py-1 text-[14px] font-medium leading-none text-[var(--primary-lime)]">
+                <span className="absolute left-2.5 top-2.5 rounded-full bg-black/45 px-2 py-1 text-[14px] font-medium leading-none text-[#d4ff3f]">
                   {c.badge}
                 </span>
               ))}
           </div>
           <div className="flex flex-col gap-1 px-3 pb-3 pt-2.5">
-            <span className="subtitle-2 text-[var(--text-strong)]">{c.title}</span>
-            {c.meta && <span className="body-3 text-white/80">{c.meta}</span>}
+            <span className="subtitle-2 text-[#f5f4f2]">{c.title}</span>
+            {c.meta && <span className="body-3 text-white/60">{c.meta}</span>}
           </div>
         </button>
       ))}
@@ -91,7 +91,7 @@ function CardRow({
 /* 지도 코스 카드 (목업 06) */
 function MapCard({ title, meta, image }: { title: string; meta?: string; image?: string }) {
   return (
-    <div className="ml-[38px] overflow-hidden rounded-[18px] bg-[var(--bg-elevated)]">
+    <div className="ml-[38px] overflow-hidden rounded-[18px] bg-[#232323]">
       <div className="grid h-[150px] place-items-center bg-[#2c2c30]">
         {image ? (
           <img src={image} alt="" className="h-full w-full object-cover" />
@@ -100,8 +100,8 @@ function MapCard({ title, meta, image }: { title: string; meta?: string; image?:
         )}
       </div>
       <div className="flex flex-col gap-1 px-4 py-3">
-        <span className="subtitle-2 text-[var(--text-strong)]">{title}</span>
-        {meta && <span className="body-3 text-white/80">{meta}</span>}
+        <span className="subtitle-2 text-[#f5f4f2]">{title}</span>
+        {meta && <span className="body-3 text-white/60">{meta}</span>}
       </div>
     </div>
   );
@@ -112,14 +112,14 @@ function ProgressBar({ title, step, total }: { title: string; step: number; tota
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="body-3 text-[var(--text-strong)]">📖 {title}</span>
-        <span className="body-3 text-[var(--primary-lime)]">
+        <span className="body-3 text-[#232323]">📖 {title}</span>
+        <span className="body-3 text-[#777]">
           {step} / {total}
         </span>
       </div>
-      <div className="h-1 overflow-hidden rounded-full bg-[var(--bg-elevated)]">
+      <div className="h-1 overflow-hidden rounded-full bg-[#e6e6e6]">
         <div
-          className="h-full rounded-full bg-[var(--primary-lime)]"
+          className="h-full rounded-full bg-[#d4ff3f]"
           style={{ width: `${(step / total) * 100}%` }}
         />
       </div>
@@ -138,14 +138,14 @@ function CareCard({
   return (
     <div className="flex items-start gap-2">
       <RuniAvatar />
-      <div className="flex max-w-[85%] flex-col gap-2.5 rounded-2xl bg-[var(--bg-elevated)] px-4 py-3">
-        <p className="chat-body text-[var(--text-strong)]">⚠️ {text}</p>
+      <div className="flex max-w-[85%] flex-col gap-2.5 rounded-2xl bg-[#e6e6e6] px-4 py-3">
+        <p className="chat-body text-[#232323]">⚠️ {text}</p>
         {stats && (
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             {stats.map((s) => (
-              <span key={s.label} className="body-3 text-white/70">
+              <span key={s.label} className="body-3 text-[#777]">
                 {s.label}{" "}
-                <b className={s.warn ? "text-[var(--primary-orange)]" : "text-[var(--text-strong)]"}>
+                <b className={s.warn ? "text-[var(--primary-orange)]" : "text-[#232323]"}>
                   {s.value}
                 </b>
               </span>
@@ -163,13 +163,13 @@ function ErrorBubble({ text, onRetry }: { text: string; onRetry?: () => void }) 
     <div className="flex items-start gap-2">
       <RuniAvatar />
       <div className="flex max-w-[85%] flex-col items-start gap-2">
-        <p className="chat-body rounded-2xl bg-[var(--bg-elevated)] px-4 py-2.5 text-[var(--text-strong)]">
+        <p className="chat-body rounded-2xl bg-[#e6e6e6] px-4 py-2.5 text-[#232323]">
           {text}
         </p>
         <button
           type="button"
           onClick={onRetry}
-          className="btn-text rounded-full bg-[var(--primary-lime)] px-4 py-2 text-black"
+          className="btn-text rounded-full bg-[#d4ff3f] px-4 py-2 text-[#0f120c]"
         >
           다시 시도
         </button>
@@ -193,7 +193,7 @@ function ChipRow({
           key={c.label}
           type="button"
           onClick={() => onChip?.(c.prompt)}
-          className="subtitle-2 rounded-full bg-[var(--bg-elevated)] px-3.5 py-2 text-[var(--primary-lime)]"
+          className="subtitle-2 rounded-full bg-[#232323] px-3.5 py-2 text-[#d4ff3f]"
         >
           {c.label}
         </button>
@@ -208,16 +208,16 @@ function TypingBubble({ label }: { label?: string }) {
     <div className="flex items-start gap-2">
       <RuniAvatar />
       <div className="flex flex-col gap-1">
-        <span className="flex items-center gap-1 rounded-2xl bg-[var(--bg-elevated)] px-4 py-3.5">
+        <span className="flex items-center gap-1 rounded-2xl bg-[#e6e6e6] px-4 py-3.5">
           {[0, 1, 2].map((i) => (
             <span
               key={i}
-              className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--primary-lime)]"
+              className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#d4ff3f]"
               style={{ animationDelay: `${i * 0.15}s` }}
             />
           ))}
         </span>
-        {label && <span className="body-3 pl-1 text-white/40">{label}</span>}
+        {label && <span className="body-3 pl-1 text-[#777]">{label}</span>}
       </div>
     </div>
   );

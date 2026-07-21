@@ -93,18 +93,18 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
   return (
     // h-full: 오버레이 높이에 꽉 차게 — 대화 목록은 내부에서만 스크롤.
     // 상태바는 오버레이가 상태바 아래(top:--statusbar-h)에서 시작하므로 여기서 그리지 않는다.
-    <div className="phone h-full flex flex-col bg-[var(--bg-app)] text-white">
+    <div className="phone h-full flex flex-col bg-[#fafafa] text-[#1c1c1c]">
       {/* 헤더: ‹ 뒤로 · 러니(아바타+이름) · ⋯ */}
-      <header className="relative flex h-[54px] items-center justify-center px-[var(--gutter)]">
-        <BackButton onClick={onBack} className="absolute left-[18px]" />
+      <header className="relative flex h-[58px] items-center justify-center border-b border-[#ebebeb] bg-white px-[var(--gutter)]">
+        <BackButton onClick={onBack} className="absolute left-[18px]" color="text-[#232323]" />
         <div className="flex items-center gap-2">
-          <span className="grid h-[30px] w-[30px] place-items-center rounded-full bg-[var(--bg-elevated)]">
+          <span className="grid h-[30px] w-[30px] place-items-center rounded-full bg-[#232323]">
             <img src={runiIcon} alt="" className="h-[17px] w-[17px]" />
           </span>
-          <span className="subtitle-1 text-[var(--text-strong)]">러니</span>
+          <span className="subtitle-1 text-black">러니</span>
         </div>
         <button
-          className="absolute right-[18px] grid h-[26px] w-[26px] place-items-center text-white/70"
+          className="absolute right-[18px] grid h-[26px] w-[26px] place-items-center text-[#232323]"
           type="button"
           aria-label="더보기"
         >
@@ -122,11 +122,11 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
         {isEmpty ? (
           <div className="flex flex-col items-center">
             <div className="flex flex-col items-center gap-3 pt-[60px]">
-              <span className="grid h-[72px] w-[72px] place-items-center rounded-full bg-[var(--bg-elevated)]">
+              <span className="grid h-[72px] w-[72px] place-items-center rounded-full bg-[#232323]">
                 <img src={runiIcon} alt="" className="h-[46px] w-[46px]" />
               </span>
-              <h1 className="subtitle-1 text-[var(--text-strong)]">안녕하세요, {profile.name}님!</h1>
-              <p className="body-2 text-center text-white/70">
+              <h1 className="subtitle-1 text-[#1c1c1c]">안녕하세요, {profile.name}님!</h1>
+              <p className="body-2 text-center text-[#1c1c1c]">
                 대회 찾기부터 코스 그리기까지,
                 <br />
                 러닝에 관한 건 뭐든 물어보세요
@@ -138,14 +138,14 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
                   key={s.title}
                   type="button"
                   onClick={() => send(s.prompt)}
-                  className="flex items-center gap-3 rounded-[18px] bg-[var(--bg-elevated)] px-4 py-3.5 text-left"
+                  className="flex items-center gap-3 rounded-[18px] bg-[#efefef] px-4 py-3.5 text-left"
                 >
-                  <span className="shrink-0 text-[var(--primary-lime)]">{s.icon}</span>
+                  <span className="shrink-0 text-[#2a2a2a]">{s.icon}</span>
                   <span className="flex-1">
-                    <span className="subtitle-2 block text-[var(--text-strong)]">{s.title}</span>
-                    <span className="body-3 mt-0.5 block text-white/50">{s.desc}</span>
+                    <span className="subtitle-2 block text-[#2a2a2a]">{s.title}</span>
+                    <span className="body-3 mt-0.5 block text-[#777]">{s.desc}</span>
                   </span>
-                  <span className="text-white/40">›</span>
+                  <span className="text-[#919191]">›</span>
                 </button>
               ))}
             </div>
@@ -174,7 +174,7 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
       </div>
 
       {/* 입력 바 (하단 고정) */}
-      <div className="fixed bottom-0 left-1/2 w-[var(--frame-width)] max-w-full -translate-x-1/2 bg-[var(--bg-app)] px-[var(--gutter)] pb-[env(safe-area-inset-bottom,0px)] pt-2">
+      <div className="fixed bottom-0 left-1/2 w-[var(--frame-width)] max-w-full -translate-x-1/2 border-t border-[#ebebeb] bg-white px-[var(--gutter)] pb-[calc(env(safe-area-inset-bottom,0px)+19px)] pt-[17px]">
         <form
           className="flex items-center gap-2"
           onSubmit={(e) => {
@@ -183,7 +183,7 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
           }}
         >
           <input
-            className="body-1 h-[46px] flex-1 rounded-full bg-[var(--bg-elevated)] px-5 text-white outline-0 placeholder:text-white/40"
+            className="body-1 h-[46px] flex-1 rounded-full bg-[#f1f1f1] px-5 text-[#232323] outline-0 placeholder:text-[#919191]"
             placeholder="러니에게 물어보기"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -191,7 +191,7 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-full bg-[var(--primary-lime)] text-black disabled:opacity-40"
+            className="grid h-[46px] w-[46px] shrink-0 place-items-center rounded-full bg-[#d4ff3f] text-[#0f120c] disabled:opacity-40"
             aria-label="보내기"
           >
             <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
