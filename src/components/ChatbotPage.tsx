@@ -174,7 +174,7 @@ export default function ChatbotPage({ onBack }: { onBack?: () => void }) {
       </div>
 
       {/* 입력 바 (하단 고정) */}
-      <div className="fixed bottom-0 left-1/2 w-[var(--frame-width)] max-w-full -translate-x-1/2 bg-[var(--bg-app)] px-[var(--gutter)] pb-5 pt-2">
+      <div className="fixed bottom-0 left-1/2 w-[var(--frame-width)] max-w-full -translate-x-1/2 bg-[var(--bg-app)] px-[var(--gutter)] pb-[env(safe-area-inset-bottom,0px)] pt-2">
         <form
           className="flex items-center gap-2"
           onSubmit={(e) => {

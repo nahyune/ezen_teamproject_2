@@ -194,7 +194,7 @@ export default function ScheduleDetailPage({ onBack }: Props) {
         </section>
       </main>
 
-      <div className="fixed bottom-0 left-1/2 z-[100] flex h-[93px] w-[var(--frame-width)] max-w-full -translate-x-1/2 items-start gap-[10px] border-t border-[#262626] bg-[#0e0e0e] px-[var(--gutter)] pb-7 pt-[14px]">
+      <div className="fixed bottom-0 left-1/2 z-[100] flex h-[calc(67px+env(safe-area-inset-bottom,0px))] w-[var(--frame-width)] max-w-full -translate-x-1/2 items-start gap-[10px] border-t border-[#262626] bg-[#0e0e0e] px-[var(--gutter)] pb-[env(safe-area-inset-bottom,0px)] pt-[14px]">
         {!attending && (
           <button
             className="h-[53px] flex-1 rounded-full bg-[#1d1d1d] text-[16px] font-medium leading-[1.3] tracking-[-0.48px] text-[#9c9c9c]"

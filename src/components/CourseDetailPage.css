@@ -168,7 +168,7 @@
 }
 
 .course-detail__cta {
-  @apply fixed bottom-0 left-1/2 z-[100] flex h-[88px] w-[var(--frame-width)] max-w-full -translate-x-1/2 items-center gap-[29px] border border-[rgba(245,244,242,0.08)] bg-[#0e0e10] pt-3.5 pr-[18px] pb-5 pl-8;
+  @apply fixed bottom-0 left-1/2 z-[100] flex h-[calc(62px+env(safe-area-inset-bottom,0px))] w-[var(--frame-width)] max-w-full -translate-x-1/2 items-center gap-[29px] border border-[rgba(245,244,242,0.08)] bg-[#0e0e10] pt-3.5 pr-[18px] pb-[env(safe-area-inset-bottom,0px)] pl-8;
 }
 
 .course-detail__route {
