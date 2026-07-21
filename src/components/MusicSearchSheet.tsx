@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   searchSongs,
   getRecommendedSongs,
@@ -20,6 +20,9 @@ import { playSong, pauseSong, stopSong, warmUpPlayer } from "../lib/youtubePlaye
 // 미리듣기 바의 → 버튼을 눌러야 onPick 으로 확정된다. 북마크는 저장/해제(로컬 보관).
 
 type Tab = "recommend" | "trending" | "saved";
+
+/** 핸들 바를 이만큼(px) 아래로 끌면 시트가 닫힌다 */
+const SHEET_CLOSE_THRESHOLD = 80;
 
 const TABS: { key: Tab; label: string }[] = [
   { key: "recommend", label: "추천" },
@@ -133,6 +136,25 @@ export default function MusicSearchSheet({
   // 미리듣기 — 곡 행을 탭하면 하단 바에서 인기 파트 30초 재생 (인스타식)
   const [preview, setPreview] = useState<Song | null>(null);
   const [previewPlaying, setPreviewPlaying] = useState(false);
+  // 핸들 바를 아래로 끌어 닫기 — dragY 만큼 시트를 내리고, 임계값 넘으면 닫는다.
+  const [dragY, setDragY] = useState(0);
+  const dragFrom = useRef<number | null>(null);
+
+  const onDragStart = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragFrom.current = e.clientY;
+  };
+  const onDragMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (dragFrom.current === null) return;
+    // 아래로만 따라온다(위로 끌어도 안 늘어남)
+    setDragY(Math.max(0, e.clientY - dragFrom.current));
+  };
+  const onDragEnd = () => {
+    if (dragFrom.current === null) return;
+    dragFrom.current = null;
+    if (dragY > SHEET_CLOSE_THRESHOLD) onClose(); // 충분히 내리면 닫기
+    setDragY(0); // 아니면 제자리로 (transition 이 다시 붙어 부드럽게 복귀)
+  };
 
   // 열릴 때 추천(첫 50개)·차트 로드 + 검색·미리듣기 초기화 (닫힐 때도 재생 정지)
   useEffect(() => {
@@ -227,19 +249,25 @@ export default function MusicSearchSheet({
 
       {/* 시트 — 상태바 아래에서 시작, 아래에서 스르륵 */}
       <div
-        className={`fixed inset-x-0 bottom-0 top-[var(--statusbar-h)] z-[131] flex flex-col rounded-t-[20px] bg-[#191b1f] transition-transform duration-300 ${
+        className={`fixed inset-x-0 bottom-0 top-[var(--statusbar-h)] z-[131] flex flex-col rounded-t-[20px] bg-[#191b1f] ${
           open ? "translate-y-0" : "invisible translate-y-full"
-        }`}
+        } ${dragY > 0 ? "" : "transition-transform duration-300"}`}
+        style={dragY > 0 ? { transform: `translateY(${dragY}px)` } : undefined}
         role="dialog"
         aria-label="음악 찾기"
         aria-hidden={!open || undefined}
       >
-        {/* 핸들 바 — 디자인 보완: 시트 상단 중앙, 탭하면 닫힘 */}
+        {/* 핸들 바 — 아래로 끌어 내리면 닫히고(임계값 이상), 탭해도 닫힌다.
+            끌다 만 경우(임계값 미만)에는 제자리로 돌아온다. */}
         <button
           type="button"
           onClick={onClose}
           aria-label="닫기"
-          className="flex w-full shrink-0 justify-center pb-2 pt-3"
+          className="flex w-full shrink-0 touch-none justify-center pb-2 pt-3"
+          onPointerDown={onDragStart}
+          onPointerMove={onDragMove}
+          onPointerUp={onDragEnd}
+          onPointerCancel={onDragEnd}
         >
           <span className="h-1 w-10 rounded-full bg-white/25" />
         </button>
