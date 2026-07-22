@@ -18,6 +18,7 @@ import thumbsUp from "../assets/emoji/thumbs-up.svg";
 import partyingFace from "../assets/emoji/partying-face.svg";
 import clappingHands from "../assets/emoji/clapping-hands.svg";
 import womanRunning from "../assets/emoji/woman-running.svg";
+import { useUserProfile } from "../lib/userProfile";
 
 /* 아이콘은 BottomNav와 동일하게 mask 방식 - text 색으로 아이콘 색 제어 */
 const maskIconClass =
@@ -430,7 +431,9 @@ function FeedCard({
   onUpdateCaption?: (caption: string) => void;
 }) {
   const mediaItems = post.images ?? (post.image ? [post.image] : []);
-  const avatarImage = isMine ? feedStories[0].image : post.avatar;
+  const { profile, avatarSrc } = useUserProfile();
+  const avatarImage = isMine ? avatarSrc : post.avatar;
+  const displayAuthor = isMine ? profile.name : post.author;
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
   const [liked, setLiked] = useState(false);
   const [heartBurstKey, setHeartBurstKey] = useState(0);
@@ -511,7 +514,7 @@ function FeedCard({
             }`}
             onClick={onOpenStory}
             disabled={!onOpenStory}
-            aria-label={onOpenStory ? `${post.author} 스토리 보기` : undefined}
+            aria-label={onOpenStory ? `${displayAuthor} 스토리 보기` : undefined}
           >
             {/* 스토리 레일과 동일한 얇은 흰색 테두리 — 오렌지 링이 사라져도 아바타 윤곽 유지 */}
             {avatarImage ? (
@@ -527,7 +530,7 @@ function FeedCard({
             )}
           </button>
           <div className="flex flex-col">
-            <span className="subtitle-1 text-[var(--text-strong)]">{post.author}</span>
+            <span className="subtitle-1 text-[var(--text-strong)]">{displayAuthor}</span>
             <span className="body-2 text-[var(--text-soft)]">{post.meta}</span>
           </div>
         </div>
@@ -729,7 +732,7 @@ function FeedCard({
         <div className="flex flex-col gap-1">
           {post.caption && (
             <p className="body-1 text-white">
-              <strong className="font-medium">{post.author}</strong> {post.caption}
+              <strong className="font-medium">{displayAuthor}</strong> {post.caption}
             </p>
           )}
           {showLikedBy && <p className="body-1 text-white">{post.likedBy}</p>}
@@ -937,9 +940,11 @@ export default function FeedPage({
 }) {
   // 현재 보고 있는 스토리(null = 닫힘) + 이번 세션에서 확인한 스토리 이름들.
   // 확인 기록은 새로고침 시 초기화된다(시연용 — 오렌지 링이 매번 복귀).
+  const { avatarSrc } = useUserProfile();
   const [activeStory, setActiveStory] = useState<FeedStory | null>(null);
   const [viewedStories, setViewedStories] = useState<Set<string>>(new Set());
-  const stories = createdStory ? [createdStory, ...feedStories.slice(1)] : feedStories;
+  const myStory = { ...(createdStory ?? feedStories[0]), name: "내 스토리", image: avatarSrc };
+  const stories = [myStory, ...feedStories.slice(1)];
 
   const openStory = (story: FeedStory) => {
     setActiveStory(story);

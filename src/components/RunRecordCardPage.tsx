@@ -424,7 +424,7 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
           />
         </span>
         <p className="text-[13px] text-primary-lime">
-          사진, 문구, GPS 아트, 기록 정보를 원하는 위치로 옮겨보세요.
+          사진, 문구, GPS 아트, 기록 정보를 <span className="font-medium text-primary-orange">원하는 위치로</span> 옮겨보세요.
         </p>
       </div>
 
