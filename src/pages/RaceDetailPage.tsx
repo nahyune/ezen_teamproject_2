@@ -28,11 +28,20 @@ const bodyTextClass = "text-[14px] font-normal leading-[1.3] tracking-[-0.42px] 
 
 function ShareIcon() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="18" cy="5" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <circle cx="6" cy="12" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <circle cx="18" cy="19" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <path d="M8 11L16 6M8 13L16 18" stroke="currentColor" strokeLinecap="round" strokeWidth="1.7" />
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
+      <path
+        d="M17.1 8.3L13 4.2L8.9 8.3M13 4.8V16.4"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M8 11.3H6.6C5.7 11.3 5 12 5 12.9V20.3C5 21.2 5.7 21.9 6.6 21.9H19.4C20.3 21.9 21 21.2 21 20.3V12.9C21 12 20.3 11.3 19.4 11.3H18"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.6"
+      />
     </svg>
   );
 }
@@ -84,7 +93,7 @@ export default function RaceDetailPage({ onBack }: Props) {
           대회 소식
         </h1>
         <button
-          className="grid h-6 w-6 place-items-center text-[#f6f6ed]"
+          className="grid h-[26px] w-[26px] place-items-center text-[#f6f6ed]"
           type="button"
           aria-label="공유하기"
           onClick={() => setShareOpen(true)}

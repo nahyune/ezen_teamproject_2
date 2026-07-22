@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import kakaoLogo from "../assets/icons/Kakao_logo 1.svg";
 import instagramLogo from "../assets/icons/Instagram_icon 1.svg";
-import werunLogo from "../assets/icons/werun.svg";
+
+// public/ 자산이라 일반 import가 아닌 루트 절대경로로 참조(PWA 홈화면 아이콘과 동일 이미지).
+const werunLogo = "/app-icon.svg";
 
 function KakaoIcon() {
   return <img src={kakaoLogo} alt="" width={32} height={32} aria-hidden />;
@@ -12,7 +14,8 @@ function InstagramIcon() {
 }
 
 function WeRunIcon() {
-  return <img src={werunLogo} alt="" width={32} height={32} aria-hidden />;
+  // app-icon.svg는 각진 정사각형이라, 옆 카카오톡·인스타그램 아이콘과 둥글기를 맞춘다.
+  return <img src={werunLogo} alt="" width={32} height={32} className="rounded-[7px]" aria-hidden />;
 }
 
 const options = [
