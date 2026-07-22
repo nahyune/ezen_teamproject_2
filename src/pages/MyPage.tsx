@@ -64,7 +64,8 @@ export default function MyPage({
   const [editDistance, setEditDistance] = useState("");
   const [editDate, setEditDate] = useState("");
   const [editCaption, setEditCaption] = useState("");
-  const [activeHighlight, setActiveHighlight] = useState<HighlightKey | null>(null);
+  const [activeHighlight, setActiveHighlight] = useState<HighlightKey>("streak");
+  const [highlightOpen, setHighlightOpen] = useState(false);
 
   const openRecord = (record: MyRecord) => {
     setSelectedRecord(record);
@@ -180,7 +181,10 @@ export default function MyPage({
             type="button"
             key={h.key}
             className="flex flex-col items-center gap-[7px] text-xs tracking-[-0.36px] text-white/70"
-            onClick={() => setActiveHighlight(h.key as HighlightKey)}
+            onClick={() => {
+              setActiveHighlight(h.key as HighlightKey);
+              setHighlightOpen(true);
+            }}
             aria-label={`${h.label} 자세히 보기`}
           >
             <div className="flex items-center justify-center w-16 h-16 rounded-full bg-elevated border-[1.5px] border-primary-lime/70">
@@ -252,17 +256,28 @@ export default function MyPage({
         </ul>
       </div>
 
-      {activeHighlight && (
-        <div
-          className="fixed inset-0 z-[220] flex items-end bg-black/65"
-          onClick={() => setActiveHighlight(null)}
-          role="presentation"
-        >
+      <div
+        className={`fixed inset-0 z-[220] flex items-end bg-black/65 transition-opacity duration-300 ${
+          highlightOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={() => setHighlightOpen(false)}
+        role="presentation"
+        aria-hidden={!highlightOpen || undefined}
+      >
           <section
-            className="w-full rounded-t-[8px] border-t border-white/10 bg-[#151517] px-[18px] pb-[calc(42px+env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_45px_rgba(0,0,0,0.45)]"
+            className={`w-full rounded-t-[8px] border-t border-white/10 bg-[#232323] px-[18px] pb-[calc(42px+env(safe-area-inset-bottom))] pt-3 shadow-[0_-18px_45px_rgba(0,0,0,0.45)] transition-transform duration-300 ${
+              highlightOpen ? "translate-y-0" : "invisible translate-y-full"
+            }`}
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="mx-auto mb-10 h-1 w-10 rounded-full bg-white/20" />
+            <button
+              type="button"
+              className="mx-auto mb-3 flex h-8 w-20 items-start justify-center"
+              onClick={() => setHighlightOpen(false)}
+              aria-label="하이라이트 패널 닫기"
+            >
+              <span className="h-1 w-10 rounded-full bg-white/20" />
+            </button>
             <header className="mb-8 flex items-center">
               <div className="flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full border border-primary-lime/60 bg-elevated">
@@ -324,8 +339,7 @@ export default function MyPage({
               </div>
             )}
           </section>
-        </div>
-      )}
+      </div>
 
       {selectedRecord && (
         <div

@@ -45,7 +45,7 @@ export default function RunNotifications({
       </button>
 
       {open && (
-        <section className={`absolute right-0 top-[36px] z-[120] w-[360px] max-w-[calc(100vw-36px)] overflow-hidden rounded-[8px] border ${variant === "dark" ? "border-white/10 bg-[#232323] text-white shadow-[0_16px_42px_rgba(0,0,0,0.6)]" : "border-black/8 bg-white text-black shadow-[0_16px_42px_rgba(0,0,0,0.15)]"}`}>
+        <section className={`absolute right-0 top-[36px] z-[120] w-[360px] max-w-[calc(100vw-36px)] overflow-hidden rounded-[8px] border ${variant === "dark" ? "border-white/10 bg-[#404040] text-white shadow-[0_16px_42px_rgba(0,0,0,0.6)]" : "border-black/8 bg-white text-black shadow-[0_16px_42px_rgba(0,0,0,0.15)]"}`}>
           <div className={`flex h-12 items-center justify-between border-b px-4 ${variant === "dark" ? "border-white/8" : "border-black/8"}`}>
             <h2 className="text-[17px] font-semibold">알림</h2>
             <span className="text-[12px] font-medium text-primary-lime">알림 2개</span>
