@@ -103,12 +103,12 @@ export default function RunningMapPage({
         className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-10 drop-shadow-[0_0_4px_rgba(0,0,0,0.75)]"
       />
 
-      <p className="absolute top-[calc(var(--statusbar-h)+37px)] left-13.75 flex min-w-[164px] items-baseline justify-center gap-1.5 leading-[0.95] whitespace-nowrap">
+      <p className="absolute top-[calc(var(--statusbar-h)+18px)] left-13.75 flex min-w-[164px] items-baseline justify-center gap-1.5 leading-[0.95] whitespace-nowrap">
         <span className="font-display text-[48px] text-primary-lime tabular-nums">{distance}</span>
         <span className="text-[32px] text-[#b1b1b1]">/8km</span>
       </p>
 
-      <div className="absolute top-[calc(var(--statusbar-h)+105px)] left-1/2 flex -translate-x-1/2 items-start gap-4 min-[390px]:gap-7">
+      <div className="absolute top-[calc(var(--statusbar-h)+86px)] left-1/2 flex -translate-x-1/2 items-start gap-4 min-[390px]:gap-7">
         <Stat value={formatTime(seconds)} label="시간" />
         <Stat value={pace} label="평균 페이스" />
         <Stat value={String(bpm)} label="BPM" />

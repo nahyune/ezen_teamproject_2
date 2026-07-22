@@ -42,9 +42,10 @@ const options = [
 type Props = {
   open: boolean;
   onClose: () => void;
+  variant?: "dark" | "run-complete";
 };
 
-export default function SharePopup({ open, onClose }: Props) {
+export default function SharePopup({ open, onClose, variant = "dark" }: Props) {
   const [sharedMessage, setSharedMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -59,14 +60,16 @@ export default function SharePopup({ open, onClose }: Props) {
   return (
     <>
       <div
-        className={`fixed inset-0 z-[210] bg-black/50 transition-opacity duration-300 ${
-          open ? "opacity-100" : "pointer-events-none opacity-0"
+        className={`share-popup-dim fixed inset-0 z-[210] bg-black/50 transition-opacity duration-300 ${
+          open ? "is-open opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={onClose}
         aria-hidden
       />
       <div
-        className={`fixed bottom-0 left-1/2 z-[211] w-[var(--frame-width)] max-w-full -translate-x-1/2 rounded-t-[20px] bg-[#1d1d1d] pb-8 pt-3 transition-transform duration-300 ${
+        className={`fixed bottom-0 left-1/2 z-[211] w-[var(--frame-width)] max-w-full -translate-x-1/2 rounded-t-[20px] pb-8 pt-3 transition-transform duration-300 ${
+          variant === "run-complete" ? "bg-white" : "bg-[#1d1d1d]"
+        } ${
           open ? "translate-y-0" : "invisible translate-y-full"
         }`}
         role="dialog"
@@ -74,10 +77,10 @@ export default function SharePopup({ open, onClose }: Props) {
         aria-hidden={!open || undefined}
       >
         <button type="button" onClick={onClose} aria-label="닫기" className="flex w-full justify-center pb-4">
-          <span className="h-1 w-10 rounded-full bg-white/25" />
+          <span className={`h-1 w-10 rounded-full ${variant === "run-complete" ? "bg-black/20" : "bg-white/25"}`} />
         </button>
 
-        <h2 className="px-[var(--gutter)] pb-6 text-center text-[16px] font-medium leading-[1.3] tracking-[-0.48px] text-white">
+        <h2 className={`px-[var(--gutter)] pb-6 text-center text-[16px] font-medium leading-[1.3] tracking-[-0.48px] ${variant === "run-complete" ? "text-[#232323]" : "text-white"}`}>
           {sharedMessage ?? "공유하기"}
         </h2>
 
@@ -89,8 +92,8 @@ export default function SharePopup({ open, onClose }: Props) {
               className="flex flex-col items-center gap-2"
               onClick={() => handleShare(option.message)}
             >
-              <span className={`grid h-16 w-16 place-items-center rounded-full ${option.swatch}`}>{option.icon}</span>
-              <span className="text-[13px] font-normal leading-[1.3] tracking-[-0.39px] text-[#c8c8c8]">
+              <span className={`grid h-16 w-16 place-items-center rounded-full ${variant === "run-complete" ? "bg-black/6" : option.swatch}`}>{option.icon}</span>
+              <span className={`text-[13px] font-normal leading-[1.3] tracking-[-0.39px] ${variant === "run-complete" ? "text-[#3e3e3e]" : "text-[#c8c8c8]"}`}>
                 {option.label}
               </span>
             </button>

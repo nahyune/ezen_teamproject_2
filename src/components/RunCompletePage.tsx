@@ -1,7 +1,9 @@
+import { useState } from "react";
 import MapBackdrop from "./MapBackdrop";
 import { BackButton } from "./Icons";
 import { RUNNING_MAP_LOCATION } from "./RunningMapPage";
 import type { RunSummary } from "./RunningPage";
+import SharePopup from "./SharePopup";
 import shareIcon from "../assets/icons/share.svg";
 
 const formatTime = (total: number) =>
@@ -17,12 +19,14 @@ const fallbackSummary: RunSummary = {
 };
 
 function Stat({ value, label, suffix }: { value: string; label: string; suffix?: string }) {
+  const valueOffset = label === "평균 페이스" ? " translate-x-[7px]" : "";
+
   return (
     <div className="flex w-27.5 flex-col items-center gap-1">
-      <span className="flex items-center gap-1.25 font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-[#3E3E3E]">
+      <span className={`relative flex h-[47px] w-full items-center justify-center font-display text-[36px] leading-none tracking-[-0.72px] whitespace-nowrap text-[#3E3E3E]${valueOffset}`}>
         {value}
         {suffix && (
-          <span className="font-sans text-[24px] tracking-[-0.48px] text-[#ff4e16]">
+          <span className="absolute top-1/2 left-[calc(50%+23px)] -translate-y-1/2 font-sans text-[20px] tracking-[-0.4px] text-[#ff4e16]">
             {suffix}
           </span>
         )}
@@ -46,22 +50,29 @@ export default function RunCompletePage({
 }) {
   const result = summary ?? fallbackSummary;
   const cadence = summary ? String(Math.round(result.bpm * 1.06)) : "172";
+  const [shareOpen, setShareOpen] = useState(false);
+
   return (
     <div className="run-complete-page scrollbar-hidden relative flex flex-1 min-h-0 animate-run-complete-fade flex-col items-center overflow-y-auto bg-[#fafafa]">
       <div className="fixed top-0 left-0 right-0 z-10 h-[var(--statusbar-h)] bg-white" aria-hidden />
       <header className="sticky top-[var(--statusbar-h)] z-10 mt-[var(--statusbar-h)] flex h-13 w-full shrink-0 items-center justify-between border-b border-[#eeeeee] bg-white px-4.5">
         <BackButton onClick={onBack} color="text-[#0D0D0F]" />
-        <button type="button" className="grid size-[26px] place-items-center" aria-label="공유하기">
+        <button
+          type="button"
+          className="grid size-[26px] place-items-center"
+          aria-label="공유하기"
+          onClick={() => setShareOpen(true)}
+        >
           <img className="size-[26px]" src={shareIcon} alt="" />
         </button>
       </header>
 
-      <p className="mt-3 flex w-87.5 shrink-0 items-baseline justify-start gap-1.25 pl-3 font-display leading-[1.3] whitespace-nowrap">
-        <span className="text-[128px] tracking-[-2.56px] text-[#0D0D0F] tabular-nums">{result.distance}</span>
+      <p className="mt-6 flex w-87.5 translate-x-3 shrink-0 items-baseline justify-center gap-1.25 font-display leading-[1.3] whitespace-nowrap">
+        <span className="text-[128px] tracking-[0] text-[#0D0D0F] tabular-nums">{result.distance}</span>
         <span className="text-[36px] tracking-[-0.72px] text-[rgba(0,0,0,0.26)]">KM</span>
       </p>
 
-      <div className="mt-4 flex w-87.5 shrink-0 flex-col gap-4">
+      <div className="mt-6 flex w-87.5 shrink-0 flex-col gap-4">
         <div className="flex items-start justify-between">
           <Stat value={result.pace} label="평균 페이스" />
           <Stat value={cadence} label="케이던스" />
@@ -74,20 +85,22 @@ export default function RunCompletePage({
         </div>
       </div>
 
-      <div className="relative mt-8 mb-5 h-102.75 w-96.75 shrink-0 overflow-hidden rounded-card bg-white">
-        <MapBackdrop
-          center={result.mapCenter ?? result.mapPosition ?? RUNNING_MAP_LOCATION}
-          level={result.mapLevel ?? 4}
-          markerPosition={result.mapPosition ?? RUNNING_MAP_LOCATION}
-          markerVariant="orange"
-          markerPath={result.mapPath && result.mapPath.length > 1 ? result.mapPath : undefined}
-          showTraveledPath
-          showRoutePreview={result.mapShowRoutePreview ?? false}
-          traveledPathProgress={result.mapProgress ?? 1}
-          fitPathBounds
-        />
+      <div className="relative mt-8 mb-5 h-102.75 w-96.75 shrink-0 touch-pan-y overflow-hidden rounded-card bg-white">
+        <div className="pointer-events-none absolute inset-0">
+          <MapBackdrop
+            center={result.mapCenter ?? result.mapPosition ?? RUNNING_MAP_LOCATION}
+            level={result.mapLevel ?? 4}
+            markerPosition={result.mapPosition ?? RUNNING_MAP_LOCATION}
+            markerVariant="orange"
+            markerPath={result.mapPath && result.mapPath.length > 1 ? result.mapPath : undefined}
+            showTraveledPath
+            showRoutePreview={result.mapShowRoutePreview ?? false}
+            traveledPathProgress={result.mapProgress ?? 1}
+            fitPathBounds
+          />
+        </div>
 
-        <span className="absolute top-4.5 left-3.75 z-10 flex h-8.25 w-33.25 items-center justify-center rounded-[5px] bg-white text-[14px] leading-[1.3] tracking-[-0.42px] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
+        <span className="pointer-events-none absolute top-4.5 left-3.75 z-10 flex h-8.25 w-33.25 items-center justify-center rounded-[5px] bg-white text-[14px] leading-[1.3] tracking-[-0.42px] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
           서울특별시, 대한민국
         </span>
       </div>
@@ -99,6 +112,8 @@ export default function RunCompletePage({
       >
         기록 카드 만들기
       </button>
+
+      <SharePopup open={shareOpen} onClose={() => setShareOpen(false)} variant="run-complete" />
     </div>
   );
 }

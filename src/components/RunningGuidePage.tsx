@@ -1,4 +1,4 @@
-import { BackButton } from "./Icons";
+import { BackButton, ChevronRight } from "./Icons";
 import iconPlay from "../assets/icons/guide-play.svg";
 import iconArrow from "../assets/icons/guide-arrow.svg";
 
@@ -32,7 +32,7 @@ const runningTips = [
 // ── 러닝 가이드 화면 (기록 탭 하위 페이지, 하단 네비 없음) ────
 export default function RunningGuidePage({ onBack }: { onBack?: () => void }) {
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className="flex min-h-0 flex-1 flex-col bg-[#232323]">
       {/* 헤더: 뒤로가기 + 가운데 타이틀 (spacer로 광학 중앙 정렬 유지) */}
       <header className="mt-[calc(var(--statusbar-h)+12px)] flex items-center justify-between px-4.5 py-2.5">
         <BackButton onClick={onBack} />
@@ -51,7 +51,7 @@ export default function RunningGuidePage({ onBack }: { onBack?: () => void }) {
             {guideRuns.map((g) => (
               <li
                 key={g.id}
-                className="flex items-center gap-3 rounded-2xl bg-surface px-4 py-3.5"
+                className="flex items-center gap-3 rounded-2xl bg-[#404040] px-4 py-3.5"
               >
                 <button
                   type="button"
@@ -78,7 +78,7 @@ export default function RunningGuidePage({ onBack }: { onBack?: () => void }) {
           <h2 className="text-[20px] font-medium leading-[1.3] tracking-[-0.6px]">
             진행 중인 프로그램
           </h2>
-          <div className="flex flex-col gap-4 rounded-[14px] bg-[#26262a] p-4">
+          <div className="flex flex-col gap-4 rounded-[14px] bg-[#404040] p-4">
             <div className="flex items-center justify-between">
               <p className="text-[16px] leading-[1.3] tracking-[-0.48px]">
                 첫 5K 도전 · 8주 프로그램
@@ -115,9 +115,10 @@ export default function RunningGuidePage({ onBack }: { onBack?: () => void }) {
             </h2>
             <button
               type="button"
-              className="text-[12px] font-light tracking-[-0.36px] text-[#d6ff1e]"
+              className="flex items-center gap-0.5 text-sm tracking-[-0.42px] text-[var(--text-muted)]"
             >
-              모두 보기
+              <span>전체보기</span>
+              <ChevronRight size={14} />
             </button>
           </div>
           <ul className="flex flex-col gap-3">
@@ -125,7 +126,7 @@ export default function RunningGuidePage({ onBack }: { onBack?: () => void }) {
               <li key={t.id}>
                 <button
                   type="button"
-                  className="flex w-full items-center justify-between gap-3 rounded-[14px] bg-[#26262a] p-4 text-left"
+                  className="flex w-full items-center justify-between gap-3 rounded-[14px] bg-[#404040] p-4 text-left"
                 >
                   <span className="min-w-0 flex-1 text-[14px] font-medium leading-[1.3] tracking-[-0.42px]">
                     {t.title}

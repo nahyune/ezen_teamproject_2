@@ -7,7 +7,10 @@ import type { MapPoint } from "./RunningMapPage";
 
 const HOLD_MS = 500; // "길게 눌러 종료" 판정 시간
 const PAUSED_RUN_LOCATION = { lat: 37.5769, lng: 126.9828 }; // 경복궁과 안국역 사이
-const MAP_TOP_GRADIENT_CLASS = "pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-transparent to-transparent";
+const MAP_TOP_GRADIENT_STYLE = {
+  backgroundImage:
+    "linear-gradient(180deg, rgba(0, 0, 0, 0.92) 3.73%, rgba(122, 122, 122, 0) 100%)",
+};
 
 const formatTime = (total: number) =>
   `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
@@ -17,8 +20,15 @@ function Stat({ value, label }: { value: string; label: string }) {
 
   return (
     <div className="flex w-27.5 flex-col items-center gap-1">
-      <span className={"font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap text-[#3E3E3E]" + paceValueOffset}>
-        {value}
+      <span className={"flex h-[47px] w-full items-center justify-center font-display text-[36px] leading-none tracking-[-0.72px] whitespace-nowrap text-[#3E3E3E]" + paceValueOffset}>
+        <span className="relative">
+          {value}
+          {label === "BPM" && (
+            <span className="absolute top-1/2 left-full ml-[3px] -translate-y-1/2 font-sans text-[20px] tracking-[-0.4px] text-[#ff4e16]" aria-hidden>
+              ♡
+            </span>
+          )}
+        </span>
       </span>
       <span className="text-[16px] leading-[1.3] tracking-[-0.48px] text-[rgba(0,0,0,0.26)]">
         {label}
@@ -91,15 +101,16 @@ export default function PausedRunPage({
   };
 
   return (
-    <div className="paused-run-page relative flex-1 bg-white">
+    <div className="paused-run-page relative flex-1 bg-[#fafafa]">
       <BackButton
         onClick={onBack}
         className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-10 drop-shadow-[0_0_4px_rgba(0,0,0,0.75)]"
-        color="text-black"
+        color="text-white"
       />
       <button
         type="button"
         className="relative block h-69.25 w-full overflow-hidden text-left"
+        style={{ scale: 1, transition: "none" }}
         aria-label="지도 전체화면으로 보기"
         onClick={() => setIsMapOpen(true)}
       >
@@ -113,7 +124,10 @@ export default function PausedRunPage({
           showRoutePreview={showRoutePreview}
           traveledPathProgress={mapProgress}
         />
-        <div className={MAP_TOP_GRADIENT_CLASS} />
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-[170px]"
+          style={MAP_TOP_GRADIENT_STYLE}
+        />
       </button>
 
       {isMapOpen && (
@@ -129,12 +143,15 @@ export default function PausedRunPage({
             showRoutePreview={showRoutePreview}
             traveledPathProgress={mapProgress}
           />
-          <div className={`${MAP_TOP_GRADIENT_CLASS} z-10`} />
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[170px]"
+            style={MAP_TOP_GRADIENT_STYLE}
+          />
           <BackButton
             onClick={() => setIsMapOpen(false)}
             label="지도 닫기"
             className="absolute top-[calc(var(--statusbar-h)+18px)] left-[18px] z-20 drop-shadow-[0_0_4px_rgba(0,0,0,0.75)]"
-            color="text-black"
+            color="text-white"
           />
         </div>
       )}

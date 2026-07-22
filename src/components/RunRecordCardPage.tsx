@@ -8,6 +8,7 @@ import exampleShoes from "../assets/img/feed-running-shoes.webp";
 import shareIcon from "../assets/icons/share.svg";
 import { BackButton } from "./Icons";
 import type { RunSummary } from "./RunningPage";
+import SharePopup from "./SharePopup";
 
 type Props = {
   summary?: RunSummary | null;
@@ -135,6 +136,7 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
   const cardRef = useRef<HTMLDivElement>(null);
   const customBgRef = useRef("");
   const dragRef = useRef<{ key: DragKey; offsetX: number; offsetY: number } | null>(null);
+  const resizeRef = useRef<{ key: DragKey; startX: number; startY: number; startScale: number } | null>(null);
 
   const [backgroundImage, setBackgroundImage] = useState(cardPhoto);
   const [title, setTitle] = useState("오늘의 러닝");
@@ -146,10 +148,17 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
   const [elementsSectionOpen, setElementsSectionOpen] = useState(true);
   const [sharing, setSharing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [selectedElement, setSelectedElement] = useState<DragKey | null>(null);
   const [positions, setPositions] = useState<Record<DragKey, Position>>({
     title: { x: 22, y: 14 },
     route: { x: 22, y: 33 },
     stats: { x: 23, y: 64 },
+  });
+  const [scales, setScales] = useState<Record<DragKey, number>>({
+    title: 1,
+    route: 1,
+    stats: 1,
   });
 
   useEffect(() => {
@@ -171,6 +180,7 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
   const startDrag = (key: DragKey, event: ReactPointerEvent<HTMLElement>) => {
     const card = cardRef.current;
     if (!card) return;
+    setSelectedElement(key);
     const cardBox = card.getBoundingClientRect();
     const targetBox = event.currentTarget.getBoundingClientRect();
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -203,6 +213,34 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
     dragRef.current = null;
   };
 
+  const startResize = (key: DragKey, event: ReactPointerEvent<HTMLElement>) => {
+    event.stopPropagation();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    resizeRef.current = {
+      key,
+      startX: event.clientX,
+      startY: event.clientY,
+      startScale: scales[key],
+    };
+  };
+
+  const moveResize = (event: ReactPointerEvent<HTMLElement>) => {
+    event.stopPropagation();
+    const resize = resizeRef.current;
+    if (!resize || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    const delta = ((event.clientX - resize.startX) + (event.clientY - resize.startY)) / 180;
+    const nextScale = Math.min(1.5, Math.max(0.6, resize.startScale + delta));
+    setScales((current) => ({ ...current, [resize.key]: nextScale }));
+  };
+
+  const endResize = (event: ReactPointerEvent<HTMLElement>) => {
+    event.stopPropagation();
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    resizeRef.current = null;
+  };
+
   const chooseCustomBackground = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -216,6 +254,7 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
   const draggableStyle = (key: DragKey) => ({
     left: `${positions[key].x}%`,
     top: `${positions[key].y}%`,
+    scale: scales[key],
   });
 
   const createSharedCardImage = async () => {
@@ -240,25 +279,33 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
     context.fillStyle = gradient;
     context.fillRect(0, size * 0.55, size, size * 0.45);
 
-    context.textAlign = "center";
     context.textBaseline = "middle";
-    context.shadowColor = "rgba(0,0,0,0.7)";
-    context.shadowBlur = 18;
+    context.shadowColor = "rgba(0,0,0,0.38)";
+    context.shadowBlur = 8;
     context.fillStyle = "#ffffff";
-    context.font = '600 68px "Pretendard", sans-serif';
-    context.fillText(title, size * positions.title.x / 100, size * positions.title.y / 100 - 18);
-    context.font = '400 38px "Pretendard", sans-serif';
-    context.fillText(subtitle, size * positions.title.x / 100, size * positions.title.y / 100 + 48);
+    const titleScale = scales.title;
+    const titleFont = `600 ${68 * titleScale}px "Pretendard", sans-serif`;
+    const subtitleFont = `400 ${38 * titleScale}px "Pretendard", sans-serif`;
+    context.font = titleFont;
+    const titleWidth = context.measureText(title).width;
+    context.font = subtitleFont;
+    const subtitleWidth = context.measureText(subtitle).width;
+    const titleLeft = size * positions.title.x / 100 - Math.max(titleWidth, subtitleWidth) / 2;
+    context.textAlign = "left";
+    context.font = titleFont;
+    context.fillText(title, titleLeft, size * positions.title.y / 100 - 18 * titleScale);
+    context.font = subtitleFont;
+    context.fillText(subtitle, titleLeft, size * positions.title.y / 100 + 48 * titleScale);
 
     if (showRoute) {
       context.shadowBlur = 0;
       if (hasRoutePath) {
         // 실제 달린 경로를 카드 미리보기와 동일한 정규화 좌표로 스트로크한다.
-        const routeBox = 176;
+        const routeBox = 176 * scales.route;
         const boxX = size * positions.route.x / 100 - routeBox / 2;
         const boxY = size * positions.route.y / 100 - routeBox / 2;
         context.strokeStyle = "#D6FF1E";
-        context.lineWidth = 9;
+        context.lineWidth = 9 * scales.route;
         context.lineJoin = "round";
         context.lineCap = "round";
         context.beginPath();
@@ -271,8 +318,8 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
         context.stroke();
       } else {
         const route = await loadCanvasImage(routeIcon);
-        const routeWidth = 166;
-        const routeHeight = 142;
+        const routeWidth = 166 * scales.route;
+        const routeHeight = 142 * scales.route;
         context.drawImage(
           route,
           size * positions.route.x / 100 - routeWidth / 2,
@@ -284,24 +331,35 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
     }
 
     if (showStats) {
-      const x = size * positions.stats.x / 100;
-      const startY = size * positions.stats.y / 100 - 178;
-      const statGap = 148;
-      const valueOffset = 60;
+      const statsScale = scales.stats;
+      const startY = size * positions.stats.y / 100 - 178 * statsScale;
+      const statGap = 148 * statsScale;
+      const valueOffset = 60 * statsScale;
       const stats = [
         ["거리", `${distance} km`],
         ["시간", formatTime(seconds)],
         ["평균 페이스", pace],
       ];
-      context.shadowColor = "rgba(0,0,0,0.7)";
-      context.shadowBlur = 16;
+      const statsLabelFont = `400 ${30 * statsScale}px "Pretendard", sans-serif`;
+      const statsValueFont = `400 ${54 * statsScale}px "Anton", sans-serif`;
+      const statsWidths = stats.flatMap(([label, value]) => {
+        context.font = statsLabelFont;
+        const labelWidth = context.measureText(label).width;
+        context.font = statsValueFont;
+        const valueWidth = context.measureText(value).width;
+        return [labelWidth, valueWidth];
+      });
+      const x = size * positions.stats.x / 100 - Math.max(...statsWidths) / 2;
+      context.textAlign = "left";
+      context.shadowColor = "rgba(0,0,0,0.38)";
+      context.shadowBlur = 8;
       stats.forEach(([label, value], index) => {
         const y = startY + index * statGap;
         context.fillStyle = "#ffffff";
-        context.font = '400 30px "Pretendard", sans-serif';
+        context.font = statsLabelFont;
         context.fillText(label, x, y);
         context.fillStyle = "#f5f5f7";
-        context.font = '400 54px "Anton", sans-serif';
+        context.font = statsValueFont;
         context.fillText(value, x, y + valueOffset);
       });
     }
@@ -344,8 +402,7 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
           type="button"
           className="grid size-[26px] place-items-center"
           aria-label="공유하기"
-          onClick={shareCard}
-          disabled={sharing || saving}
+          onClick={() => setShareOpen(true)}
         >
           <img className="size-[26px] brightness-0 invert" src={shareIcon} alt="" />
         </button>
@@ -381,24 +438,38 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
         <div className="absolute inset-x-0 bottom-0 h-30 bg-gradient-to-b from-black/0 to-black/55" />
 
         <div
-          className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none select-none flex-col gap-[1px] rounded-[8px] px-2 py-1 text-white active:cursor-grabbing"
+          className={`absolute z-10 flex -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none select-none flex-col gap-[1px] rounded-[8px] px-2 py-1 text-white active:cursor-grabbing ${selectedElement === "title" ? "outline outline-1 outline-primary-lime" : ""}`}
           style={draggableStyle("title")}
           onPointerDown={(event) => startDrag("title", event)}
           onPointerMove={moveDrag}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
         >
-          <p className="text-[24px] font-semibold tracking-[-0.48px] drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">
+          <p className="text-[24px] font-semibold tracking-[-0.48px] drop-shadow-[0_1px_4px_rgba(0,0,0,0.38)]">
             {title}
           </p>
-          <p className="text-[14px] tracking-[-0.42px] drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">
+          <p className="text-[14px] tracking-[-0.42px] drop-shadow-[0_1px_4px_rgba(0,0,0,0.38)]">
             {subtitle}
           </p>
+          {selectedElement === "title" && <span
+            className="absolute -right-4 -bottom-4 z-20 grid size-8 cursor-nwse-resize touch-none place-items-center rounded-full"
+            onPointerDown={(event) => startResize("title", event)}
+            onPointerMove={moveResize}
+            onPointerUp={endResize}
+            onPointerCancel={endResize}
+            aria-label="문구 크기 조절"
+            role="slider"
+            aria-valuemin={60}
+            aria-valuemax={150}
+            aria-valuenow={Math.round(scales.title * 100)}
+          >
+            <span className="size-3 rounded-full border-2 border-primary-lime bg-white shadow-[0_1px_4px_rgba(0,0,0,0.45)]" />
+          </span>}
         </div>
 
         {showRoute && (
           <div
-            className="absolute z-10 flex h-22 w-22 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none select-none items-center justify-center rounded-full active:cursor-grabbing"
+            className={`absolute z-10 flex h-22 w-22 -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none select-none items-center justify-center rounded-[8px] active:cursor-grabbing ${selectedElement === "route" ? "outline outline-1 outline-primary-lime" : ""}`}
             style={draggableStyle("route")}
             onPointerDown={(event) => startDrag("route", event)}
             onPointerMove={moveDrag}
@@ -423,12 +494,26 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
             ) : (
               <img className="pointer-events-none h-12.5 w-14.75" src={routeIcon} alt="" aria-hidden draggable={false} />
             )}
+            {selectedElement === "route" && <span
+              className="absolute -right-4 -bottom-4 z-20 grid size-8 cursor-nwse-resize touch-none place-items-center rounded-full"
+              onPointerDown={(event) => startResize("route", event)}
+              onPointerMove={moveResize}
+              onPointerUp={endResize}
+              onPointerCancel={endResize}
+              aria-label="GPS 아트 크기 조절"
+              role="slider"
+              aria-valuemin={60}
+              aria-valuemax={150}
+              aria-valuenow={Math.round(scales.route * 100)}
+            >
+              <span className="size-3 rounded-full border-2 border-primary-lime bg-white shadow-[0_1px_4px_rgba(0,0,0,0.45)]" />
+            </span>}
           </div>
         )}
 
         {showStats && (
           <div
-            className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none select-none flex-col gap-2.5 rounded-[10px] px-2 py-1 active:cursor-grabbing"
+            className={`absolute z-10 flex -translate-x-1/2 -translate-y-1/2 cursor-grab touch-none select-none flex-col items-start gap-2.5 rounded-[10px] px-2 py-1 text-left active:cursor-grabbing ${selectedElement === "stats" ? "outline outline-1 outline-primary-lime" : ""}`}
             style={draggableStyle("stats")}
             onPointerDown={(event) => startDrag("stats", event)}
             onPointerMove={moveDrag}
@@ -436,17 +521,31 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
             onPointerCancel={endDrag}
           >
             <div>
-              <p className="text-[12px] leading-[1.25] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">거리</p>
-              <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7] drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">{distance} km</p>
+              <p className="text-[12px] leading-[1.25] text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.38)]">거리</p>
+              <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7] drop-shadow-[0_1px_4px_rgba(0,0,0,0.38)]">{distance} km</p>
             </div>
             <div>
-              <p className="text-[12px] leading-[1.25] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">시간</p>
-              <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7] drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">{formatTime(seconds)}</p>
+              <p className="text-[12px] leading-[1.25] text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.38)]">시간</p>
+              <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7] drop-shadow-[0_1px_4px_rgba(0,0,0,0.38)]">{formatTime(seconds)}</p>
             </div>
             <div>
-              <p className="text-[12px] leading-[1.25] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">평균 페이스</p>
-              <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7] drop-shadow-[0_2px_8px_rgba(0,0,0,0.65)]">{pace}</p>
+              <p className="text-[12px] leading-[1.25] text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.38)]">평균 페이스</p>
+              <p className="font-display text-[22px] leading-[1.25] tracking-[-0.44px] text-[#f5f5f7] drop-shadow-[0_1px_4px_rgba(0,0,0,0.38)]">{pace}</p>
             </div>
+            {selectedElement === "stats" && <span
+              className="absolute -right-4 -bottom-4 z-20 grid size-8 cursor-nwse-resize touch-none place-items-center rounded-full"
+              onPointerDown={(event) => startResize("stats", event)}
+              onPointerMove={moveResize}
+              onPointerUp={endResize}
+              onPointerCancel={endResize}
+              aria-label="기록 정보 크기 조절"
+              role="slider"
+              aria-valuemin={60}
+              aria-valuemax={150}
+              aria-valuenow={Math.round(scales.stats * 100)}
+            >
+              <span className="size-3 rounded-full border-2 border-primary-lime bg-white shadow-[0_1px_4px_rgba(0,0,0,0.45)]" />
+            </span>}
           </div>
         )}
       </div>
@@ -558,6 +657,7 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
           </svg>
         </button>
         {elementsSectionOpen && (
+        <>
         <div className="mt-3 grid grid-cols-2 gap-2">
           <button
             type="button"
@@ -574,6 +674,7 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
             기록 정보
           </button>
         </div>
+        </>
         )}
       </section>
 
@@ -593,6 +694,8 @@ export default function RunRecordCardPage({ summary, onBack, onClose, onShare, o
       >
         {saving ? "저장 중..." : "기록만 저장하고 닫기"}
       </button>
+
+      <SharePopup open={shareOpen} onClose={() => setShareOpen(false)} />
     </div>
   );
 }

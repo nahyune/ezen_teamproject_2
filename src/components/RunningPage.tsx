@@ -79,19 +79,15 @@ function Stat({ value, label }: { value: string; label: string }) {
 
   return (
     <div className="flex w-22 flex-col items-center gap-1 text-center">
-      <span className={"flex w-full items-center justify-center gap-1.25 text-center font-display text-[36px] leading-[1.3] tracking-[-0.72px] whitespace-nowrap tabular-nums" + valueColor + paceValueOffset}>
-        {value}
-        {label === "BPM" && (
-          <svg className="size-5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path
-              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"
-              stroke="#FF4E16"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
+      <span className={"flex h-[47px] w-full items-center justify-center text-center font-display text-[36px] leading-none tracking-[-0.72px] whitespace-nowrap tabular-nums" + valueColor + paceValueOffset}>
+        <span className="relative">
+          {value}
+          {label === "BPM" && (
+            <span className="absolute top-1/2 left-full ml-[3px] -translate-y-1/2 font-sans text-[20px] tracking-[-0.4px] text-[#ff4e16]" aria-hidden>
+              ♡
+            </span>
+          )}
+        </span>
       </span>
       <span className={"w-full text-center text-[16px] leading-[1.3] tracking-[-0.48px]" + labelColor + paceLabelOffset}>
         {label}
@@ -340,13 +336,11 @@ export default function RunningPage({
       </button>
 
       {/* 누적 거리 */}
-      <p className="mt-15.25 flex w-full items-baseline justify-center font-display leading-[1.3] whitespace-nowrap">
-        <span className="inline-flex min-w-[296px] items-baseline justify-center gap-1.25">
-          <span className="text-[128px] tracking-[-2.56px] text-[#0D0D0F] tabular-nums">
-            {distance}
-          </span>
-          <span className="text-[36px] tracking-[-0.72px] text-[rgba(0,0,0,0.26)]">KM</span>
+      <p className="mt-15.25 flex w-87.5 translate-x-3 items-baseline justify-center gap-1.25 font-display leading-[1.3] whitespace-nowrap">
+        <span className="text-[128px] tracking-[0] text-[#0D0D0F] tabular-nums">
+          {distance}
         </span>
+        <span className="text-[36px] tracking-[-0.72px] text-[rgba(0,0,0,0.26)]">KM</span>
       </p>
 
       {/* 시간 · 평균 페이스 · BPM */}

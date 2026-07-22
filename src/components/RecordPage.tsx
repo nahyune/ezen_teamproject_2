@@ -130,11 +130,11 @@ export default function RecordPage({
   }, []);
 
   return (
-    <div className="record-page relative flex flex-1 flex-col overflow-hidden">
+    <div className="record-page relative flex flex-1 flex-col overflow-hidden bg-[#232323]">
       <div className="pointer-events-none absolute inset-x-0 top-52.5 bottom-0 z-0 overflow-hidden [transform:translateZ(0)] md:rounded-b-[42px]">
         <MapBackdrop />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_center,rgba(0,0,0,0.45)_0%,rgba(0,0,0,0.7)_60%,rgba(0,0,0,0.85)_100%)]" />
-        <div className="absolute inset-x-0 top-0 h-35 bg-linear-to-b from-black from-19% to-black/0" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_center,rgba(35,35,35,0.45)_0%,rgba(35,35,35,0.7)_60%,rgba(35,35,35,0.85)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-35 bg-linear-to-b from-[#232323] from-19% to-transparent" />
       </div>
 
       <header className="relative z-10 mb-3 mt-[calc(var(--statusbar-h)+12px)] flex h-13 items-center justify-between px-4.5">
