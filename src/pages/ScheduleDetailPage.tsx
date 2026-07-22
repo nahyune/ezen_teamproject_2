@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronRight, BackButton } from "../components/Icons";
 import SharePopup from "../components/SharePopup";
 import MapBackdrop from "../components/MapBackdrop";
@@ -13,6 +13,8 @@ import course1 from "../assets/img/course1.webp";
 
 type Props = {
   onBack: () => void;
+  /** 전체화면 지도 열림/닫힘을 App 에 알림 — 상태바를 투명(clear)으로 전환하는 용도 */
+  onMapOpenChange?: (open: boolean) => void;
 };
 
 const attendees = [
@@ -78,16 +80,24 @@ function AnimatedCheckIcon() {
   );
 }
 
-export default function ScheduleDetailPage({ onBack }: Props) {
+export default function ScheduleDetailPage({ onBack, onMapOpenChange }: Props) {
   const [showAttendConfirm, setShowAttendConfirm] = useState(false);
   const [attending, setAttending] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
 
+  // 지도 열림 상태를 App 에 동기화 (마운트 시 false 로 초기화 포함) → 상태바 투명 처리
+  useEffect(() => {
+    onMapOpenChange?.(isMapOpen);
+  }, [isMapOpen, onMapOpenChange]);
+
   return (
     <div className="phone bg-[#232323] text-white">
       <header className="subheader justify-between">
         <BackButton onClick={onBack} />
+        <h1 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[24px] font-semibold leading-[1.3] tracking-[-0.48px]">
+          내 일정
+        </h1>
         <button
           className="grid h-[26px] w-[26px] place-items-center text-white"
           type="button"
@@ -127,13 +137,13 @@ export default function ScheduleDetailPage({ onBack }: Props) {
 
         <section
           className="flex flex-col gap-[10px]"
-          style={{ marginTop: "calc(14px - (var(--spacing, 2.25rem) * 18))" }}
+          style={{ marginTop: "calc(14px - (var(--spacing, 2.25rem) * 14))" }}
         >
           <div className="flex gap-[6px]">
-            <span className="inline-flex min-h-[27px] items-center justify-center rounded-[12px] border border-[var(--primary-lime)] px-[10px] py-1 text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[var(--primary-lime)]">
+            <span className="inline-flex min-h-[27px] items-center justify-center rounded-[12px] border border-[var(--primary-lime)] px-[10px] py-1 text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[var(--primary-lime)]">
               크루
             </span>
-            <span className="inline-flex min-h-[27px] items-center justify-center rounded-[12px] bg-[var(--primary-lime)] px-[10px] py-1 text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#0a0a0a]">
+            <span className="inline-flex min-h-[27px] items-center justify-center rounded-[12px] bg-[var(--primary-lime)] px-[10px] py-1 text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#0a0a0a]">
               D-1
             </span>
           </div>
@@ -145,11 +155,11 @@ export default function ScheduleDetailPage({ onBack }: Props) {
 
         <section className="flex flex-col gap-3">
           <div className="flex w-full flex-col gap-[10px] rounded-2xl bg-[#404040] p-4">
-            <div className="grid min-h-[21px] grid-cols-[42px_minmax(0,1fr)_auto] items-center gap-x-[11px] max-[380px]:grid-cols-[38px_minmax(0,1fr)_auto] max-[380px]:gap-x-2">
-              <span className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#8a8a8a]">장소</span>
+            <div className="grid min-h-[21px] grid-cols-[42px_minmax(0,1fr)_auto] items-baseline gap-x-[11px] max-[380px]:grid-cols-[38px_minmax(0,1fr)_auto] max-[380px]:gap-x-2">
+              <span className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#8a8a8a]">장소</span>
               <strong className="truncate text-[16px] font-normal leading-[1.3] tracking-[-0.48px] text-white">뚝섬유원지 3번 출구</strong>
               <button
-                className="inline-flex items-center justify-end whitespace-nowrap text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[var(--primary-lime)]"
+                className="inline-flex items-center justify-end whitespace-nowrap text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[var(--primary-lime)]"
                 type="button"
                 onClick={() => setIsMapOpen(true)}
               >
@@ -157,44 +167,44 @@ export default function ScheduleDetailPage({ onBack }: Props) {
                 <ChevronRight size={14} />
               </button>
             </div>
-            <div className="grid min-h-[21px] grid-cols-[42px_minmax(0,1fr)] items-center gap-x-[11px] max-[380px]:grid-cols-[38px_minmax(0,1fr)] max-[380px]:gap-x-2">
-              <span className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#8a8a8a]">코스</span>
+            <div className="grid min-h-[21px] grid-cols-[42px_minmax(0,1fr)] items-baseline gap-x-[11px] max-[380px]:grid-cols-[38px_minmax(0,1fr)] max-[380px]:gap-x-2">
+              <span className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#8a8a8a]">코스</span>
               <strong className="truncate text-[16px] font-normal leading-[1.3] tracking-[-0.48px] text-white">뚝섬 → 잠실대교 왕복 6km</strong>
             </div>
-            <div className="grid min-h-[21px] grid-cols-[42px_minmax(0,1fr)] items-center gap-x-[11px] max-[380px]:grid-cols-[38px_minmax(0,1fr)] max-[380px]:gap-x-2">
-              <span className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#8a8a8a]">페이스</span>
+            <div className="grid min-h-[21px] grid-cols-[42px_minmax(0,1fr)] items-baseline gap-x-[11px] max-[380px]:grid-cols-[38px_minmax(0,1fr)] max-[380px]:gap-x-2">
+              <span className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#8a8a8a]">페이스</span>
               <strong className="truncate text-[16px] font-normal leading-[1.3] tracking-[-0.48px] text-white">6'30&quot; 그룹런</strong>
             </div>
           </div>
 
           <div className="flex w-full flex-col gap-3 rounded-2xl bg-[#404040] p-4">
-            <div className="flex items-center justify-between text-[14px] leading-[1.3] tracking-[-0.42px] text-white">
-              <strong className="font-medium">참석자</strong>
-              <span className="font-normal text-[#9c9c9c]">참석 12 · 불참 3 · 미응답 5</span>
+            <div className="flex items-center justify-between text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-white">
+              <strong className="font-light">참석자</strong>
+              <span className="font-light text-[#9c9c9c]">참석 12 · 불참 3 · 미응답 5</span>
             </div>
             <div className="flex items-center justify-center gap-2 max-[380px]:gap-[5px]">
               {attendees.map((attendee, index) => (
                 <img
-                  className="h-10 w-10 rounded-full border-2 border-[var(--primary-orange)] object-cover max-[380px]:h-9 max-[380px]:w-9"
+                  className="h-10 w-10 shrink-0 rounded-full border-2 border-[var(--primary-orange)] object-cover max-[380px]:h-9 max-[380px]:w-9"
                   key={`${attendee.image}-${index}`}
                   src={attendee.image}
                   alt=""
                   style={{ objectPosition: attendee.position }}
                 />
               ))}
-              <span className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-[#8a8a8a]">+5</span>
+              <span className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#8a8a8a]">+5</span>
             </div>
           </div>
 
           <div className="w-full rounded-2xl bg-[#404040] p-4">
-            <strong className="mb-2 block text-[14px] font-medium leading-[1.3] tracking-[-0.42px]">크루 공지</strong>
-            <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-[#9c9c9c]">우천 시 당일 17시에 취소 공지 드려요.</p>
-            <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-[#9c9c9c]">짐 보관은 3번 출구 편의점 앞에서 가능합니다.</p>
+            <strong className="mb-2 block text-[14px] font-light leading-[1.3] tracking-[-0.42px]">크루 공지</strong>
+            <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#9c9c9c]">우천 시 당일 17시에 취소 공지 드려요.</p>
+            <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#9c9c9c]">짐 보관은 3번 출구 편의점 앞에서 가능합니다.</p>
           </div>
         </section>
       </main>
 
-      <div className="fixed bottom-0 left-1/2 z-[100] flex h-[calc(67px+env(safe-area-inset-bottom,0px))] w-[var(--frame-width)] max-w-full -translate-x-1/2 items-start gap-[10px] border-t border-[#262626] bg-[#0e0e0e] px-[var(--gutter)] pb-[env(safe-area-inset-bottom,0px)] pt-[14px]">
+      <div className="fixed bottom-0 left-1/2 z-[100] flex h-[calc(91px+env(safe-area-inset-bottom,0px))] w-[var(--frame-width)] max-w-full -translate-x-1/2 items-start gap-[10px] bg-[#232323] px-[var(--gutter)] pb-[calc(env(safe-area-inset-bottom,0px)+24px)] pt-[14px]">
         {!attending && (
           <button
             className="h-[53px] flex-1 rounded-full bg-[#1d1d1d] text-[16px] font-medium leading-[1.3] tracking-[-0.48px] text-[#9c9c9c]"
@@ -230,7 +240,7 @@ export default function ScheduleDetailPage({ onBack }: Props) {
             </span>
             <div className="flex flex-col gap-1">
               <h2 className="text-[18px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">참석 완료</h2>
-              <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-[#9c9c9c]">
+              <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#9c9c9c]">
                 이번 일정에 참석이 확정되었어요.
               </p>
             </div>

@@ -9,12 +9,12 @@
 
 .home {
   @apply flex flex-1 flex-col px-[var(--gutter)] pt-3 pb-[130px];
-  gap: calc(var(--spacing, 2.25rem) * 18);
+  gap: calc(var(--spacing, 2.25rem) * 14);
   /* extra bottom padding leaves room for the floating nav dock */
 }
 
 .detail-section-stack {
-  gap: calc(var(--spacing, 2.25rem) * 18);
+  gap: calc(var(--spacing, 2.25rem) * 14);
 }
 
 /* 서브/연계 페이지 공통 헤더 "영역" — 메인 헤더(.appheader) 기준으로 통일.

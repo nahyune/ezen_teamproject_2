@@ -119,6 +119,8 @@ export default function App() {
   // 기록하기 음악 연결 여부 — 기록 탭을 나갔다 와도 유지, 새로고침 시에만 초기화.
   const [recordMusicConnected, setRecordMusicConnected] = useState(false);
   const [feedStoryOpen, setFeedStoryOpen] = useState(false);
+  // 내 일정 상세의 전체화면 지도 열림 여부 — 열리면 상태바를 투명으로 전환
+  const [scheduleMapOpen, setScheduleMapOpen] = useState(false);
   const [createdFeedPosts, setCreatedFeedPosts] = useState<FeedPost[]>([]);
   const [createdMyRecords, setCreatedMyRecords] = useState<MyRecord[]>([]);
   const [createdStory, setCreatedStory] = useState<FeedStory | null>(null);
@@ -325,7 +327,7 @@ export default function App() {
     }
 
     if (page === "runners") return <RunnerExplorePage onBack={() => setPage("home")} />;
-    if (page === "schedule") return <ScheduleDetailPage onBack={() => setPage("home")} />;
+    if (page === "schedule") return <ScheduleDetailPage onBack={() => setPage("home")} onMapOpenChange={setScheduleMapOpen} />;
     if (page === "scheduleList") {
       return (
         <ScheduleListPage
@@ -508,7 +510,7 @@ export default function App() {
     );
   })();
 
-  const clearStatusBar = page === "record" || (page === "courseDetail" && Boolean(runCourseMaps[courseDetailKind])) || ((page === "feed" || page === "home") && feedStoryOpen);
+  const clearStatusBar = page === "record" || (page === "courseDetail" && Boolean(runCourseMaps[courseDetailKind])) || ((page === "feed" || page === "home") && feedStoryOpen) || (page === "schedule" && scheduleMapOpen);
 
   return (
     <PhoneFrame

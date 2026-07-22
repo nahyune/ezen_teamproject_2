@@ -76,15 +76,24 @@ const products = [
 ];
 
 const sectionTitleClass = "text-[24px] font-semibold leading-[1.3] tracking-[-0.48px] text-white";
-const bodyTextClass = "text-[14px] font-normal leading-[1.3] tracking-[-0.48px] text-white/50";
+const bodyTextClass = "text-[14px] font-light leading-[1.3] tracking-[-0.48px] text-white/50";
 
 function ShareIcon() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="18" cy="5" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <circle cx="6" cy="12" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <circle cx="18" cy="19" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <path d="M8 11L16 6M8 13L16 18" stroke="currentColor" strokeLinecap="round" strokeWidth="1.7" />
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
+      <path
+        d="M17.1 8.3L13 4.2L8.9 8.3M13 4.8V16.4"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M8 11.3H6.6C5.7 11.3 5 12 5 12.9V20.3C5 21.2 5.7 21.9 6.6 21.9H19.4C20.3 21.9 21 21.2 21 20.3V12.9C21 12 20.3 11.3 19.4 11.3H18"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.6"
+      />
     </svg>
   );
 }
@@ -123,7 +132,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
         <BackButton onClick={onBack} />
         <h1 className="text-center text-[24px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">매거진</h1>
         <button
-          className="grid h-6 w-6 shrink-0 place-items-center text-white"
+          className="grid h-[26px] w-[26px] place-items-center text-white"
           type="button"
           aria-label="공유하기"
           onClick={() => setShareOpen(true)}
@@ -140,7 +149,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
             aria-hidden
           />
           <div className="absolute left-[18px] right-[18px] top-[207px] flex flex-col gap-[14px]">
-            <span className="inline-flex w-fit items-center justify-center whitespace-nowrap rounded-full bg-[var(--primary-lime)] px-[14px] py-[8px] text-[14px] font-semibold leading-[1.3] tracking-[-0.42px] text-black">
+            <span className="inline-flex w-fit items-center justify-center whitespace-nowrap rounded-full bg-[var(--primary-lime)] px-[14px] py-[8px] text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-black">
               러닝 기어
             </span>
             <div className="flex flex-col gap-[6px]">
@@ -152,7 +161,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
                 종류가 너무 많아 고르기 어려운 당신에게
               </p>
             </div>
-            <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-white/50">
+            <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-white/50">
               위런 매거진 · 2026. 7. 2
             </p>
           </div>
@@ -195,7 +204,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
           <div className="flex gap-2">
             {tags.map((tag) => (
               <span
-                className="whitespace-nowrap rounded-full border border-[#404538] bg-[#1f211f] px-[14px] py-[8px] text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#f6f6ed]"
+                className="whitespace-nowrap rounded-full border border-[#404538] bg-[#1f211f] px-[14px] py-[8px] text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#f6f6ed]"
                 key={tag}
               >
                 {tag}
@@ -225,7 +234,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
                       <span key={line}>{line}</span>
                     ))}
                   </h4>
-                  <p className="flex flex-col text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-white/70">
+                  <p className="flex flex-col text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-white/70">
                     {a.subtitle.map((line) => (
                       <span key={line}>{line}</span>
                     ))}
@@ -258,7 +267,7 @@ export default function MagazineDetailPage({ onBack }: Props) {
                   />
                 </div>
                 <div className="flex flex-col gap-[3px] px-[14px] py-3">
-                  <p className="text-[12px] font-medium leading-[1.3] tracking-[-0.36px] text-white/50">{p.brand}</p>
+                  <p className="text-[13px] font-light leading-[1.3] tracking-[-0.36px] text-white/50">{p.brand}</p>
                   <p className="text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-[#f5f4f2]">{p.name}</p>
                   <p className="text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">{p.price}</p>
                 </div>

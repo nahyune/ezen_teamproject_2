@@ -24,7 +24,7 @@ const timeline = [
 const glassCardClass =
   "relative min-h-[94px] overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(29,29,29,0.2)] p-[13px_16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_-1px_0_rgba(0,0,0,0.28)] backdrop-blur-[14px] backdrop-saturate-[145%] before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.02)_46%,rgba(255,255,255,0))] [&>*]:relative";
 const sectionTitleClass = "text-[24px] font-semibold leading-[1.3] tracking-[-0.48px] text-[#f6f6ed]";
-const bodyTextClass = "text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-white/70";
+const bodyTextClass = "text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-white/70";
 
 function ShareIcon() {
   return (
@@ -106,13 +106,13 @@ export default function RaceDetailPage({ onBack }: Props) {
         <section className="relative h-[581px] overflow-hidden after:absolute after:inset-0 after:bg-[linear-gradient(to_bottom,rgba(0,0,0,0.03),rgba(0,0,0,0.42))]">
           <img className="absolute inset-0 h-full w-full object-cover object-[48%_center]" src={raceHero} alt="" />
           <div className="relative z-[1] flex h-full flex-col justify-between px-[19px] py-4">
-            <span className="inline-flex min-h-[31px] w-[54px] items-center justify-center rounded-2xl bg-[var(--primary-lime)] text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-black">
+            <span className="inline-flex min-h-[31px] w-[54px] items-center justify-center rounded-2xl bg-[var(--primary-lime)] text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-black">
               서울
             </span>
             <div className="flex flex-col items-center gap-0 text-center">
               <p className="mb-[17px] [font-family:var(--font-display)] text-[64px] leading-[0.95] text-[var(--primary-lime)]">D-3</p>
               <h2 className="mb-[3px] text-[30px] font-semibold leading-[1.2] tracking-[-0.6px] text-white">한강 마라톤</h2>
-              <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-white">2026-07-25(토) 18:00 · 여의도 한강공원</p>
+              <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-white">2026-07-25(토) 18:00 · 여의도 한강공원</p>
               <div className="mt-[15px] flex gap-[5px]" aria-hidden>
                 <span className="h-[6px] w-[6px] rounded-full bg-[var(--primary-lime)]" />
                 <span className="h-[6px] w-[6px] rounded-full bg-[#f6f6ed]/45" />
@@ -124,15 +124,15 @@ export default function RaceDetailPage({ onBack }: Props) {
 
         <section
           className="grid grid-cols-2 gap-x-[18px] gap-y-4 px-[var(--gutter)] max-[380px]:gap-3"
-          style={{ marginTop: "calc(24px - (var(--spacing, 2.25rem) * 18))" }}
+          style={{ marginTop: "calc(24px - (var(--spacing, 2.25rem) * 14))" }}
         >
           {infoCards.map((card) => (
             <article className={glassCardClass} key={card.label}>
-              <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-white/70">{card.label}</p>
-              <strong className="mt-[5px] block text-[20px] font-medium leading-[1.3] tracking-[-0.6px] text-white max-[380px]:text-[18px]">
+              <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-white/70">{card.label}</p>
+              <strong className="mt-[5px] block text-[18px] font-medium leading-[1.3] tracking-[-0.6px] text-white max-[380px]:text-[16px]">
                 {card.value}
               </strong>
-              <span className="mt-0.5 block text-[12px] font-light leading-[1.3] tracking-[-0.36px] text-white/70">{card.note}</span>
+              <span className="mt-0.5 block text-[13px] font-light leading-[1.3] tracking-[-0.36px] text-white/70">{card.note}</span>
             </article>
           ))}
         </section>
@@ -151,14 +151,14 @@ export default function RaceDetailPage({ onBack }: Props) {
                 key={item.time}
               >
                 <time
-                  className={`block pt-[3px] text-[14px] font-medium leading-[1.3] tracking-[-0.42px] ${
+                  className={`block pt-[3px] text-[14px] font-light leading-[1.3] tracking-[-0.42px] ${
                     item.active ? "text-[var(--primary-lime)]" : "text-white/70"
                   }`}
                 >
                   {item.time}
                 </time>
                 <div>
-                  <strong className="text-[20px] font-medium leading-[1.3] tracking-[-0.6px] text-white max-[380px]:text-[18px]">
+                  <strong className="text-[18px] font-medium leading-[1.3] tracking-[-0.6px] text-white max-[380px]:text-[16px]">
                     {item.title}
                   </strong>
                   <p className={`${bodyTextClass} mt-[5px]`}>{item.desc}</p>
@@ -206,8 +206,8 @@ export default function RaceDetailPage({ onBack }: Props) {
               <AnimatedCheckIcon />
             </span>
             <div className="flex flex-col gap-1">
-              <h2 className="text-[18px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">참가 신청 완료</h2>
-              <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-white/70">
+              <h2 className="text-[16px] font-semibold leading-[1.3] tracking-[-0.48px] text-white">참가 신청 완료</h2>
+              <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-white/70">
                 이 대회에 참가 신청이 완료되었어요.
               </p>
             </div>

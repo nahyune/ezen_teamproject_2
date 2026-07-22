@@ -53,18 +53,27 @@ const tips = [
 const glassCardClass =
   "relative min-h-[94px] flex-1 min-w-0 overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(29,29,29,0.2)] p-[13px_16px] shadow-[inset_0_1px_0_rgba(255,255,255,0.08),inset_0_-1px_0_rgba(0,0,0,0.28)] backdrop-blur-[14px] backdrop-saturate-[145%] before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.02)_46%,rgba(255,255,255,0))] [&>*]:relative";
 const sectionTitleClass = "text-[24px] font-semibold leading-[1.3] tracking-[-0.48px] text-white";
-const bodyTextClass = "text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]";
+const bodyTextClass = "text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]";
 const cardClass = "flex flex-col rounded-xl bg-[#404040] px-5 py-[17px]";
-const cardTitleClass = "mb-[7px] text-[20px] font-medium leading-[1.3] tracking-[-0.6px] text-white";
-const cardBodyClass = "text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]";
+const cardTitleClass = "mb-[7px] text-[18px] font-medium leading-[1.3] tracking-[-0.6px] text-white";
+const cardBodyClass = "text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]";
 
 function ShareIcon() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <circle cx="18" cy="5" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <circle cx="6" cy="12" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <circle cx="18" cy="19" r="2.2" stroke="currentColor" strokeWidth="1.7" />
-      <path d="M8 11L16 6M8 13L16 18" stroke="currentColor" strokeLinecap="round" strokeWidth="1.7" />
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden>
+      <path
+        d="M17.1 8.3L13 4.2L8.9 8.3M13 4.8V16.4"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M8 11.3H6.6C5.7 11.3 5 12 5 12.9V20.3C5 21.2 5.7 21.9 6.6 21.9H19.4C20.3 21.9 21 21.2 21 20.3V12.9C21 12 20.3 11.3 19.4 11.3H18"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.6"
+      />
     </svg>
   );
 }
@@ -76,11 +85,11 @@ export default function ChallengeDetailPage({ onBack, onStartChallenge }: Props)
     <div className="phone bg-[#232323] text-[#f6f6ed]">
       <header className="subheader justify-between">
         <BackButton onClick={onBack} />
-        <h1 className="text-center text-[20px] font-medium leading-[1.3] tracking-[-0.6px] text-[#f6f6ed]">
+        <h1 className="text-center text-[24px] font-semibold leading-[1.3] tracking-[-0.48px] text-[#f6f6ed]">
           챌린지
         </h1>
         <button
-          className="grid h-6 w-6 shrink-0 place-items-center text-[#f6f6ed]"
+          className="grid h-[26px] w-[26px] place-items-center text-white"
           type="button"
           aria-label="공유하기"
           onClick={() => setShareOpen(true)}
@@ -93,24 +102,24 @@ export default function ChallengeDetailPage({ onBack, onStartChallenge }: Props)
         <section className="relative h-[420px] overflow-hidden rounded-[20px]">
           <img className="h-full w-full object-cover" src={challengeHero} alt="경복궁 댕댕런 GPS 아트런 경로 지도" />
           <div className="absolute inset-x-0 bottom-0 flex flex-col gap-[15px] pt-[65px] pr-[40px] pb-[26px] pl-[15px] bg-[linear-gradient(to_top,rgba(0,0,0,0.62)_30%,rgba(0,0,0,0.33)_70%,rgba(0,0,0,0)_100%)]">
-            <span className="inline-flex w-fit min-h-[31px] items-center justify-center whitespace-nowrap rounded-2xl bg-[var(--primary-lime)] px-[14px] py-[6px] text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-black">
+            <span className="inline-flex w-fit min-h-[31px] items-center justify-center whitespace-nowrap rounded-2xl bg-[var(--primary-lime)] px-[14px] py-[6px] text-[14px] font-normal leading-[1.3] tracking-[-0.42px] text-black">
               GPS 아트런
             </span>
             <div className="flex flex-col gap-[2px] text-white">
               <h2 className="max-w-[220px] text-[30px] font-semibold leading-[1.2] tracking-[-0.6px]">경복궁 댕댕런</h2>
-              <p className="text-[14px] font-normal leading-[1.3] tracking-[-0.42px]">👥 5,234명 참여</p>
+              <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px]">👥 5,234명 참여</p>
             </div>
           </div>
         </section>
 
-        <section className="flex gap-[14px]" style={{ marginTop: "calc(24px - (var(--spacing, 2.25rem) * 18))" }}>
+        <section className="flex gap-[14px]" style={{ marginTop: "calc(24px - (var(--spacing, 2.25rem) * 14))" }}>
           {infoCards.map((card) => (
             <article className={glassCardClass} key={card.label}>
-              <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]">{card.label}</p>
-              <strong className="mt-[5px] block text-[20px] font-medium leading-[1.3] tracking-[-0.6px] text-white">
+              <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]">{card.label}</p>
+              <strong className="mt-[5px] block text-[18px] font-medium leading-[1.3] tracking-[-0.6px] text-white">
                 {card.value}
               </strong>
-              <span className="mt-0.5 block text-[12px] font-light leading-[1.3] tracking-[-0.36px] text-[#a1a1a8]">
+              <span className="mt-0.5 block text-[13px] font-light leading-[1.3] tracking-[-0.36px] text-[#a1a1a8]">
                 {card.note}
               </span>
             </article>
@@ -159,7 +168,7 @@ export default function ChallengeDetailPage({ onBack, onStartChallenge }: Props)
         </section>
 
         <section className={cardClass}>
-          <p className="mb-[15px] text-[20px] font-medium leading-[1.3] tracking-[-0.6px] text-white">직접 걸어보니</p>
+          <p className="mb-[15px] text-[18px] font-medium leading-[1.3] tracking-[-0.6px] text-white">직접 걸어보니</p>
           <div className="flex items-center gap-5">
             {walkStatColumns.map((col, i) => (
               <div className="flex flex-1 min-w-0 flex-col gap-3" key={i}>
@@ -172,7 +181,7 @@ export default function ChallengeDetailPage({ onBack, onStartChallenge }: Props)
                     >
                       {stat.value}
                     </p>
-                    <p className="whitespace-nowrap text-[12px] font-normal leading-[15px] text-[#a1a1a8]">
+                    <p className="whitespace-nowrap text-[13px] font-light leading-[15px] text-[#a1a1a8]">
                       {stat.label}
                     </p>
                   </div>
@@ -188,7 +197,7 @@ export default function ChallengeDetailPage({ onBack, onStartChallenge }: Props)
             {tips.map((tip) => (
               <li className="flex items-start gap-[7px]" key={tip}>
                 <span
-                  className="w-[18px] shrink-0 text-center text-[14px] leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]"
+                  className="w-[18px] shrink-0 text-center text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]"
                   aria-hidden
                 >
                   ✔
@@ -208,7 +217,7 @@ export default function ChallengeDetailPage({ onBack, onStartChallenge }: Props)
         </section>
 
         <section className="mt-[22px] flex flex-col gap-[15px]">
-          <p className="text-[14px] font-medium leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]">
+          <p className="text-[14px] font-light leading-[1.3] tracking-[-0.42px] text-[#a1a1a8]">
             <span aria-hidden>📍</span> 완주 후 지도에 남은 강아지 모양을 캡처해서 챌린지 인증으로 남겨보세요.
           </p>
           <button

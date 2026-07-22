@@ -55,7 +55,7 @@
 
 .course-detail__content {
   @apply flex flex-col pt-1.5;
-  gap: calc(var(--spacing, 2.25rem) * 18);
+  gap: calc(var(--spacing, 2.25rem) * 14);
 }
 
 .course-detail__summary {
@@ -75,15 +75,15 @@
 }
 
 .course-detail__level {
-  @apply shrink-0 rounded-[10px] bg-[var(--primary-lime)] px-[9px] py-[3px] text-xs leading-[1.3] font-light tracking-[-0.36px] text-[#0f0f0f];
+  @apply shrink-0 rounded-[10px] bg-[var(--primary-lime)] px-[9px] py-[3px] text-[13px] leading-[1.3] font-light tracking-[-0.36px] text-[#0f0f0f];
 }
 
 .course-detail__rating {
-  @apply shrink-0 text-sm leading-[1.3] font-normal tracking-[-0.42px] text-[var(--primary-lime)];
+  @apply shrink-0 text-sm leading-[1.3] font-light tracking-[-0.42px] text-[var(--primary-lime)];
 }
 
 .course-detail__location {
-  @apply text-sm leading-[1.3] font-medium tracking-[-0.42px] text-[rgba(245,244,242,0.65)];
+  @apply text-sm leading-[1.3] font-light tracking-[-0.42px] text-[rgba(245,244,242,0.65)];
 }
 
 .course-detail__stats {
@@ -95,11 +95,11 @@
 }
 
 .course-stat__label {
-  @apply text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.55)];
+  @apply text-[13px] leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.55)];
 }
 
 .course-stat__value {
-  @apply text-sm leading-[1.3] font-medium tracking-[-0.42px] text-[var(--text-strong)];
+  @apply text-sm leading-[1.3] font-light tracking-[-0.42px] text-[var(--text-strong)];
 }
 
 .course-detail__section {
@@ -124,11 +124,11 @@
 }
 
 .course-variant__title {
-  @apply text-sm leading-[1.3] font-medium tracking-[-0.42px] text-[var(--text-strong)];
+  @apply text-sm leading-[1.3] font-light tracking-[-0.42px] text-[var(--text-strong)];
 }
 
 .course-variant__level {
-  @apply text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.55)];
+  @apply text-[13px] leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.55)];
 }
 
 .course-variant--active .course-variant__title {
@@ -148,7 +148,7 @@
 }
 
 .course-amenity__label {
-  @apply text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.6)];
+  @apply text-[13px] leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.6)];
 }
 
 .course-detail__section--social {
@@ -156,7 +156,7 @@
 }
 
 .course-detail__social {
-  @apply text-sm leading-[1.3] font-medium tracking-[-0.42px] text-[var(--primary-lime)];
+  @apply text-sm leading-[1.3] font-light tracking-[-0.42px] text-[var(--primary-lime)];
 }
 
 .course-reviews {
@@ -164,7 +164,7 @@
 }
 
 .course-review {
-  @apply w-full rounded-xl bg-[#404040] px-[15px] py-[13px] text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.75)];
+  @apply w-full rounded-xl bg-[#404040] px-[15px] py-[13px] text-[13px] leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.75)];
 }
 
 .course-detail__cta {
@@ -172,7 +172,7 @@
 }
 
 .course-detail__route {
-  @apply shrink-0 text-sm leading-[1.3] font-normal tracking-[-0.42px] text-[rgba(245,244,242,0.65)];
+  @apply shrink-0 text-sm leading-[1.3] font-light tracking-[-0.42px] text-[rgba(245,244,242,0.65)];
 }
 
 .course-detail__start {

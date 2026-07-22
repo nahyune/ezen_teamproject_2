@@ -104,7 +104,7 @@
 }
 
 .course-list__title {
-  @apply min-w-0 max-w-[168px] overflow-hidden text-ellipsis whitespace-nowrap text-base leading-[1.3] font-semibold tracking-[-0.48px] text-[var(--text-strong)];
+  @apply min-w-0 max-w-[168px] overflow-hidden text-ellipsis whitespace-nowrap text-[16px] leading-[1.3] font-semibold tracking-[-0.48px] text-[var(--text-strong)];
 }
 
 .course-list__level {
@@ -112,11 +112,11 @@
 }
 
 .course-list__meta {
-  @apply text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.7)];
+  @apply text-[13px] leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.7)];
 }
 
 .course-list__nearby {
-  @apply text-xs leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.55)];
+  @apply text-[13px] leading-[1.3] font-light tracking-[-0.36px] text-[rgba(245,244,242,0.55)];
 }
 
 .course-list__more {
